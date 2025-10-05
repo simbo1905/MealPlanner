@@ -4,7 +4,7 @@ Based on [GitHub's Spec-Kit](https://github.com/github/spec-kit) specification-d
 
 ## Project Overview
 
-MealPlanner is a **mobile-first service** that delights busy parents (personas: "Josh" and "Sonia") by solving real meal planning problems with the smallest viable solution, continuously validated through real-world user feedback.
+MealPlanner is a **mobile-first service** that delights busy parents (fictional personas: "Josh" and "Sonia") by solving real meal planning problems with the smallest viable solution, continuously validated through real-world user feedback.
 
 ## Core Philosophy
 
