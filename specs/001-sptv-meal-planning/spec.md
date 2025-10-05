@@ -3,13 +3,13 @@
 **Feature Branch**: `001-sptv-meal-planning`  
 **Created**: 2025-10-03  
 **Status**: Draft  
-**Feature Description**: SPTV meal planning application for busy parents Josh and Sonia to organise fortnightly meal planning with minimal effort, focusing on meal planning framework, shopping list generation, and calendar integration. Users provide their own recipes via LLM integration rather than receiving pre-curated meal suggestions.
+**Feature Description**: SPTV meal planning application for busy parent fictional personas "Josh" and "Sonia", to organise fortnightly meal planning with minimal effort, focusing on the meal planning framework, shopping list generation, and calendar integration. Users provide their own recipes via LLM integration rather than receiving pre-curated meal suggestions.
 
 ## Execution Flow (main)
 ```
 1. Parse user description from Input
    → If empty: ERROR "No feature description provided"
-2. Extract key concepts from description
+2. Extract key concepts from the description
    → Identify: actors, actions, data, constraints
 3. For each unclear aspect:
    → Mark with [NEEDS CLARIFICATION: specific question]
