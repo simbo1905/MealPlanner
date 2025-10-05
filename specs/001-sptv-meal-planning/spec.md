@@ -6,23 +6,23 @@
 **Feature Description**: SPTV meal planning application for busy parent fictional personas "Josh" and "Sonia", to organise fortnightly meal planning with minimal effort, focusing on the meal planning framework, shopping list generation, and calendar integration. Users provide their own recipes via LLM integration rather than receiving pre-curated meal suggestions.
 
 ## Execution Flow (main)
-```
-1. Parse user description from Input
-   → If empty: ERROR "No feature description provided"
-2. Extract key concepts from the description
-   → Identify: actors, actions, data, constraints
-3. For each unclear aspect:
-   → Mark with [NEEDS CLARIFICATION: specific question]
-4. Fill User Scenarios & Testing section
-   → If no clear user flow: ERROR "Cannot determine user scenarios"
-5. Generate Functional Requirements
-   → Each requirement must be testable
-   → Mark ambiguous requirements
-6. Identify Key Entities (if data involved)
-7. Run Review Checklist
-   → If any [NEEDS CLARIFICATION]: WARN "Spec has uncertainties"
-   → If implementation details found: ERROR "Remove tech details"
-8. Return: SUCCESS (spec ready for planning)
+```mermaid
+flowchart TD
+  A[Start] --> B[Parse user description<br/>from input]
+  B -->|Empty| E1[Error: No feature description<br/>provided]
+  B --> C[Extract key concepts]
+  C --> D[Identify actors, actions,<br/>data, constraints]
+  D --> E[Check unclear aspects]
+  E -->|Unclear| F[Mark with NEEDS CLARIFICATION]
+  E --> G[Fill User Scenarios &<br/>Testing section]
+  G -->|No clear user flow| E2[Error: Cannot determine<br/>user scenarios]
+  G --> H[Generate Functional Requirements]
+  H --> I[Mark ambiguous requirements]
+  I --> J[Identify Key Entities]
+  J --> K[Run Review Checklist]
+  K -->|NEEDS CLARIFICATION found| W1[Warn: Spec has<br/>uncertainties]
+  K -->|Implementation details found| E3[Error: Remove tech details]
+  K --> L[Return SUCCESS — spec ready<br/>for planning]
 ```
 
 ---
