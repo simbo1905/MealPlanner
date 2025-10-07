@@ -4,3 +4,5 @@ CLAUDE.md
 .specify/
 .vscode/
 /.worktrees/
+.changecolor
+create-t3-turbo-main/

@@ -181,6 +181,7 @@ Hypothesis → User Evidence → Decision Log → Implementation → Measurement
 - Follow the workflow sequence strictly
 - Maintain user focus throughout development
 - Document everything in Learning Logs
+- **Prototype Management**: Use `timeout 20 ./prototype.sh <id> start` to prevent hanging on slow systems
 
 ## Documentation Accountability
 
