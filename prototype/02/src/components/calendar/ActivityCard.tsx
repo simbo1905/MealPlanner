@@ -1,5 +1,7 @@
 import { Activity } from "@/lib/types";
 import { Utensils, Cookie, ChefHat, Soup, Salad, Zap } from "lucide-react";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 const iconMap = {
   utensils: Utensils,
@@ -26,10 +28,25 @@ export function ActivityCard({ activity, onTap }: ActivityCardProps) {
   const Icon = iconMap[activity.icon] || Utensils;
   const colorClass = colorMap[activity.accentColor] || colorMap.green;
 
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: activity.id,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   return (
     <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       onClick={onTap}
-      className={`flex-shrink-0 w-52 p-4 bg-white rounded-xl shadow-sm border border-gray-100 ${colorClass} border-l-4 cursor-pointer transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start`}
+      className={`flex-shrink-0 w-52 p-4 bg-white rounded-xl shadow-sm border border-gray-100 ${colorClass} border-l-4 cursor-pointer transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start ${
+        isDragging ? "z-50" : ""
+      }`}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
