@@ -26,7 +26,7 @@ export function ActivitiesScroll({ activities, onActivityTap, onAddClick }: Acti
       ))}
       <button
         onClick={onAddClick}
-        className="flex-shrink-0 w-52 h-[88px] bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-150 hover:border-gray-300 transition-colors scroll-snap-align-start"
+        className="flex-shrink-0 w-52 h-[88px] bg-white rounded-xl border border-white flex items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors scroll-snap-align-start"
       >
         <Plus className="w-5 h-5" />
         <span className="font-medium text-sm">Add Meal</span>
