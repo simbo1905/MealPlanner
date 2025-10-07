@@ -19,7 +19,7 @@ As a busy parent planning weekly meals, I want to see a visual calendar view whe
 
 3. **Given** I have assigned meals to days, **When** I want to change a meal to a different day, **Then** I can drag the meal from one day to another day seamlessly
 
-4. **Given** I have assigned a meail to a day, **When** I tap on the recipe card, **Then** a recipe specific banner floats up from the bottom that has the title, a thumbnail, and buttons. Tapping on the title or image opens up the recipe in its own page. 
+4. **Given** I have assigned a meal to a day, **When** I tap on the recipe card, **Then** a recipe specific banner floats up from the bottom that has the title, a thumbnail, and buttons. Tapping on the title or image opens up the recipe in its own page. 
 
 ### Edge Cases
 - Q: What happens when a user tries to drag a recipe to a day that already has a meal planned?
@@ -29,7 +29,7 @@ As a busy parent planning weekly meals, I want to see a visual calendar view whe
 - Q: What feedback is provided when a drag operation is unsuccessful?
   A: None the card will spring back to where it was. 
 - Q: How are recipes returned to the pool if removed from a calendar day?
-  A: If a user taps on the card, a a recipe specific banner floats up from the bottom that has the title, a thumbnail, and buttons. There is a remove button that causes the banner to close and the card to be removed from the weekly scrolling calendar. 
+  A: If a user taps on the card, a recipe specific banner floats up from the bottom that has the title, a thumbnail, and buttons. There is a remove button that causes the banner to close and the card to be removed from the weekly scrolling calendar. 
 
 ## Requirements *(mandatory)*
 
@@ -39,13 +39,13 @@ As a busy parent planning weekly meals, I want to see a visual calendar view whe
 - **FR-003**: Users MUST be able to drag recipe cards between days using intuitive drag-and-drop interaction
 - **FR-004**: System MUST visually indicate when a recipe card is being dragged
 - **FR-005**: System MUST provide visual feedback when a recipe card hovers over a valid calendar day (highlighting, borders, etc.)
-- **FR-006**: System MUST display a recipe bannder when tapping on the card which has title, thumbnail and total preperation time.
+- **FR-006**: System MUST display a recipe banner when tapping on the card which has title, thumbnail and total preparation time.
 - **FR-007**: System MUST support vertical continuous scrolling through multiple weeks of calendar view
-- **FR-008**: System MUST allow multiple cards to be assign to a given day with card moving to the right when a new meal card is added. The user may drag the cards to the left to scroll to see all cards assigned to a day. 
-- **FR-009**: System MUST provide visual confirmation when a recipe is successfully assigned to a day and the card must say within the day swimlane as the user continously scrolls the calendar vertically
+- **FR-008**: System MUST allow multiple cards to be assigned to a given day with card moving to the right when a new meal card is added. The user may drag the cards to the left to scroll to see all cards assigned to a day. 
+- **FR-009**: System MUST provide visual confirmation when a recipe is successfully assigned to a day and the card must stay within the day swimlane as the user continuously scrolls the calendar vertically
 
 ### Key Entities *(include if feature involves data)*
-- **Recipe Card**: Represents an individual recipe with name, with some minimal infomation showing depending on space such as cooking time. 
+- **Recipe Card**: Represents an individual recipe with name, with some minimal information showing depending on space such as cooking time. 
 - **Calendar Day**: Represents a single day in the meal planning calendar that can accept recipe assignments and displays assigned meals
 - **Meal Assignment**: Represents the relationship between a recipe and a specific calendar day, including assignment timestamp
 - **Recipe Pool**: A logical database of recipes that are covered by a different set of screens from which a user may assign a recipes to a given day. To demo the calendar screen there will be an faint add button on each day. The user will click this, a popup mention of meals by title will be shown, a user may select one, and it will be assigned to the day. 
