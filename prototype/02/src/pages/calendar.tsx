@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { WeekSummary as WeekSummaryType, CalendarDay, Activity } from "@/lib/types";
-import { generateInitialCalendarData, SAMPLE_RECIPES } from "@/lib/calendar-data";
+import { Recipe } from "@/lib/recipe-types";
+import { generateInitialCalendarData } from "@/lib/calendar-data";
 import { WeekSummary } from "@/components/calendar/WeekSummary";
 import { DayRow } from "@/components/calendar/DayRow";
 import { RecipeBanner } from "@/components/calendar/RecipeBanner";
@@ -111,10 +112,14 @@ export default function CalendarPage() {
     setIsAddDialogOpen(true);
   };
 
-  const handleSelectRecipe = (recipe: Activity) => {
+  const handleSelectRecipe = (recipe: Recipe) => {
+    const recipeId = recipe.title.toLowerCase().replace(/\s+/g, "-");
     const newActivity: Activity = {
-      ...recipe,
-      id: `${recipe.id}-${Date.now()}`,
+      id: `${recipeId}-${Date.now()}`,
+      title: recipe.title,
+      prepTime: `${recipe.total_time} min`,
+      icon: "utensils",
+      accentColor: "green",
     };
 
     setWeeks((prevWeeks) => {
@@ -306,7 +311,6 @@ export default function CalendarPage() {
           isOpen={isAddDialogOpen}
           onClose={() => setIsAddDialogOpen(false)}
           onSelectRecipe={handleSelectRecipe}
-          availableRecipes={SAMPLE_RECIPES}
         />
       </div>
       <Toaster />
