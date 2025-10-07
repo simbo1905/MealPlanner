@@ -156,7 +156,7 @@ export default function CalendarPage() {
               <button className="p-2 -ml-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <ChevronLeft className="w-5 h-5 text-gray-600" />
               </button>
-              <h1 className="text-xl font-bold text-gray-900">Training calendar</h1>
+              <h1 className="text-xl font-bold text-gray-900">MealPlanner Calendar View</h1>
             </div>
             <button className="text-gray-400 text-sm font-medium hover:text-gray-600 transition-colors">
               Save
