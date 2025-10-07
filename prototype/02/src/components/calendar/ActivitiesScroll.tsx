@@ -1,12 +1,14 @@
 import { Activity } from "@/lib/types";
 import { ActivityCard } from "./ActivityCard";
+import { Plus } from "lucide-react";
 
 interface ActivitiesScrollProps {
   activities: Activity[];
   onActivityTap: (activity: Activity) => void;
+  onAddClick: () => void;
 }
 
-export function ActivitiesScroll({ activities, onActivityTap }: ActivitiesScrollProps) {
+export function ActivitiesScroll({ activities, onActivityTap, onAddClick }: ActivitiesScrollProps) {
   return (
     <div
       className="flex gap-3 px-3 py-2 overflow-x-auto"
@@ -22,6 +24,13 @@ export function ActivitiesScroll({ activities, onActivityTap }: ActivitiesScroll
           onTap={() => onActivityTap(activity)}
         />
       ))}
+      <button
+        onClick={onAddClick}
+        className="flex-shrink-0 w-52 h-[88px] bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center gap-2 text-gray-600 hover:bg-gray-150 hover:border-gray-300 transition-colors scroll-snap-align-start"
+      >
+        <Plus className="w-5 h-5" />
+        <span className="font-medium text-sm">Add Meal</span>
+      </button>
     </div>
   );
 }
