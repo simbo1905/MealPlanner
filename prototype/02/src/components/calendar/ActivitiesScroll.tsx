@@ -26,11 +26,16 @@ export function ActivitiesScroll({ activities, onActivityTap, onAddClick }: Acti
       ))}
       <button
         onClick={onAddClick}
-        className="flex-shrink-0 w-52 h-[88px] rounded-xl border flex items-center justify-center gap-2 text-gray-500 hover:bg-white hover:border-white hover:text-gray-700 transition-colors scroll-snap-align-start"
-        style={{ backgroundColor: '#f9fafb', borderColor: '#f9fafb' }}
+        className="flex-shrink-0 w-36 h-[88px] rounded-xl border flex items-center gap-1 text-gray-500 hover:bg-white hover:border-white hover:text-gray-700 transition-colors scroll-snap-align-start"
+        style={{ 
+          backgroundColor: '#f9fafb', 
+          borderColor: '#f9fafb',
+          justifyContent: 'flex-start',
+          paddingLeft: '0.75rem'
+        }}
       >
-        <Plus className="w-5 h-5" />
-        <span className="font-medium text-sm">Add Meal</span>
+        <Plus className="w-4 h-4 flex-shrink-0" />
+        <span className="font-medium text-sm whitespace-nowrap">Add</span>
       </button>
     </div>
   );
