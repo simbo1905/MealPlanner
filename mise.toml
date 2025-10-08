@@ -1,0 +1,36 @@
+[tools]
+node = "22.11.0"
+pnpm = "9.12.3"
+java = "17"
+gradle = "8.9"
+
+[env]
+# Ensure mise tools are in PATH
+_.path = ["{{config_root}}/node_modules/.bin"]
+
+# Node.js configuration
+NODE_OPTIONS = "--max-old-space-size=4096"
+
+# PNPM configuration
+PNPM_HOME = "{{config_root}}/node_modules/.pnpm"
+
+[settings]
+# Experimental features
+experimental = true
+
+# Scripts that can be run with mise run
+[tasks.build]
+description = "Build all packages and apps"
+run = "pnpm build"
+
+[tasks.dev]
+description = "Start development mode"
+run = "pnpm dev"
+
+[tasks.test]
+description = "Run all tests"
+run = "pnpm test"
+
+[tasks.clean]
+description = "Clean all build artifacts"
+run = "pnpm clean"

@@ -6,3 +6,34 @@ CLAUDE.md
 /.worktrees/
 .changecolor
 create-t3-turbo-main/
+node_modules/
+**/node_modules/
+**/_next
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Thumbnails
+Thumbs.db
+
+# macOS-specific folders
+__MACOSX/
+
+# Xcode
+*.xcuserstate
+*.xcuserdata/
+*.xcworkspace/
+DerivedData/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.moved-aside
+build/
+*.pbxuser
+!default.pbxuser
+*.perspective
+!default.perspective
+xcuserdata/
