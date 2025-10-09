@@ -1,0 +1,22 @@
+{
+  "extends": "@mealplanner/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "resolveJsonModule": true,
+    "incremental": false
+  },
+  "include": [
+    "src/**/*",
+    "data/**/*",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.test.ts"
+  ]
+}

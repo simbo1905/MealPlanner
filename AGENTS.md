@@ -21,6 +21,55 @@ Write commits in the imperative mood (`Add VoU sync guard`) and reference the re
 ## Security & Configuration Tips
 Never commit `.env*` secrets; Turbo caches detection will flag them. Verify Node ≥22.11 and pnpm ≥9.12 via `mise use` or local tooling before running scripts. For prototype work, isolate experiments under `prototype/<id>` and document any data fixtures or temporary endpoints in the accompanying Learning Log entry.
 
+## Web App Prototypes
+
+Prototypes live under `prototype/<id>/` as standalone Next.js apps for rapid UI iteration. Each prototype MUST be production-built before serving to avoid hanging development watchers during agentic workflows.
+
+### Prototype Management Script
+
+Use `./prototype.sh <id> <action>` to manage prototypes:
+
+```bash
+# Build and start prototype (runs npm build then npm start)
+./prototype.sh 02 start
+
+# Stop a running prototype
+./prototype.sh 02 stop
+
+# Reload (stop + start)
+./prototype.sh 02 reload
+```
+
+**Critical**: The script builds the app first (`npm run build`), then serves with `npm run start` (production mode). This ensures no hanging watchers and clean background execution. The server starts within 5 seconds.
+
+### Manual Build & Run
+
+If needed, build and run manually:
+
+```bash
+cd prototype/02
+npm install           # Install dependencies
+npm run build         # Build production bundle
+npm run start         # Serve on http://localhost:3000
+```
+
+### Testing with Playwright
+
+Always test prototypes with Playwright MCP after starting:
+
+```bash
+# 1. Start the prototype
+./prototype.sh 02 start
+
+# 2. Use Playwright MCP tools to navigate and interact
+# mcp_playwright_browser_navigate to http://localhost:3000/calendar
+# mcp_playwright_browser_snapshot to capture UI state
+# mcp_playwright_browser_click, etc. for interactions
+
+# 3. Stop when done
+./prototype.sh 02 stop
+```
+
 ## Stack
 
 **Important** JSON Schema is a dumpster fire and MUST NOT be used. JDT RFC 8927 MAY be used. 
