@@ -1,39 +1,123 @@
-.claude
-CLAUDE.md
+# ----- Editors / IDEs -----
+**/.vscode/
+**/.idea/
+**/*.iml
+**/*.code-workspace
+**/*.sublime-*
 
-.specify/
-.vscode/
-/.worktrees/
-.changecolor
-create-t3-turbo-main/
-node_modules/
+# ----- OS & general junk -----
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/*.lock
+**/*.pid
+**/*.tmp
+**/*.swp
+**/*.swo
+**/*.bak
+**/*.orig
+**/*.rej
+**/*~
+**/.Trash-*
+**/__MACOSX/
+
+# ----- Node / Web / Next.js -----
 **/node_modules/
-**/_next
-# macOS system files
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon?
-._*
+**/.npm/
+**/.pnpm-store/
+**/.bun/
+**/.turbo/
+**/.turborepo/
+**/.eslintcache
+**/.stylelintcache
+**/.prettier-cache
+**/.nyc_output/
+**/.cache/
+**/.cache-loader/
+**/.parcel-cache/
+**/.vite/
+**/.vercel/
+**/.next/
+**/_next/
+**/dist/
+**/out/
+**/build/
+**/coverage/
+**/logs/
+**/storybook-static/
+**/.env
+**/.env.*
+!**/.env.example
 
-# Thumbnails
-Thumbs.db
+# Optional: ignore lockfiles repo-wide (aggressive)
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
 
-# macOS-specific folders
-__MACOSX/
+# ----- iOS / Swift / Xcode -----
+**/DerivedData/
+**/.swiftpm/
+**/.build/
+**/Pods/
+**/Carthage/
+**/Carthage/Build/
+**/fastlane/
+**/*.xcuserstate
+**/*.xcworkspace
+**/*.xccheckout
+**/*.xcuserdatad
+**/*.xcodeproj/project.xcworkspace/
+**/*.xcodeproj/xcuserdata/
+**/*.xcodeproj/xcshareddata/
+**/*.ipa
+**/*.dSYM
+**/*.dSYM.zip
+**/*.xcarchive
 
-# Xcode
-*.xcuserstate
-*.xcuserdata/
-*.xcworkspace/
-DerivedData/
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-*.moved-aside
-build/
-*.pbxuser
-!default.pbxuser
-*.perspective
-!default.perspective
-xcuserdata/
+# If you never want SPM’s resolution committed
+**/Package.resolved
+
+# ----- Android / Gradle / Kotlin / Java -----
+**/.gradle/
+**/gradle-cache/
+**/.cxx/
+**/build/
+**/captures/
+**/outputs/
+**/intermediates/
+**/generated/
+**/release/
+**/debug/
+**/libs/
+**/local.properties
+**/*.apk
+**/*.ap_
+**/*.aab
+**/*.dex
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+**/*.so
+**/*.hprof
+
+# ----- Test tooling -----
+**/cypress/screenshots/
+**/cypress/videos/
+**/playwright-report/
+**/.allure/
+**/reports/
+**/junit/
+
+# ----- Python crumbs (often from scripts) -----
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+
+# ----- Project-specific you mentioned -----
+**/.specify/
+**/.worktrees/
+**/create-t3-turbo-main/
+**/.changecolor
+**/.claude
+**/CLAUDE.md

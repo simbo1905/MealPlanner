@@ -83,7 +83,7 @@ fi
 
 log "Building Android app..."
 cd "$ROOT_DIR"
-mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" assembleDebug
+mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" assembleDebug --info --stacktrace
 
 log "Checking for connected devices/emulators..."
 if ! command -v adb >/dev/null 2>&1; then
@@ -96,7 +96,7 @@ if [ "$DEVICE_COUNT" -eq 0 ]; then
 fi
 
 log "Installing app on device/emulator..."
-mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" installDebug
+mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" installDebug --info
 
 log "Launching app..."
 adb shell am start -n com.mealplanner.app/.MainActivity

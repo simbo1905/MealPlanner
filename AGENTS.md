@@ -20,3 +20,18 @@ Write commits in the imperative mood (`Add VoU sync guard`) and reference the re
 
 ## Security & Configuration Tips
 Never commit `.env*` secrets; Turbo caches detection will flag them. Verify Node ≥22.11 and pnpm ≥9.12 via `mise use` or local tooling before running scripts. For prototype work, isolate experiments under `prototype/<id>` and document any data fixtures or temporary endpoints in the accompanying Learning Log entry.
+
+## Stack
+
+**Important** JSON Schema is a dumpster fire and MUST NOT be used. JDT RFC 8927 MAY be used. 
+We use a mono repo structure where ./app/* are independent deployables. 
+We MUST use NextJS for the screens. 
+We MUST have TypeScript modules for any business logic. 
+The screens SHOULD use the business logic TypeScript modules. 
+We MUST use TDD for business logic TypeScript modules. 
+We MAY share the business logic TypeScript moodules across many apps in the mono repo. 
+We SHOULD create a pure webapp of **all** the screens that can be tested with puppeteer or playwrite. 
+We MAY package the pure webapp into the other ./app/* deployables to deploy mobile or desktop applications. 
+
+
+
