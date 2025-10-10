@@ -4,8 +4,6 @@
   "private": true,
   "description": "Shared TypeScript configuration for MealPlanner monorepo",
   "files": [
-    "base.json",
-    "nextjs.json",
-    "react.json"
+    "base.json"
   ]
 }

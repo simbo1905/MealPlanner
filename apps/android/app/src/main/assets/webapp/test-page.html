@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Console Bridge Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 28px;
+      color: #667eea;
+      margin-bottom: 12px;
+    }
+    p {
+      color: #6c757d;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .button {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 12px;
+    }
+    .button:active {
+      transform: translateY(2px);
+    }
+    .button.error {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    }
+    .status {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .status-item:last-child {
+      margin-bottom: 0;
+    }
+    .status-icon {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Console Bridge Test</h1>
+    <p>This page tests JavaScript console logging bridged to Android Logcat.</p>
+    
+    <button class="button" onclick="testLog()">
+      🔘 Test console.log
+    </button>
+    
+    <button class="button error" onclick="testError()">
+      ❌ Test console.error
+    </button>
+    
+    <button class="button" onclick="testLocalStorage()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+      💾 Test localStorage
+    </button>
+    
+    <div class="status">
+      <div class="status-item">
+        <span class="status-icon">✅</span>
+        <span id="pageLoadStatus">Page loading...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon">📝</span>
+        <span id="scriptStatus">Script executing...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon">🔘</span>
+        <span id="clickStatus">Waiting for button click...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-icon">💾</span>
+        <span id="storageStatus">localStorage not tested yet</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log('✅ Script executed at page load');
+    document.getElementById('scriptStatus').textContent = 'Script executed successfully';
+
+    let clickCount = 0;
+
+    function testLog() {
+      clickCount++;
+      console.log('🔘 Test button clicked! Click count: ' + clickCount);
+      document.getElementById('clickStatus').textContent = 'Button clicked ' + clickCount + ' time(s)';
+    }
+
+    function testError() {
+      console.error('❌ Test error triggered by user');
+      console.warn('⚠️ This is a warning message');
+      alert('Error logged! Check Android Studio Logcat');
+    }
+
+    function testLocalStorage() {
+      console.log('💾 Testing localStorage...');
+      
+      try {
+        const testKey = 'test_key';
+        const testValue = { message: 'Hello from localStorage!', timestamp: Date.now() };
+        
+        console.log('Setting item in localStorage:', testValue);
+        localStorage.setItem(testKey, JSON.stringify(testValue));
+        
+        const retrieved = localStorage.getItem(testKey);
+        console.log('Retrieved from localStorage:', retrieved);
+        
+        const parsed = JSON.parse(retrieved);
+        console.log('Parsed value:', parsed);
+        
+        console.log('✅ localStorage test successful!');
+        document.getElementById('storageStatus').textContent = 'localStorage works! Value: ' + parsed.message;
+        
+        alert('localStorage test passed! Check Logcat for details.');
+      } catch (e) {
+        console.error('❌ localStorage test failed:', e);
+        document.getElementById('storageStatus').textContent = 'localStorage failed: ' + e.message;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('✅ Page loaded and DOM ready');
+      document.getElementById('pageLoadStatus').textContent = 'Page loaded and DOM ready';
+      
+      console.log('ℹ️ Test various log levels:');
+      console.log('  - This is a normal log message (blue in Logcat)');
+      console.warn('  - This is a warning message (orange in Logcat)');
+      console.error('  - This is an error message (red in Logcat)');
+    });
+  </script>
+</body>
+</html>

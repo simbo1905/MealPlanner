@@ -9,16 +9,7 @@ catalog:
   "@types/node": "^22.9.0"
   "eslint": "^9.14.0"
   "prettier": "^3.3.3"
-  "turbo": "^2.3.3"
   "zod": "^3.23.8"
-
-# React catalog for webapp
-catalogs:
-  react19:
-    "react": "^19.0.0"
-    "react-dom": "^19.0.0"
-    "@types/react": "^19.0.0"
-    "@types/react-dom": "^19.0.0"
 
 # Build optimizations
 onlyBuiltDependencies:
@@ -29,7 +20,8 @@ onlyBuiltDependencies:
 nodeLinker: hoisted
 linkWorkspacePackages: true
 
-# Ensure consistent package resolution
+# Ensure consistent package resolution across workspace
+# Using 'highest' to prefer latest compatible versions within semver ranges
 resolution-mode: highest
 
 # Override any problematic dependency versions

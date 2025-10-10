@@ -16,7 +16,7 @@ A family meal planning application built with a modern monorepo architecture.
 - Vitest for testing
 
 **Mobile** (`apps/ios`, `apps/android`)
-- WebView wrappers for the web application
+- WebView wrappers loading Vite static bundle
 - Native Swift (iOS) and Kotlin (Android)
 
 ## Quick Start
@@ -57,7 +57,7 @@ pnpm test             # Run all tests
 pnpm typecheck        # Type checking
 pnpm lint             # Linting
 
-# Prototypes (Next.js reference implementations)
+# Prototypes (legacy Next.js visual mockups only)
 just prototype 02 start   # Start on :3000
 just prototype 02 stop
 ```

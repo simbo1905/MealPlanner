@@ -11,17 +11,17 @@ default:
 prototype num action:
     sh ./scripts/prototype.sh {{num}} {{action}}
 
-# Build webapp using Turbo cache (fast incremental)
+# Build webapp with pnpm
 build-webapp:
-    turbo run build --filter @mealplanner/web
+    pnpm build:web
 
-# Build webapp bypassing cache (clean build)
+# Build webapp with clean cache
 clean-build-webapp:
-    turbo run build --filter @mealplanner/web --force
+    pnpm clean:web && pnpm build:web
 
-# Start webapp dev mode with Turbo
+# Start webapp dev mode
 dev-webapp:
-    turbo run dev --filter @mealplanner/web
+    pnpm dev:web
 
 # Start webapp production server
 webapp action:
@@ -29,18 +29,31 @@ webapp action:
 
 # Clean all build artifacts
 clean:
-    turbo run clean
+    pnpm clean
 
 # Clean everything including node_modules
 clean-all:
-    turbo run clean && rm -rf node_modules apps/*/node_modules packages/*/node_modules
+    pnpm clean && rm -rf node_modules apps/*/node_modules packages/*/node_modules
 
-# Full repar of web
+# Full repair of web environment (clear pnpm cache and reinstall)
 nuke-web:
     @echo "🩺 Running MealPlanner web environment doctor..."
-    cd /Users/Shared/MealPlanner
     rm -rf node_modules pnpm-lock.yaml
     rm -rf node_modules/.pnpm/store
     pnpm store prune --force || true
     rm -rf "$(pnpm store path 2>/dev/null || echo ~/.pnpm-store)"
     pnpm install
+
+# Build webapp to static bundle for deployment
+build-bundle:
+    sh ./scripts/build_webapp_bundle.sh
+
+# Deploy webapp bundle to iOS Resources
+deploy-ios:
+    sh ./scripts/build_webapp_bundle.sh
+    sh ./scripts/deploy_webapp_to_ios.sh
+
+# Deploy webapp bundle to Android assets
+deploy-android:
+    sh ./scripts/build_webapp_bundle.sh
+    sh ./scripts/deploy_webapp_to_android.sh

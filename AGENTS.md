@@ -41,8 +41,8 @@ Never commit `.env*` secrets or build artifacts. Verify Node â‰¥22.11 and pnpm â
 - **Testing**: Vitest
 
 ### Prototypes (prototype/*)
-- **Framework**: Next.js (reference/mockup only - DO NOT MODIFY)
-- **Purpose**: Visual reference for UI porting
+- **Framework**: Next.js (legacy visual mockups only - DO NOT MODIFY)
+- **Purpose**: Historical UI reference for porting to Svelte
 
 ## Build Tool Standards
 
@@ -131,7 +131,7 @@ just prototype 02 start  # Calls: sh ./scripts/prototype.sh 02 start
 just prototype 02 stop   # Calls: sh ./scripts/prototype.sh 02 stop
 ```
 
-**Note**: Prototypes build before serving (typically starts quickly, usually under 10 seconds depending on machine).
+**Note**: Prototypes build before serving (typically starts quickly, usually under 10 seconds). These are legacy Next.js mockups for visual reference only.
 
 ## Troubleshooting
 
@@ -220,7 +220,7 @@ Always test prototypes with Playwright MCP after starting:
 
 ```bash
 # 1. Start the prototype
-./prototype.sh 02 start
+./scripts/prototype.sh 02 start
 
 # 2. Use Playwright MCP tools to navigate and interact
 # mcp_playwright_browser_navigate to http://localhost:3000/calendar
@@ -228,20 +228,28 @@ Always test prototypes with Playwright MCP after starting:
 # mcp_playwright_browser_click, etc. for interactions
 
 # 3. Stop when done
-./prototype.sh 02 stop
+./scripts/prototype.sh 02 stop
 ```
 
 ## Stack
 
-**Important** JSON Schema is a dumpster fire and MUST NOT be used. JDT RFC 8927 MAY be used. 
-We use a mono repo structure where ./apps/* are independent deployables. 
-The web app uses **Svelte + Vite** for the screens. 
-We MUST have TypeScript modules for any business logic. 
-The screens SHOULD use the business logic TypeScript modules. 
-We MUST use TDD for business logic TypeScript modules. 
-We MAY share the business logic TypeScript modules across many apps in the mono repo. 
-We SHOULD create a pure webapp of **all** the screens that can be tested with Playwright. 
-We MAY package the pure webapp into the other ./apps/* deployables to deploy mobile or desktop applications. 
+**Important:** JSON Schema is a dumpster fire and MUST NOT be used. JTD RFC 8927 MAY be used.
+
+We use a monorepo structure where `./apps/*` are independent deployables.
+
+The web app uses **Svelte 5 + Vite 6** for all screens.
+
+We MUST have TypeScript modules for business logic in `./packages/*`.
+
+The screens SHOULD use the business logic TypeScript modules from `./packages/*`.
+
+We MUST use TDD for business logic TypeScript modules.
+
+We MAY share the business logic TypeScript modules across many apps in the monorepo.
+
+We SHOULD create a pure webapp of **all** screens that can be tested with Playwright.
+
+We MAY package the pure Vite webapp bundle into the other `./apps/*` deployables to deploy mobile or desktop applications. 
 
 
 

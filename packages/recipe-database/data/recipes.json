@@ -1,27 +1,68 @@
 [
   {
-    "title": "Quick Chicken Stir-Fry",
+    "title": "Spaghetti Bolognese",
+    "image_url": "https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=400",
+    "description": "Classic Italian pasta with rich meat sauce",
+    "notes": "Perfect family meal. Can be made ahead and frozen.",
+    "pre_reqs": ["Large pot", "Skillet", "Wooden spoon"],
+    "total_time": 45,
+    "ingredients": [
+      {
+        "name": "spaghetti",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 1.0,
+        "metric-unit": "g",
+        "metric-amount": 400,
+        "notes": "Dried pasta"
+      },
+      {
+        "name": "minced beef",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 1.0,
+        "metric-unit": "g",
+        "metric-amount": 500,
+        "notes": "Lean beef mince"
+      },
+      {
+        "name": "tomato sauce",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 2.0,
+        "metric-unit": "ml",
+        "metric-amount": 400,
+        "notes": "Passata or canned tomatoes"
+      },
+      {
+        "name": "onion",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 0.5,
+        "metric-unit": "g",
+        "metric-amount": 100,
+        "notes": "Finely diced"
+      }
+    ],
+    "steps": [
+      "Brown the minced beef in a large skillet",
+      "Add diced onion and cook until softened",
+      "Pour in tomato sauce and simmer for 30 minutes",
+      "Meanwhile, cook spaghetti according to package directions",
+      "Drain pasta and serve with bolognese sauce on top"
+    ]
+  },
+  {
+    "title": "Chicken Stir-Fry",
     "image_url": "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400",
-    "description": "A speedy weeknight dinner with tender chicken and crisp vegetables in a savory sauce",
-    "notes": "Perfect for busy weeknights. Prep vegetables while chicken marinates for maximum efficiency.",
-    "pre_reqs": ["Wok or large skillet", "Sharp knife", "Cutting board"],
-    "total_time": 25,
+    "description": "Quick and healthy chicken with colorful vegetables",
+    "notes": "High heat is key for crispy vegetables.",
+    "pre_reqs": ["Wok or large skillet", "Sharp knife"],
+    "total_time": 30,
     "ingredients": [
       {
         "name": "chicken breast",
         "ucum-unit": "cup_us",
-        "ucum-amount": 2.0,
+        "ucum-amount": 1.5,
         "metric-unit": "g",
         "metric-amount": 400,
-        "notes": "Cut into bite-sized pieces"
-      },
-      {
-        "name": "mixed vegetables (bell peppers, broccoli, snap peas)",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 3.0,
-        "metric-unit": "g",
-        "metric-amount": 450,
-        "notes": "Fresh or frozen, cut into bite-sized pieces"
+        "notes": "Cut into strips"
       },
       {
         "name": "soy sauce",
@@ -32,224 +73,136 @@
         "notes": "Low sodium preferred"
       },
       {
-        "name": "vegetable oil",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
-        "metric-amount": 30,
-        "notes": "For stir-frying"
-      },
-      {
-        "name": "garlic",
-        "ucum-unit": "tsp_us",
-        "ucum-amount": 2.0,
+        "name": "mixed vegetables",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 3.0,
         "metric-unit": "g",
-        "metric-amount": 6,
-        "notes": "Minced"
+        "metric-amount": 400,
+        "notes": "Bell peppers, broccoli, carrots"
       }
     ],
     "steps": [
-      "Cut chicken into bite-sized pieces and season with salt and pepper",
-      "Heat wok over high heat, add oil",
-      "Stir-fry chicken until golden, about 5-6 minutes",
-      "Add garlic and vegetables, stir-fry for 3-4 minutes",
+      "Heat wok over high heat with oil",
+      "Stir-fry chicken until golden, about 5 minutes",
+      "Add vegetables and stir-fry for 3-4 minutes",
       "Add soy sauce and toss everything together",
       "Serve immediately over rice or noodles"
     ]
   },
   {
-    "title": "Creamy Mushroom Risotto",
-    "image_url": "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400",
-    "description": "Rich and creamy Italian rice dish with earthy mushrooms and parmesan cheese",
-    "notes": "Requires constant stirring but worth the effort. Use warm broth for best results.",
-    "pre_reqs": ["Heavy-bottomed saucepan", "Wooden spoon", "Ladle"],
-    "total_time": 45,
+    "title": "Fish and Chips",
+    "image_url": "https://images.unsplash.com/photo-1579208575657-c595a05383b7?w=400",
+    "description": "British classic with crispy battered fish and chips",
+    "notes": "Use firm white fish like cod or haddock.",
+    "pre_reqs": ["Deep fryer or large pot", "Thermometer"],
+    "total_time": 40,
     "ingredients": [
       {
-        "name": "arborio rice",
+        "name": "white fish fillet",
         "ucum-unit": "cup_us",
         "ucum-amount": 1.5,
         "metric-unit": "g",
-        "metric-amount": 300,
-        "notes": "Italian short-grain rice"
+        "metric-amount": 600,
+        "notes": "Cod or haddock"
       },
       {
-        "name": "mixed mushrooms (cremini, shiitake, oyster)",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "g",
-        "metric-amount": 300,
-        "notes": "Cleaned and sliced"
-      },
-      {
-        "name": "vegetable broth",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 4.0,
-        "metric-unit": "ml",
-        "metric-amount": 1000,
-        "notes": "Warm, low sodium"
-      },
-      {
-        "name": "white wine",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 0.5,
-        "metric-unit": "ml",
-        "metric-amount": 120,
-        "notes": "Dry white wine"
-      },
-      {
-        "name": "parmesan cheese",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 0.5,
-        "metric-unit": "g",
-        "metric-amount": 50,
-        "notes": "Freshly grated"
-      },
-      {
-        "name": "butter",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 3.0,
-        "metric-unit": "g",
-        "metric-amount": 45,
-        "notes": "Unsalted"
-      },
-      {
-        "name": "onion",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 0.5,
-        "metric-unit": "g",
-        "metric-amount": 80,
-        "notes": "Finely diced"
-      }
-    ],
-    "steps": [
-      "Warm broth in a separate saucepan",
-      "Sauté mushrooms in butter until golden, set aside",
-      "Cook onion in remaining butter until translucent",
-      "Add rice and toast for 2 minutes, stirring constantly",
-      "Add wine and stir until absorbed",
-      "Add broth one ladle at a time, stirring constantly until absorbed",
-      "Continue adding broth and stirring for 20-25 minutes",
-      "Stir in mushrooms, parmesan, and remaining butter",
-      "Season with salt and pepper, serve immediately"
-    ]
-  },
-  {
-    "title": "Simple Tomato Soup",
-    "image_url": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400",
-    "description": "Classic comfort food with ripe tomatoes, herbs, and a touch of cream",
-    "notes": "Use ripe, seasonal tomatoes for best flavor. Can be made ahead and reheated.",
-    "pre_reqs": ["Large pot", "Immersion blender or regular blender", "Fine mesh strainer"],
-    "total_time": 35,
-    "ingredients": [
-      {
-        "name": "ripe tomatoes",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 6.0,
-        "metric-unit": "g",
-        "metric-amount": 900,
-        "notes": "Roma or vine-ripened, cored and chopped"
-      },
-      {
-        "name": "vegetable broth",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
-        "metric-amount": 500,
-        "notes": "Low sodium"
-      },
-      {
-        "name": "heavy cream",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 0.5,
-        "metric-unit": "ml",
-        "metric-amount": 120,
-        "notes": "For richness (optional)"
-      },
-      {
-        "name": "onion",
+        "name": "flour",
         "ucum-unit": "cup_us",
         "ucum-amount": 1.0,
         "metric-unit": "g",
-        "metric-amount": 160,
-        "notes": "Chopped"
+        "metric-amount": 125,
+        "notes": "For batter"
       },
       {
-        "name": "garlic",
-        "ucum-unit": "tsp_us",
-        "ucum-amount": 2.0,
+        "name": "potatoes",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 4.0,
         "metric-unit": "g",
-        "metric-amount": 6,
-        "notes": "Minced"
-      },
-      {
-        "name": "olive oil",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
-        "metric-amount": 30,
-        "notes": "Extra virgin"
-      },
-      {
-        "name": "fresh basil",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "g",
-        "metric-amount": 6,
-        "notes": "Chopped, plus extra for garnish"
+        "metric-amount": 800,
+        "notes": "Cut into chips"
       }
     ],
     "steps": [
-      "Heat olive oil in a large pot over medium heat",
-      "Sauté onion until softened, about 5 minutes",
-      "Add garlic and cook for 1 minute more",
-      "Add tomatoes and broth, bring to a simmer",
-      "Cook for 20 minutes until tomatoes break down",
-      "Blend soup until smooth using immersion blender",
-      "Strain through fine mesh for silky texture",
-      "Stir in cream if using, heat through",
-      "Season with salt, pepper, and fresh basil"
+      "Cut potatoes into chips and soak in cold water",
+      "Make batter with flour, water, and seasoning",
+      "Heat oil to 180°C (350°F)",
+      "Fry chips until golden, drain on paper",
+      "Dip fish in batter and fry until crispy",
+      "Serve hot with malt vinegar and mushy peas"
     ]
   },
   {
-    "title": "Grilled Salmon with Asparagus",
-    "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400",
-    "description": "Healthy and flavorful salmon with tender asparagus and lemon herb butter",
-    "notes": "Don't overcook the salmon - it should flake easily but still be moist in the center.",
-    "pre_reqs": ["Grill or grill pan", "Fish spatula", "Meat thermometer (optional)"],
-    "total_time": 20,
+    "title": "Vegetable Curry",
+    "image_url": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400",
+    "description": "Fragrant vegetarian curry with mixed vegetables",
+    "notes": "Adjust spice level to taste.",
+    "pre_reqs": ["Large pot", "Spice grinder (optional)"],
+    "total_time": 35,
     "ingredients": [
       {
-        "name": "salmon fillets",
+        "name": "mixed vegetables",
         "ucum-unit": "cup_us",
         "ucum-amount": 4.0,
         "metric-unit": "g",
         "metric-amount": 600,
-        "notes": "Skin-on, about 150g each"
+        "notes": "Cauliflower, peas, carrots, potatoes"
       },
       {
-        "name": "asparagus spears",
+        "name": "coconut milk",
         "ucum-unit": "cup_us",
+        "ucum-amount": 1.0,
+        "metric-unit": "ml",
+        "metric-amount": 400,
+        "notes": "Full-fat for creamy texture"
+      },
+      {
+        "name": "curry paste",
+        "ucum-unit": "tbsp_us",
         "ucum-amount": 2.0,
         "metric-unit": "g",
-        "metric-amount": 300,
-        "notes": "Trimmed"
-      },
-      {
-        "name": "lemon",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
         "metric-amount": 30,
-        "notes": "Juiced, plus wedges for serving"
+        "notes": "Thai or Indian curry paste"
+      }
+    ],
+    "steps": [
+      "Sauté curry paste in oil until fragrant",
+      "Add chopped vegetables and stir to coat",
+      "Pour in coconut milk and bring to simmer",
+      "Cook for 20-25 minutes until vegetables are tender",
+      "Season with salt and serve with rice or naan"
+    ]
+  },
+  {
+    "title": "Roast Chicken",
+    "image_url": "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400",
+    "description": "Perfectly seasoned roasted whole chicken",
+    "notes": "Let rest for 15 minutes before carving.",
+    "pre_reqs": ["Roasting pan", "Meat thermometer"],
+    "total_time": 90,
+    "ingredients": [
+      {
+        "name": "whole chicken",
+        "ucum-unit": "cup_us",
+        "ucum-amount": 4.0,
+        "metric-unit": "g",
+        "metric-amount": 1800,
+        "notes": "About 1.8kg"
       },
       {
-        "name": "olive oil",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 3.0,
-        "metric-unit": "ml",
-        "metric-amount": 45,
-        "notes": "For brushing"
+        "name": "salt and pepper",
+        "ucum-unit": "tsp_us",
+        "ucum-amount": 2.0,
+        "metric-unit": "g",
+        "metric-amount": 10,
+        "notes": "Season generously"
+      },
+      {
+        "name": "onion powder",
+        "ucum-unit": "tsp_us",
+        "ucum-amount": 1.0,
+        "metric-unit": "g",
+        "metric-amount": 3,
+        "notes": "Optional seasoning"
       },
       {
         "name": "butter",
@@ -257,104 +210,25 @@
         "ucum-amount": 2.0,
         "metric-unit": "g",
         "metric-amount": 30,
-        "notes": "Melted"
+        "notes": "Softened"
       },
       {
-        "name": "fresh dill",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 1.0,
-        "metric-unit": "g",
-        "metric-amount": 3,
-        "notes": "Chopped"
-      }
-    ],
-    "steps": [
-      "Preheat grill to medium-high heat",
-      "Brush salmon and asparagus with olive oil",
-      "Season salmon with salt and pepper",
-      "Grill salmon skin-side down for 4-5 minutes",
-      "Flip salmon and add asparagus to grill",
-      "Cook for 3-4 minutes more until salmon flakes easily",
-      "Mix melted butter with lemon juice and dill",
-      "Drizzle lemon herb butter over salmon and asparagus",
-      "Serve immediately with lemon wedges"
-    ]
-  },
-  {
-    "title": "Vegetarian Buddha Bowl",
-    "image_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400",
-    "description": "Colorful and nutritious bowl with quinoa, roasted vegetables, chickpeas, and tahini dressing",
-    "notes": "Great for meal prep - roast vegetables ahead of time and assemble when ready to eat.",
-    "pre_reqs": ["Baking sheet", "Mixing bowls", "Sharp knife"],
-    "total_time": 40,
-    "ingredients": [
-      {
-        "name": "quinoa",
+        "name": "celery",
         "ucum-unit": "cup_us",
         "ucum-amount": 1.0,
         "metric-unit": "g",
-        "metric-amount": 185,
-        "notes": "Rinsed"
-      },
-      {
-        "name": "chickpeas",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 1.5,
-        "metric-unit": "g",
-        "metric-amount": 250,
-        "notes": "Cooked or canned, drained"
-      },
-      {
-        "name": "sweet potato",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "g",
-        "metric-amount": 300,
-        "notes": "Cubed"
-      },
-      {
-        "name": "kale",
-        "ucum-unit": "cup_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "g",
-        "metric-amount": 130,
-        "notes": "Chopped, tough stems removed"
-      },
-      {
-        "name": "tahini",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
-        "metric-amount": 30,
-        "notes": "Sesame paste"
-      },
-      {
-        "name": "lemon juice",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 2.0,
-        "metric-unit": "ml",
-        "metric-amount": 30,
-        "notes": "Fresh"
-      },
-      {
-        "name": "olive oil",
-        "ucum-unit": "tbsp_us",
-        "ucum-amount": 3.0,
-        "metric-unit": "ml",
-        "metric-amount": 45,
-        "notes": "For roasting and dressing"
+        "metric-amount": 100,
+        "notes": "Chopped, for roasting pan"
       }
     ],
     "steps": [
-      "Cook quinoa according to package directions",
-      "Preheat oven to 425°F (220°C)",
-      "Toss sweet potato and chickpeas with oil, salt, and pepper",
-      "Roast for 25-30 minutes until tender and golden",
-      "Massage kale with a pinch of salt until softened",
-      "Whisk tahini with lemon juice, water, and garlic for dressing",
-      "Assemble bowls with quinoa, roasted vegetables, and kale",
-      "Drizzle with tahini dressing",
-      "Add any additional toppings like seeds or nuts"
+      "Preheat oven to 220°C (425°F)",
+      "Pat chicken dry and season inside and out",
+      "Rub butter under the skin",
+      "Place celery in roasting pan, chicken on top",
+      "Roast for 20 minutes, then reduce to 180°C (350°F)",
+      "Continue roasting for 60-70 minutes until internal temp reaches 75°C",
+      "Rest for 15 minutes before carving"
     ]
   }
 ]
