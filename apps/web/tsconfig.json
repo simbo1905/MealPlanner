@@ -6,20 +6,13 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "allowJs": true
+    }
   },
   "include": [
-    "**/*.cjs",
-    "**/*.mjs",
     "**/*.ts",
     "**/*.tsx",
-    "../../packages/recipe-database/src/**/*",
-    "../../packages/recipe-types/src/**/*",
-    "../../packages/recipe-validator/src/**/*",
     ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "dist/types/**/*.ts"
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules",
