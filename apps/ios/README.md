@@ -1,6 +1,6 @@
 # iOS Hello WebView App
 
-Minimal iOS app with embedded Next.js WebView showing recipe list with add/delete functionality.
+Minimal iOS app with embedded Svelte + Vite WebView showing recipe list with add/delete functionality.
 
 ## Setup & Build
 
@@ -11,7 +11,7 @@ Run these commands from the repository root:
 bash scripts/setup_ios.sh
 
 # Or run steps individually:
-bash scripts/build_ios_webapp.sh      # Build Next.js app
+bash scripts/build_ios_webapp.sh      # Build Vite app
 bash scripts/copy_ios_webapp.sh       # Copy to iOS Resources
 bash scripts/generate_ios_xcode.sh    # Generate Xcode project
 ```
@@ -31,9 +31,9 @@ Then select a simulator and press Cmd+R to build and run.
   - JS-Swift bridge via message handlers
   - In-memory recipe storage (5 default recipes)
   
-- **Web Side**: `webapp/src/app/page.tsx`
-  - Next.js static export
-  - TypeScript + React
+- **Web Side**: `webapp/src/App.svelte`
+  - Vite static export
+  - TypeScript + Svelte
   - Communicates via `window.webkit.messageHandlers.recipeHandler`
 
 ## How It Works
@@ -55,13 +55,14 @@ apps/ios/
 ├── Resources/
 │   ├── Info.plist
 │   └── webapp/ (copied from webapp/out/)
-├── webapp/ (new Next.js project)
-│   ├── src/app/
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+├── webapp/ (Svelte + Vite project)
+│   ├── src/
+│   │   ├── App.svelte
+│   │   ├── main.ts
+│   │   └── lib/
 │   ├── package.json
 │   ├── tsconfig.json
-│   └── next.config.js
+│   └── vite.config.ts
 └── project.yml (modified - added webapp resources)
 ```
 
@@ -73,7 +74,7 @@ apps/ios/
 
 **Build fails?**
 - Ensure xcodegen is installed: `brew install xcodegen`
-- Ensure Node.js is installed for Next.js build
+- Ensure Node.js is installed for Vite build
 
 **WebView blank?**
 - Check Safari Web Inspector (Develop menu → Simulator → index.html)
