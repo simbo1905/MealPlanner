@@ -252,4 +252,14 @@ We SHOULD create a pure webapp of **all** screens that can be tested with Playwr
 We MAY package the pure Vite webapp bundle into the other `./apps/*` deployables to deploy mobile or desktop applications. 
 
 
+## Automation Semantics
 
+- Recipes named `build-*` perform an incremental build for that deployable only. They must not rebuild shared web bundles or launch simulators/emulators.
+- Recipes named `deploy-*` first ensure the latest web bundle is produced and copied where needed, then launch/install the target application.
+- Recipes named `clean-*` remove build artifacts for their own deployable, but must not clear shared artifacts such as the web bundle; provide explicit commands if the web bundle ever needs to be cleaned.
+
+## Git Discipline
+
+- Only the user may request staging or committing work. This monorepo is actively updated by multiple agents in parallel.
+- Agents must never run `git add`, `git commit`, or similar commands on files they did not modify directly, or outside the deployable they have personally built and tested.
+- Keep local diffs focused on the requested task; leave all repository-wide staging to the user.

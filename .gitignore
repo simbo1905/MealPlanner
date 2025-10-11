@@ -45,6 +45,7 @@
 **/coverage/
 **/logs/
 **/storybook-static/
+apps/android/app/src/main/assets/webapp/
 **/.env
 **/.env.*
 !**/.env.example

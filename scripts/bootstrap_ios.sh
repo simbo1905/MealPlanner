@@ -18,7 +18,7 @@ if [ -d "$IOS_DIR" ] && [ -n "$(find "$IOS_DIR" -mindepth 1 -maxdepth 1 2>/dev/n
 fi
 
 log "Creating iOS scaffold under apps/ios"
-mkdir -p "$IOS_DIR/Sources" "$IOS_DIR/Resources" "$IOS_DIR/Assets.xcassets/AppIcon.appiconset" "$IOS_DIR/web-placeholder"
+mkdir -p "$IOS_DIR/Sources" "$IOS_DIR/Resources/webapp" "$IOS_DIR/Assets.xcassets/AppIcon.appiconset"
 
 cat <<'YAML' > "$IOS_DIR/project.yml"
 name: MealPlanner
@@ -136,7 +136,7 @@ cat <<'JSON' > "$IOS_DIR/Assets.xcassets/AppIcon.appiconset/Contents.json"
 }
 JSON
 
-cat <<'HTML' > "$IOS_DIR/web-placeholder/index.html"
+cat <<'HTML' > "$IOS_DIR/Resources/webapp/index.html"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,7 +147,7 @@ cat <<'HTML' > "$IOS_DIR/web-placeholder/index.html"
 <body>
   <main>
     <h1>MealPlanner Web Placeholder</h1>
-    <p>Swap this bundle with the Next.js export once ready.</p>
+    <p>Swap this bundle with the MealPlanner Vite export once ready.</p>
   </main>
 </body>
 </html>

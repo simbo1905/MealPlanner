@@ -43,12 +43,30 @@ nuke-web:
 build-bundle:
     sh ./scripts/build_webapp_bundle.sh
 
+# Build the iOS wrapper with the latest web bundle
+build-ios:
+    sh ./scripts/build_ios.sh
+
+# Build the Android wrapper with the latest web bundle
+build-android:
+    sh ./scripts/build_android.sh
+
+# Manage Android SDK / launch Android Studio
+android-sdk action='studio':
+    sh ./scripts/android_sdk.sh {{action}}
+
+# Deploy Android app (rebuild web bundle, copy assets, build, install, launch)
+deploy-android:
+    sh ./scripts/build_webapp_bundle.sh
+    sh ./scripts/deploy_webapp_to_android.sh
+    sh ./scripts/build_android.sh
+    sh ./scripts/launch_android.sh
+
+# Clean Android build artifacts (web bundle untouched)
+clean-android:
+    sh ./scripts/clean_android.sh
+
 # Deploy webapp bundle to iOS Resources
 deploy-ios:
     sh ./scripts/build_webapp_bundle.sh
     sh ./scripts/deploy_webapp_to_ios.sh
-
-# Deploy webapp bundle to Android assets
-deploy-android:
-    sh ./scripts/build_webapp_bundle.sh
-    sh ./scripts/deploy_webapp_to_android.sh

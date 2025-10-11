@@ -4,6 +4,12 @@ Detailed architecture for embedding the MealPlanner Svelte + Vite webapp into an
 
 ## High-Level Architecture
 
+> ⚙️ **Automation commands**
+>
+> - `just build-ios` – build the Svelte bundle, copy it into `Resources/webapp`, and run `xcodebuild` for a simulator target.
+> - `just deploy-ios` – refresh only the embedded web assets without running Xcode.
+> - `bash scripts/setup_ios.sh` – rebuild the bundle and regenerate `MealPlanner.xcodeproj` (no simulator build).
+
 - **iOS app**: Thin wrapper around WKWebView that loads bundled Vite static output
 - **Web UI**: Svelte 5 + Vite 6 app built to static HTML/JS/CSS bundle
 - **Communication**: Swift ↔ JavaScript bridge via WKScriptMessageHandler

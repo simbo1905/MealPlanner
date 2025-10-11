@@ -24,4 +24,16 @@ if [ ! -d "$DIST_DIR" ]; then
   exit 1
 fi
 
+INDEX_HTML="$DIST_DIR/index.html"
+if [ -f "$INDEX_HTML" ]; then
+  log "Normalizing Svelte bundle for WebView compatibility..."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' 's/type="module" //g' "$INDEX_HTML"
+    sed -i '' 's/crossorigin //g' "$INDEX_HTML"
+  else
+    sed -i 's/type="module" //g' "$INDEX_HTML"
+    sed -i 's/crossorigin //g' "$INDEX_HTML"
+  fi
+fi
+
 log "✅ Webapp bundle built successfully at $DIST_DIR"
