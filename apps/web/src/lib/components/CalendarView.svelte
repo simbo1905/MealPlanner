@@ -107,7 +107,7 @@
   <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <button class="p-2 hover:bg-gray-100 rounded-lg transition">
+        <button type="button" class="p-2 hover:bg-gray-100 rounded-lg transition" aria-label="Go back">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
@@ -115,7 +115,7 @@
         <h1 class="text-xl font-semibold text-gray-900">MealPlanner Calendar View</h1>
       </div>
       <button 
-        on:click={saveCalendar}
+        onclick={saveCalendar}
         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
       >
         Save
@@ -138,7 +138,7 @@
             </span>
           </div>
           <button 
-            on:click={resetCalendar}
+            onclick={resetCalendar}
             class="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +167,7 @@
               <div class="p-2 space-y-2 min-h-[100px]">
                 {#each dayMeals as meal (meal.id)}
                   <button
-                    on:click={() => removeMeal(meal.id)}
+                    onclick={() => removeMeal(meal.id)}
                     class="w-full bg-green-50 rounded-lg p-2 hover:bg-green-100 transition text-left group"
                   >
                     <div class="flex items-start justify-between gap-2">
@@ -187,7 +187,7 @@
                 
                 <!-- Add Button -->
                 <button
-                  on:click={() => openAddDialog(day)}
+                  onclick={() => openAddDialog(day)}
                   class="w-full flex items-center justify-center gap-2 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

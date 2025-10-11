@@ -13,15 +13,15 @@ prototype num action:
 
 # Build webapp with pnpm
 build-webapp:
-    pnpm build:web
+    sh ./scripts/build_webapp.sh
 
 # Build webapp with clean cache
 clean-build-webapp:
-    pnpm clean:web && pnpm build:web
+    sh ./scripts/clean_build_webapp.sh
 
 # Start webapp dev mode
 dev-webapp:
-    pnpm dev:web
+    sh ./scripts/webapp.sh start
 
 # Start webapp production server
 webapp action:
@@ -29,20 +29,15 @@ webapp action:
 
 # Clean all build artifacts
 clean:
-    pnpm clean
+    sh ./scripts/clean.sh
 
 # Clean everything including node_modules
 clean-all:
-    pnpm clean && rm -rf node_modules apps/*/node_modules packages/*/node_modules
+    sh ./scripts/clean_all.sh
 
 # Full repair of web environment (clear pnpm cache and reinstall)
 nuke-web:
-    @echo "🩺 Running MealPlanner web environment doctor..."
-    rm -rf node_modules pnpm-lock.yaml
-    rm -rf node_modules/.pnpm/store
-    pnpm store prune --force || true
-    rm -rf "$(pnpm store path 2>/dev/null || echo ~/.pnpm-store)"
-    pnpm install
+    sh ./scripts/nuke_web.sh
 
 # Build webapp to static bundle for deployment
 build-bundle:

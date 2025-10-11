@@ -13,7 +13,7 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex gap-8">
         <button
-          on:click={() => currentView.set('calendar')}
+          onclick={() => currentView.set('calendar')}
           class={`py-4 px-2 border-b-2 font-medium text-sm transition ${
             $currentView === 'calendar'
               ? 'border-blue-600 text-blue-600'
@@ -23,7 +23,7 @@
           Calendar View
         </button>
         <button
-          on:click={() => currentView.set('recipes')}
+          onclick={() => currentView.set('recipes')}
           class={`py-4 px-2 border-b-2 font-medium text-sm transition ${
             $currentView === 'recipes'
               ? 'border-blue-600 text-blue-600'

@@ -1,9 +1,72 @@
 <script lang="ts">
   import { searchQuery, selectedTags, availableTags, filteredRecipes, selectedRecipe, setSearchQuery, addTag, removeTag, createNewTag, selectRecipe } from '$lib/stores/recipes'
 
+  const INITIAL_BATCH = 12
+  const BATCH_SIZE = 12
+
+  const searchInputId = 'recipe-search-input'
+
   function normalizeTagLabel(tag: string): string {
     return tag.replace(/\u00A0/g, ' ')
   }
+
+  let visibleCount = $state(INITIAL_BATCH)
+  let listSentinel: HTMLElement | null = $state(null)
+  let filterSignature = $state('')
+  let observerEnabled = $state(false)
+
+  $effect(() => {
+    const signature = `${$searchQuery.trim().toLowerCase()}::${$selectedTags.join('|')}::${$filteredRecipes.length}`
+    if (signature !== filterSignature) {
+      filterSignature = signature
+      visibleCount = Math.min(INITIAL_BATCH, $filteredRecipes.length)
+    }
+  })
+
+  $effect(() => {
+    const total = $filteredRecipes.length
+
+    if (total === 0) {
+      return
+    }
+
+    if (visibleCount === 0) {
+      visibleCount = Math.min(INITIAL_BATCH, total)
+      return
+    }
+
+    if (visibleCount > total) {
+      visibleCount = total
+    }
+  })
+
+  $effect(() => {
+    if (!observerEnabled) return
+    if (!listSentinel) return
+    if ($filteredRecipes.length <= visibleCount) return
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        visibleCount = Math.min(visibleCount + BATCH_SIZE, $filteredRecipes.length)
+      }
+    }, { rootMargin: '0px', threshold: 1 })
+
+    observer.observe(listSentinel)
+
+    return () => observer.disconnect()
+  })
+
+  $effect(() => {
+    if (typeof window === 'undefined') return
+
+    const enableObserver = () => {
+      observerEnabled = true
+    }
+
+    window.addEventListener('scroll', enableObserver, { once: true })
+
+    return () => window.removeEventListener('scroll', enableObserver)
+  })
 
   function handleKeyDown(event: KeyboardEvent) {
     const target = event.target as HTMLInputElement
@@ -38,12 +101,15 @@
   </header>
 
   <section class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 mb-8">
-    <label class="block text-sm font-medium text-slate-700 mb-2">Search Recipes</label>
+    <label class="block text-sm font-medium text-slate-700 mb-2" for={searchInputId}>
+      Search Recipes
+    </label>
     <input
       type="text"
+      id={searchInputId}
       value={$searchQuery}
-      on:input={(e) => setSearchQuery(e.currentTarget.value)}
-      on:keydown={handleKeyDown}
+      oninput={(e) => setSearchQuery(e.currentTarget.value)}
+      onkeydown={handleKeyDown}
       placeholder="Try 'stir fry' or type #chicken to add a tag"
       class="w-full rounded-lg border border-slate-200 px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
@@ -55,7 +121,7 @@
             {normalizeTagLabel(tag)}
             <button
               type="button"
-              on:click={() => removeTag(tag)}
+              onclick={() => removeTag(tag)}
               class="rounded-full p-1 hover:bg-blue-100"
               aria-label="Remove {normalizeTagLabel(tag)}"
             >
@@ -72,7 +138,7 @@
         {#each $availableTags as tag}
           <button
             type="button"
-            on:click={() => addTag(tag)}
+            onclick={() => addTag(tag)}
             class={`px-3 py-1 rounded-full border text-sm transition ${
               $selectedTags.includes(tag)
                 ? 'bg-blue-600 text-white border-blue-600'
@@ -93,13 +159,14 @@
           No recipes match your filters yet. Adjust the search text or tags to explore the catalogue.
         </div>
       {:else}
-        {#each $filteredRecipes as recipe}
+        {#each $filteredRecipes.slice(0, visibleCount) as recipe}
           <button
             type="button"
-            on:click={() => selectRecipe(recipe)}
+            onclick={() => selectRecipe(recipe)}
             class={`w-full text-left bg-white border rounded-xl px-5 py-4 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               $selectedRecipe?.title === recipe.title ? 'border-blue-500 shadow-md' : 'border-slate-200 hover:border-blue-300'
             }`}
+            data-testid="recipe-card"
           >
             <div class="flex items-start justify-between gap-4">
               <div>
@@ -126,12 +193,30 @@
                 </span>
               {/if}
             </div>
-          </button>
+         </button>
         {/each}
+
+        {#if $filteredRecipes.length > visibleCount}
+          <div class="flex justify-center py-6">
+            <div
+              class="h-2 w-32 rounded-full bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 animate-pulse"
+              bind:this={listSentinel}
+              data-testid="infinite-scroll-sentinel"
+              aria-hidden="true"
+            ></div>
+          </div>
+        {:else if $filteredRecipes.length > 0}
+          <div class="text-center text-slate-400 text-sm py-4">
+            Showing all {$filteredRecipes.length} recipes.
+          </div>
+        {/if}
       {/if}
     </div>
 
-    <aside class="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+    <aside
+      class="bg-white border border-slate-200 rounded-xl shadow-sm p-5"
+      aria-label="Selected recipe details"
+    >
       {#if $selectedRecipe}
         <div class="space-y-4">
           <div>

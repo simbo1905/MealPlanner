@@ -11,7 +11,8 @@
     "clean": "rm -rf dist node_modules",
     "lint": "eslint src/",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "vitest"
+    "test": "vitest",
+    "test:e2e": "playwright test -c ./playwright.config.ts"
   },
   "dependencies": {
     "@mealplanner/recipe-database": "workspace:*",

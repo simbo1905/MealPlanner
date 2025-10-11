@@ -12,6 +12,7 @@
     "build": "pnpm -r --filter './packages/*' run build && pnpm --filter @mealplanner/web run build",
     "build:web": "pnpm --filter @mealplanner/web run build",
     "build:packages": "pnpm -r --filter './packages/*' run build",
+    "test:e2e": "playwright test -c apps/web/playwright.config.ts",
     "clean": "pnpm -r run clean",
     "clean:web": "pnpm --filter @mealplanner/web run clean",
     "dev": "pnpm -r --parallel --filter './packages/*' run dev & pnpm --filter @mealplanner/web run dev",
@@ -27,6 +28,7 @@
     "android": "echo 'Android build not configured yet'"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@mealplanner/prettier-config": "workspace:*",
     "@mealplanner/typescript-config": "workspace:*",
     "prettier": "^3.3.3",

@@ -1,13 +1,23 @@
 <script lang="ts">
-  import { writable, derived } from 'svelte/store'
+  import { onMount } from 'svelte'
+  import { format } from 'date-fns'
   import { searchQuery, selectedTags, availableTags, filteredRecipes, setSearchQuery, addTag, removeTag, createNewTag } from '$lib/stores/recipes'
   import type { Recipe } from '@mealplanner/recipe-database'
   
-  export let date: Date
-  export let onClose: () => void
-  export let onSelectRecipe: (recipe: Recipe) => void
+  const { date, onClose, onSelectRecipe } = $props<{
+    date: Date
+    onClose: () => void
+    onSelectRecipe: (recipe: Recipe) => void
+  }>()
+
+  const formattedDate = $derived(format(date, 'EEEE d MMM yyyy'))
   
-  let showIngredientDropdown = false
+  let showIngredientDropdown = $state(false)
+  let searchInput: HTMLInputElement | null = null
+
+  onMount(() => {
+    searchInput?.focus()
+  })
   
   function normalizeTagLabel(tag: string): string {
     return tag.replace(/\u00A0/g, ' ')
@@ -55,21 +65,31 @@
 <!-- Backdrop -->
 <div 
   class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-  on:click={onClose}
-  on:keydown={(e) => e.key === 'Escape' && onClose()}
+  onclick={(event) => {
+    if (event.target === event.currentTarget) {
+      onClose()
+    }
+  }}
+  onkeydown={(e) => e.key === 'Escape' && onClose()}
   role="presentation"
+  tabindex="-1"
 >
   <!-- Dialog -->
   <div 
     class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col"
-    on:click|stopPropagation
     role="dialog"
     aria-modal="true"
     aria-labelledby="dialog-title"
+    tabindex="-1"
   >
     <!-- Header -->
     <div class="px-6 py-4 border-b border-gray-200">
-      <h2 id="dialog-title" class="text-xl font-semibold text-gray-900">Add a Meal</h2>
+      <h2 id="dialog-title" class="text-xl font-semibold text-gray-900">
+        Add a Meal
+        <span class="block text-sm font-normal text-gray-500 mt-1">
+          {formattedDate}
+        </span>
+      </h2>
     </div>
     
     <!-- Search Section -->
@@ -78,11 +98,11 @@
       <input
         type="text"
         value={$searchQuery}
-        on:input={(e) => setSearchQuery(e.currentTarget.value)}
-        on:keydown={handleKeyDown}
+        bind:this={searchInput}
+        oninput={(e) => setSearchQuery(e.currentTarget.value)}
+        onkeydown={handleKeyDown}
         placeholder="Search recipes or type #ingredient..."
         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        autofocus
       />
       
       <!-- Ingredient Dropdown Trigger & Selected Tags -->
@@ -90,7 +110,7 @@
         <div class="relative">
           <button
             type="button"
-            on:click={toggleIngredientDropdown}
+            onclick={toggleIngredientDropdown}
             class="inline-flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
           >
             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +128,7 @@
               {#each $availableTags as tag}
                 <button
                   type="button"
-                  on:click={() => selectIngredient(tag)}
+                  onclick={() => selectIngredient(tag)}
                   class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
                 >
                   {normalizeTagLabel(tag)}
@@ -124,7 +144,7 @@
             {normalizeTagLabel(tag)}
             <button
               type="button"
-              on:click={() => removeTag(tag)}
+              onclick={() => removeTag(tag)}
               class="hover:bg-blue-100 rounded-full p-0.5 transition"
               aria-label="Remove {normalizeTagLabel(tag)}"
             >
@@ -148,7 +168,7 @@
           {#each $filteredRecipes as recipe}
             <button
               type="button"
-              on:click={() => handleSelectRecipe(recipe)}
+              onclick={() => handleSelectRecipe(recipe)}
               class="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition text-left group"
             >
               <!-- Recipe Icon -->
@@ -173,7 +193,7 @@
     <div class="px-6 py-4 border-t border-gray-200">
       <button
         type="button"
-        on:click={onClose}
+        onclick={onClose}
         class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition font-medium text-gray-700"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -12,9 +12,6 @@ _.path = ["{{config_root}}/node_modules/.bin"]
 # Node.js configuration
 NODE_OPTIONS = "--max-old-space-size=4096"
 
-# PNPM configuration
-PNPM_HOME = "{{config_root}}/node_modules/.pnpm"
-
 [settings]
 # Experimental features
 experimental = true

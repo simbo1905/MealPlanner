@@ -1,4 +1,4 @@
-import jtd from 'jtd'
+import * as jtd from 'jtd'
 import type { Schema } from 'jtd'
 import type { Recipe, Ingredient } from '@mealplanner/recipe-types'
 import { recipeJtdSchema } from '@mealplanner/recipe-types/schema'
