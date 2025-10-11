@@ -10,6 +10,7 @@ PROTOTYPE_ID="$1"
 ACTION="$2"
 PROTOTYPE_DIR="prototype/$PROTOTYPE_ID"
 PID_FILE="$PROTOTYPE_DIR/.pid"
+PROTOTYPE_PORT="3302"
 
 # Validate arguments
 if [ -z "$PROTOTYPE_ID" ] || [ -z "$ACTION" ]; then
@@ -54,13 +55,13 @@ check_nextjs_ready() {
         # Try to connect to the server
         if command -v curl >/dev/null 2>&1; then
             # Use curl with timeout
-            if curl -s -f -m 2 "http://localhost:3000" >/dev/null 2>&1; then
+            if curl -s -f -m 2 "http://localhost:$PROTOTYPE_PORT" >/dev/null 2>&1; then
                 echo "Server ready"
                 return 0
             fi
         elif command -v nc >/dev/null 2>&1; then
             # Use netcat to check if port is open
-            if nc -z localhost 3000 2>/dev/null; then
+            if nc -z localhost "$PROTOTYPE_PORT" 2>/dev/null; then
                 echo "Server ready"
                 return 0
             fi
@@ -136,7 +137,7 @@ start_prototype() {
     fi
     
     # Start Next.js production server in background
-    npm run start &
+    PORT="$PROTOTYPE_PORT" npm run start &
     new_pid=$!
     
     # Wait for Next.js to be ready with health check polling
@@ -145,7 +146,7 @@ start_prototype() {
         mkdir -p "$(dirname "$PID_FILE")"
         echo "$new_pid" > "$PID_FILE"
         echo "Prototype $PROTOTYPE_ID started successfully (PID: $new_pid)"
-        echo "Next.js development server is running on http://localhost:3000"
+        echo "Next.js development server is running on http://localhost:$PROTOTYPE_PORT"
     else
         echo "Error: Failed to start prototype $PROTOTYPE_ID - server not responding after 20 seconds"
         # Clean up the failed process
