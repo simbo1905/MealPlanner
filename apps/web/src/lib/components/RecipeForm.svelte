@@ -90,10 +90,16 @@
     </div>
 
     <div class="form-group">
-      <label>Ingredients</label>
-      {#each ingredients as ingredient, i}
+      <p class="form-label">Ingredients</p>
+      {#each ingredients as _, i}
         <div class="list-item">
-          <input type="text" bind:value={ingredients[i]} placeholder={`Ingredient ${i + 1}`} />
+          <input
+            id={`ingredient-${i}`}
+            type="text"
+            bind:value={ingredients[i]}
+            placeholder={`Ingredient ${i + 1}`}
+            aria-label={`Ingredient ${i + 1}`}
+          />
           <button type="button" class="btn-remove" onclick={() => removeIngredient(i)}>×</button>
         </div>
       {/each}
@@ -101,10 +107,16 @@
     </div>
 
     <div class="form-group">
-      <label>Steps</label>
-      {#each steps as step, i}
+      <p class="form-label">Steps</p>
+      {#each steps as _, i}
         <div class="list-item">
-          <input type="text" bind:value={steps[i]} placeholder={`Step ${i + 1}`} />
+          <input
+            id={`step-${i}`}
+            type="text"
+            bind:value={steps[i]}
+            placeholder={`Step ${i + 1}`}
+            aria-label={`Step ${i + 1}`}
+          />
           <button type="button" class="btn-remove" onclick={() => removeStep(i)}>×</button>
         </div>
       {/each}
@@ -153,13 +165,14 @@
     margin-bottom: 16px;
   }
 
-  label {
+  label,
+  .form-label {
     display: block;
     font-size: 14px;
     font-weight: 500;
     color: #374151;
     margin-bottom: 6px;
-  }
+ }
 
   input[type="text"],
   input[type="number"],

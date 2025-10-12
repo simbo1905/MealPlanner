@@ -87,7 +87,7 @@ function saveRecipes(recipes: Recipe[]): void {
 }
 
 function createRecipeStore() {
-  const { subscribe, set, update } = writable<Recipe[]>(loadRecipes())
+  const { subscribe, update } = writable<Recipe[]>(loadRecipes())
 
   return {
     subscribe,

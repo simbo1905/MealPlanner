@@ -38,7 +38,11 @@
 
   <!-- View Content -->
   {#if $currentView === 'calendar'}
-    <CalendarView />
+    <div class="p-4">
+      <h2 class="text-xl font-bold mb-4">Calendar Debug</h2>
+      <p>Testing direct component rendering...</p>
+      <CalendarView />
+    </div>
   {:else}
     <main class="min-h-screen bg-slate-50">
       <RecipeExplorer />

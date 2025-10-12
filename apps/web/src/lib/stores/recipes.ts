@@ -1,6 +1,6 @@
 import { writable, derived } from 'svelte/store'
 import { RecipeDatabase, defaultRecipes, loadTags, addTag as addTagToDb } from '@mealplanner/recipe-database'
-import type { Recipe, SearchResult } from '@mealplanner/recipe-database'
+import type { Recipe } from '@mealplanner/recipe-types'
 
 // Initialize database
 const db = new RecipeDatabase(defaultRecipes as Recipe[])
@@ -36,11 +36,7 @@ export const selectedRecipe = writable<Recipe | null>(null)
 
 // Set initial selected recipe when filtered recipes change
 filteredRecipes.subscribe($recipes => {
-  if ($recipes.length > 0) {
-    selectedRecipe.set($recipes[0])
-  } else {
-    selectedRecipe.set(null)
-  }
+  selectedRecipe.set($recipes[0] ?? null)
 })
 
 // Actions

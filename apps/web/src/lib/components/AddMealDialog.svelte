@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { format } from 'date-fns'
   import { searchQuery, selectedTags, availableTags, filteredRecipes, setSearchQuery, addTag, removeTag, createNewTag } from '$lib/stores/recipes'
-  import type { Recipe } from '@mealplanner/recipe-database'
+  import type { Recipe } from '@mealplanner/recipe-types'
   
   const { date, onClose, onSelectRecipe } = $props<{
     date: Date
