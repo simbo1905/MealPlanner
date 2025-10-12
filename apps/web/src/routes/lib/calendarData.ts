@@ -1,4 +1,4 @@
-import type { Week, Day } from '../types/calendar';
+import type { Week, Day } from './types';
 
 // UK week numbering (ISO 8601) - weeks start on Monday
 function getUKWeekNumber(date: Date): number {

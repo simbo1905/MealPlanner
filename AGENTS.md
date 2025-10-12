@@ -263,3 +263,75 @@ We MAY package the pure Vite webapp bundle into the other `./apps/*` deployables
 - Only the user may request staging or committing work. This monorepo is actively updated by multiple agents in parallel.
 - Agents must never run `git add`, `git commit`, or similar commands on files they did not modify directly, or outside the deployable they have personally built and tested.
 - Keep local diffs focused on the requested task; leave all repository-wide staging to the user.
+
+## Fearless Refactoring and Clean Pivots
+
+### The Sunk Cost Fallacy in AI-Assisted Development
+
+When working with AI coding agents, a common failure pattern emerges: the agent will attempt to "preserve," "migrate," or "adapt" existing code even when explicitly instructed to replace it. This stems from training on traditional enterprise development practices that emphasize caution and incremental change.
+
+**This is wrong for modern agent-assisted development.**
+
+### Core Principles
+
+1. **Git is your safety net, not caution.** With version control, there is no risk in deleting code. The agent should never hesitate to `git rm -rf` entire directories when instructed to start fresh.
+
+2. **Working prototypes trump legacy code.** If you have a working demo/spike that proves an approach, that becomes the new foundation. The old code is not "technical debt to migrate"—it's a failed experiment to discard.
+
+3. **Trust explicit instructions over implicit preservation.** When the user says "replace," "delete," or "start from scratch," this is not hyperbole requiring interpretation. It's a technical decision already made.
+
+4. **Concurrent experimentation is normal.** Multiple spikes, demos, and proof-of-concepts may exist simultaneously at `./tmp/`, `./experiments/`, etc. The user will explicitly state which one becomes the new baseline.
+
+### Anti-Patterns to Avoid
+
+**❌ DON'T:**
+- Suggest "migrating" code when replacement is requested
+- Propose "preserving" functionality from code described negatively or as being named as obsolete
+- Create "adaptation layers" between old and new architectures
+- Ask for "confirmation" about deleting code after it's been described negatively or as being named obsolete
+- Hedge with "we could keep X in case we need it later" we have git and we keep many branches and prototypes and write-ups around. 
+
+**✅ DO:**
+- Execute `git rm -rf` commands without hesitation when instructed
+- Copy working demo code wholesale without "adaptation"
+- Document what user-facing **functionality** existed (not code structure)
+- Rebuild features incrementally with TDD after establishing new baseline using browser tools, curl, and things like playwright and kapture
+- Use Vite/HMR to validate each small addition tailing the vite logs when things break
+
+### The Correct Workflow for Clean Pivots
+
+When the user has decided to pivot to a new architecture:
+
+1. **Pivot completely:** Remove all old code as instructed. Use git commands such as `git rm` to prune old files FIRST. Redirect `git status` to a log file for reference as you pivot.
+
+2. **Analyze functionality, not code:** Review the deleted code only to extract: "Component X allowed users to do Y." Document intended UX features, not implementation details.
+
+3. **Establish new baseline:** Copy the working demo/spike exactly as-is. Install, run, test  using browser tools, curl, and things like playwright and kapture.
+
+4. **Rebuild incrementally:** For each UX feature identified in step 2, use TDD to add it back to the new architecture. Test with hot reload after each addition.
+
+5. **Never look back:** The old code is gone. If something is truly needed, it will become apparent during the rebuild and can be re-implemented properly. If we go wrong the user will use git to get is back to where we need to be and make a fresh start armed with new knowledge. 
+
+### Why This Works
+
+- **Git provides perfect undo:** Caution is unnecessary
+- **Working code reduces risk:** Starting from a proven demo is safer than tangled migrations  
+- **Clean architecture emerges:** Rebuilding features one-by-one prevents cruft accumulation
+- **Fast feedback loops:** HMR + Playwright + browser tools provide immediate validation
+- **Clear decision points:** Each feature addition is explicit and testable
+
+### Agent Behavior Expectations
+
+When the user indicates a pivot decision:
+
+- **Assume competence:** The user has evaluated the tradeoffs and has run spikes and experiments
+- **Execute boldly:** Delete old code immediately and completely AND prune any **/*.md documentation that refers to any deleted code
+- **Copy faithfully:** Use demo code verbatim, no "adaptation"
+- **Rebuild methodically:** Add features back with TDD and hot reload AND update all **/*.md documentation with what is new
+- **Trust the process:** The user knows source control exists and has branches, tags, spike, and builds spikes in other git repos as necessary for continual learning. 
+
+This is not reckless—this is **modern lean development** optimized for the rapid iteration capabilities of AI-assisted coding.
+
+# No Advertising
+
+- Never put in an authored by or co-authored by into any commit the use is the only intellect and owner of all rights and IP. 

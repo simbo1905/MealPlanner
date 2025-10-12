@@ -1,7 +1,7 @@
 <script lang="ts">
   import { dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
-  import type { Week, Day, Meal, DndEvent } from '../types/calendar';
+  import type { Week, Day, Meal, DndEvent } from './types';
   import MealSelectionModal from './MealSelectionModal.svelte';
   
   const { week, onAddActivity, onMoveMeal } = $props<{ 
@@ -9,6 +9,14 @@
     onAddActivity: (date: string, meal: any) => void;
     onMoveMeal?: (fromDate: string, toDate: string, mealId: string) => void;
   }>();
+
+  // Sample meal data
+  const sampleMeals = [
+    { name: "Chicken Stir-Fry", time: "30 min", icon: "utensils", color: "green" },
+    { name: "Hill Repeats", time: "45 min", icon: "chef-hat", color: "green" },
+    { name: "parkrun", time: "5 km", icon: "utensils", color: "teal" },
+    { name: "Gradual Build", time: "3.1 km", icon: "utensils", color: "yellow" }
+  ];
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -60,19 +68,16 @@
 
   // Drag and drop handlers
   const handleDndConsider = (e: CustomEvent<any>, date: string) => {
-    console.log("🎨 DND Consider event for", date, "items:", e.detail.items.length);
     // Update the meals array during drag operation
     const dayIndex = week.days.findIndex((day: Day) => day.date === date);
     if (dayIndex !== -1 && week.days[dayIndex].meals) {
       week.days[dayIndex].meals = e.detail.items as Meal[];
-      console.log("🔄 Updated meals array for", date, "new count:", e.detail.items.length);
       // Trigger reactivity
       week.days = [...week.days];
     }
   };
 
   const handleDndFinalize = (e: CustomEvent<any>, date: string) => {
-    console.log("🎯 DND Finalize event for", date, "items:", e.detail.items.length);
     // Finalize the meal arrangement for the current day
     const dayIndex = week.days.findIndex((day: Day) => day.date === date);
     if (dayIndex !== -1) {
@@ -81,9 +86,6 @@
       
       // Update total activities for the week
       week.totalActivities = week.days.reduce((sum: number, day: Day) => sum + (day.meals?.length || 0), 0);
-      
-      console.log("✅ Finalized drag for", date, "activities:", week.days[dayIndex].activities);
-      console.log("📊 Week total activities:", week.totalActivities);
       
       // Trigger reactivity
       week.days = [...week.days];

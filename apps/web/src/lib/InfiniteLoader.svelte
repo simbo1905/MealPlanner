@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, type Snippet } from "svelte"
-  import { STATUS, LoaderState } from "./loaderState"
+  import { STATUS, LoaderState } from "./loaderState.svelte"
 
   type InfiniteLoaderProps = {
     triggerLoad: () => Promise<void>
@@ -37,8 +37,8 @@
   // Track load counts to avoid infinite loops
   class LoopTracker {
     coolingOff = false
-    #coolingOffTimer: number | null = null
-    #timer: number | null = null
+    #coolingOffTimer: NodeJS.Timeout | null = null
+    #timer: NodeJS.Timeout | null = null
     #count = 0
 
     // On each call, increment the count and reset the timer
@@ -49,7 +49,7 @@
       // Cooldown, after 2s, reset count to 0
       this.#timer = setTimeout(() => {
         this.#count = 0
-      }, loopDetectionTimeout) as unknown as number
+      }, loopDetectionTimeout)
 
       // If count > loopMaxCalls, begin cool-down period
       // and start timer to reset loop count tracker
@@ -60,7 +60,7 @@
         this.#coolingOffTimer = setTimeout(() => {
           this.coolingOff = false
           this.#count = 0
-        }, loopTimeout) as unknown as number
+        }, loopTimeout)
       }
     }
 
@@ -202,68 +202,58 @@
 <style>
   .infinite-loader-wrapper {
     width: 100%;
-  }
 
-  .infinite-loading {
-    font-size: 1.5rem;
-    color: #666;
-    text-align: center;
-  }
+    .infinite-loading {
+      font-size: 1.5rem;
+    }
 
-  .infinite-no-results {
-    font-size: 1.5rem;
-    color: #666;
-    text-align: center;
-  }
+    .infinite-no-results {
+      font-size: 1.5rem;
+    }
 
-  .infinite-no-data {
-    font-size: 1.5rem;
-    color: #666;
-    text-align: center;
-  }
+    .infinite-no-data {
+      font-size: 1.5rem;
+    }
 
-  .infinite-cooling-off {
-    font-size: 1.25rem;
-    color: #666;
-    text-align: center;
-  }
+    .infinite-cooling-off {
+      font-size: 1.25rem;
+    }
 
-  .infinite-error {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    font-size: 1.5rem;
-    margin-block: 1rem;
-    text-align: center;
-  }
+    .infinite-error {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-size: 1.5rem;
+      margin-block: 1rem;
 
-  .infinite-error__label {
-    color: crimson;
-  }
+      .infinite-error__label {
+        color: crimson;
+      }
 
-  .infinite-error__btn {
-    color: white;
-    background-color: #333;
-    padding-inline: 1.5rem;
-    padding-block: 0.75rem;
-    border-radius: 0.25rem;
-    border: none;
-    transition: background-color 0.3s;
-    line-height: normal;
-    cursor: pointer;
-  }
+      .infinite-error__btn {
+        color: white;
+        background-color: #333;
+        padding-inline: 1.5rem;
+        padding-block: 0.75rem;
+        border-radius: 0.25rem;
+        border: none;
+        transition: background-color 0.3s;
+        line-height: normal;
+      }
+      .infinite-error__btn:hover {
+        cursor: pointer;
+        background-color: #222;
+      }
+    }
 
-  .infinite-error__btn:hover {
-    background-color: #222;
-  }
-
-  .infinite-intersection-target {
-    width: 100%;
-    min-height: 1px;
-    display: flex;
-    padding-block: 2rem;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    .infinite-intersection-target {
+      width: 100%;
+      min-height: 1px;
+      display: flex;
+      padding-block: 2rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
   }
 </style>
