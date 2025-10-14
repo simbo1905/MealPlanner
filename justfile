@@ -5,50 +5,108 @@
 default:
     @just --list
 
+# --- Web App --- #
+
+# Manage web app: clean|bundle|dev start|dev stop|start|stop
+web action *args:
+    #!/usr/bin/env bash
+    case "{{action}}" in
+        clean)
+            rm -rf apps/web/build apps/web/.svelte-kit
+            ;;
+        bundle)
+            sh ./scripts/web-bundle.sh
+            ;;
+        dev)
+            case "{{args}}" in
+                start)
+                    sh ./scripts/web-vite.sh start
+                    ;;
+                stop)
+                    sh ./scripts/web-vite.sh stop
+                    ;;
+                *)
+                    echo "Usage: just web dev {start|stop}"
+                    echo ""
+                    echo "  start  - Start Vite development server with HMR"
+                    echo "  stop   - Stop Vite development server"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        start)
+            sh ./scripts/web-serve.sh start
+            ;;
+        stop)
+            sh ./scripts/web-serve.sh stop
+            ;;
+        *)
+            echo "Usage: just web {clean|bundle|dev|start|stop}"
+            echo ""
+            echo "Actions:"
+            echo "  clean        - Remove build artifacts"
+            echo "  bundle       - Create self-contained bundle for native deployment"
+            echo "  dev start    - Start Vite development server with HMR"
+            echo "  dev stop     - Stop Vite development server"
+            echo "  start        - Start bundled app server on port 3333"
+            echo "  stop         - Stop bundled app server"
+            exit 1
+            ;;
+    esac
+
+# --- iOS --- #
+
+# Deploy the web app bundle to the iOS project
+ios-deploy:
+    sh ./scripts/ios-deploy.sh
+
+# Clean the iOS build artifacts
+ios-clean:
+    rm -rf apps/ios/build
+
+# --- Android (DO NOT TOUCH) --- #
+
+# Build the Android wrapper with the latest web bundle
+build-android:
+    sh ./scripts/build_android.sh
+
+# Manage Android SDK / launch Android Studio
+android-sdk action='studio':
+    sh ./scripts/android_sdk.sh {{action}}
+
+# Deploy Android app (rebuild web bundle, copy assets, build, install, launch)
+deploy-android:
+    sh ./scripts/build_and_deploy_ios.sh # This should be build_and_deploy_android.sh, but for now we use the ios one
+    sh ./scripts/build_android.sh
+    sh ./scripts/launch_android.sh
+
+# Clean Android build artifacts (web bundle untouched)
+clean-android:
+    sh ./scripts/clean_android.sh
+
+# --- Prototypes (DO NOT TOUCH) --- #
+
 # Build and manage prototype servers
 # Usage: just prototype <num> <action>
 # Actions: start, stop, reload
 prototype num action:
     sh ./scripts/prototype.sh {{num}} {{action}}
 
-# Build webapp with pnpm
-build-webapp:
-    sh ./scripts/build_webapp.sh
+# --- Tooling --- #
 
-# Build webapp with clean cache
-clean-build-webapp:
-    sh ./scripts/clean_build_webapp.sh
+# Run repomix to generate code context for a specific platform
+# Usage: just repomix <platform> (e.g., web, ios, android, jfx)
+repomix platform:
+    sh ./scripts/repomix.sh {{platform}}
 
-# Start webapp dev mode
-dev-webapp:
-    sh ./scripts/webapp.sh start
-
-# Start webapp production server
-webapp action:
-    sh ./scripts/webapp.sh {{action}}
+# --- Global --- #
 
 # Clean all build artifacts
-clean:
-    sh ./scripts/clean.sh
-
-# Clean everything including node_modules
-clean-all:
-    sh ./scripts/clean_all.sh
+all-clean:
+    just web clean
+    just ios-clean
+    just clean-android
 
 # Full repair of web environment (clear pnpm cache and reinstall)
 nuke-web:
     sh ./scripts/nuke_web.sh
-
-# Build webapp to static bundle for deployment
-build-bundle:
-    sh ./scripts/build_webapp_bundle.sh
-
-# Deploy webapp bundle to iOS Resources
-deploy-ios:
-    sh ./scripts/build_webapp_bundle.sh
-    sh ./scripts/deploy_webapp_to_ios.sh
-
-# Deploy webapp bundle to Android assets
-deploy-android:
-    sh ./scripts/build_webapp_bundle.sh
-    sh ./scripts/deploy_webapp_to_android.sh

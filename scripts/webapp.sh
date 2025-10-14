@@ -10,6 +10,8 @@ ACTION="$1"
 WEBAPP_DIR="apps/web"
 PID_FILE="$WEBAPP_DIR/.pid"
 WEBAPP_PORT="3001"
+LOG_DIR="/tmp/mealplanner"
+LOG_FILE="$LOG_DIR/webapp.log"
 
 # Validate arguments
 if [ -z "$ACTION" ]; then
@@ -106,25 +108,31 @@ start_webapp() {
             rm -f "$PID_FILE"
         fi
     fi
-    
+
     # Check if package.json exists
     if [ ! -f "$WEBAPP_DIR/package.json" ]; then
         echo "Error: No package.json found in $WEBAPP_DIR"
         exit 1
     fi
-    
+
     echo "Starting webapp..."
-    
+
     # Check if node is available
     if ! command -v node >/dev/null 2>&1; then
         echo "Error: Node.js is not installed or not in PATH"
         exit 1
     fi
-    
-    # Start Vite dev server in background
-    cd "$(dirname "$0")/.." && mise exec -- pnpm dev:web &
+
+    mkdir -p "$LOG_DIR"
+    : > "$LOG_FILE"
+
+    # Start Vite dev server in background, redirecting output
+    (
+        cd "$(dirname "$0")/.."
+        exec mise exec -- pnpm dev:web >>"$LOG_FILE" 2>&1
+    ) &
     new_pid=$!
-    
+
     # Wait for Vite to be ready with health check polling
     if check_vite_ready "$new_pid"; then
         # Ensure the directory exists for PID file
@@ -132,6 +140,8 @@ start_webapp() {
         echo "$new_pid" > "$PID_FILE"
         echo "Webapp started successfully (PID: $new_pid)"
         echo "Vite dev server is running on http://localhost:$WEBAPP_PORT"
+        echo "Logs are being written to $LOG_FILE"
+        echo "Use: tail -f $LOG_FILE"
     else
         echo "Error: Failed to start webapp - server not responding after 5 seconds"
         # Clean up the failed process

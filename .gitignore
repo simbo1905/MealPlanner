@@ -1,3 +1,5 @@
+**/repomix*md
+**/.svelte-kit/
 # ----- Editors / IDEs -----
 **/.vscode/
 **/.idea/
@@ -45,6 +47,7 @@
 **/coverage/
 **/logs/
 **/storybook-static/
+apps/android/app/src/main/assets/webapp/
 **/.env
 **/.env.*
 !**/.env.example
@@ -121,3 +124,7 @@
 **/.changecolor
 **/.claude
 **/CLAUDE.md
+tmp/
+.tmp/
+.colors
+.gemini

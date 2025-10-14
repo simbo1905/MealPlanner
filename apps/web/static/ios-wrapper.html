@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MealPlanner</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        console.log('[Wrapper] Decoding and executing bundle...');
+        try {
+            const encodedScript = `__SVELTE_APP_BUNDLE__`;
+            const binaryString = atob(encodedScript);
+            const utf8Bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                utf8Bytes[i] = binaryString.charCodeAt(i);
+            }
+            const decodedScript = new TextDecoder().decode(utf8Bytes);
+            console.log('[Wrapper] Script decoded, length:', decodedScript.length);
+            const scriptEl = document.createElement('script');
+            scriptEl.textContent = decodedScript;
+            document.body.appendChild(scriptEl);
+            console.log('[Wrapper] App script injected and executed.');
+        } catch(e) {
+            console.error('[Wrapper] Failed to decode or inject app:', e);
+        }
+    </script>
+</body>
+</html>

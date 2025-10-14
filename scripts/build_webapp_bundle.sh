@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-RUN_PNPM="$ROOT_DIR/scripts/run_pnpm.sh"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 WEBAPP_DIR="$ROOT_DIR/apps/web"
-DIST_DIR="$WEBAPP_DIR/dist"
+WEBAPP_DIST="$WEBAPP_DIR/build"
+IOS_WEBAPP="$ROOT_DIR/apps/ios/Resources/webapp"
 
 log() {
-  printf "[build-webapp-bundle] %s\n" "$*"
+    echo "[build-webapp-bundle] $1"
 }
 
-if [ ! -d "$WEBAPP_DIR" ]; then
-  echo "Error: webapp directory not found at $WEBAPP_DIR"
-  exit 1
+log "🛠 Building webapp..."
+cd "$WEBAPP_DIR"
+npm run build
+
+# Check if build succeeded
+if [ ! -f "$WEBAPP_DIST/index.html" ]; then
+    log "❌ Build failed - index.html not found"
+    exit 1
 fi
 
-log "Building Vite webapp bundle..."
-cd "$ROOT_DIR"
-"$RUN_PNPM" build:web
+log "Injecting JS bundle into wrapper..."
+node "$ROOT_DIR/scripts/inject-bundle.mjs"
 
-if [ ! -d "$DIST_DIR" ]; then
-  echo "Error: build output not found at $DIST_DIR"
-  exit 1
-fi
+log "📦 Copying webapp into iOS bundle..."
+rm -rf "$IOS_WEBAPP"
+mkdir -p "$IOS_WEBAPP"
+cp -r "$WEBAPP_DIST/"* "$IOS_WEBAPP/"
 
-log "✅ Webapp bundle built successfully at $DIST_DIR"
+log "✅ Build complete!"

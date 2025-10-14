@@ -2,24 +2,24 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WEBAPP_DIST="$ROOT_DIR/apps/web/dist"
+WEBAPP_DIST="$ROOT_DIR/apps/web/build"
 IOS_WEBAPP="$ROOT_DIR/apps/ios/Resources/webapp"
+DIAGNOSTIC_HTML="$ROOT_DIR/scripts/diagnostic.html"
 
 log() {
   printf "[deploy-ios] %s\n" "$*"
 }
 
-if [ ! -d "$WEBAPP_DIST" ]; then
-  echo "Error: webapp build output not found at $WEBAPP_DIST"
-  echo "Run 'just build-bundle' or 'pnpm build:web' first"
+if [ ! -f "$DIAGNOSTIC_HTML" ]; then
+  echo "Error: diagnostic.html not found at $DIAGNOSTIC_HTML"
   exit 1
 fi
 
 log "Removing old webapp resources..."
 rm -rf "$IOS_WEBAPP"
 
-log "Copying built webapp to Resources/webapp..."
+log "Copying diagnostic wrapper to Resources/webapp..."
 mkdir -p "$IOS_WEBAPP"
-cp -r "$WEBAPP_DIST"/. "$IOS_WEBAPP"/
+cp "$DIAGNOSTIC_HTML" "$IOS_WEBAPP/index.html"
 
-log "✅ Webapp deployed to iOS Resources at $IOS_WEBAPP"
+log "✅ Diagnostic wrapper deployed to iOS Resources at $IOS_WEBAPP"

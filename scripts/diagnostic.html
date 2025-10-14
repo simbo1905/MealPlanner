@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Diagnostic — Svelte App</title>
+</head>
+<body>
+  <h1>Diagnostic runner</h1>
+  <div id="diagnostic-log"></div>
+  <script>
+    function log(msg, ...args) {
+      console.log("[DIAG]", msg, ...args);
+      const el = document.getElementById("diagnostic-log");
+      const p = document.createElement("p");
+      p.textContent = msg + " " + JSON.stringify(args);
+      el.appendChild(p);
+    }
+
+    log("Diagnostic wrapper loaded");
+
+    fetch("app.html")
+      .then(r => {
+        if (!r.ok) {
+            log("Fetch app.html failed with status", r.status);
+            return r.text().then(t => Promise.reject(t));
+        }
+        return r.text();
+      })
+      .then(html => {
+        log("Fetched app.html content length", html.length);
+        const match = html.match(/<script[^>]*>([\s\S]*?)<\/script>/m);
+        if (!match) {
+          log("No inline <script> found");
+        } else {
+          const scriptContent = match[1];
+          log("Inline script content snippet", scriptContent.slice(0, 200));
+          try {
+            new Function(scriptContent)();
+            log("Inline script executed via new Function");
+          } catch (ex) {
+            log("Inline script execution error", ex);
+          }
+        }
+      })
+      .catch(e => log("Fetch app.html failed", e));
+  </script>
+</body>
+</html>

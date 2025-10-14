@@ -1,27 +1,23 @@
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
-import path from 'path'
+import { defineConfig } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  base: './',
-  plugins: [svelte()],
-  resolve: {
-    alias: {
-      '$lib': path.resolve('./src/lib')
-    }
-  },
-  server: {
-    port: 3001,
-    strictPort: false
-  },
+  plugins: [tailwindcss(), sveltekit()],
   build: {
-    outDir: 'dist',
-    sourcemap: true,
+    // Force all assets to be inlined
+    assetsInlineLimit: 100000000,
+    // Disable code splitting
     rollupOptions: {
       output: {
         manualChunks: undefined,
-        inlineDynamicImports: true
+        inlineDynamicImports: true,
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]'
       }
     }
-  }
-})
+  },
+  // Critical for file:// protocol
+  base: './'
+});

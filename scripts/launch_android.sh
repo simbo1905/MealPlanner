@@ -6,11 +6,30 @@ ANDROID_DIR="$ROOT_DIR/apps/android"
 REQUIRED_JAVA_VERSION=17
 
 log() {
-  printf "[launch:android] %s\n" "$*"
+  printf "[deploy-android] %s\n" "$*"
+}
+
+find_adb() {
+  if command -v adb >/dev/null 2>&1; then
+    command -v adb
+    return 0
+  fi
+
+  for candidate in \
+    "$ANDROID_SDK_ROOT/platform-tools/adb" \
+    "$ANDROID_SDK_ROOT/platform-tools/adb.exe" \
+    "$ANDROID_SDK_ROOT/platform-tools/adb.sh"; do
+    if [ -x "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 error() {
-  printf "[launch:android][error] %s\n" "$*" >&2
+  printf "[deploy-android][error] %s\n" "$*" >&2
   exit 1
 }
 
@@ -77,20 +96,14 @@ fi
 log "Using Android SDK at: $ANDROID_SDK_ROOT"
 
 if [ ! -f "$ANDROID_DIR/local.properties" ]; then
-  log "Creating local.properties with SDK location..."
+log "Creating local.properties with SDK location..."
   echo "sdk.dir=$ANDROID_SDK_ROOT" > "$ANDROID_DIR/local.properties"
 fi
 
-log "Building Android app..."
-cd "$ROOT_DIR"
-mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" assembleDebug --info --stacktrace
-
 log "Checking for connected devices/emulators..."
-if ! command -v adb >/dev/null 2>&1; then
-  error "adb not found. Install Android SDK Platform Tools."
-fi
+ADB_BIN="$(find_adb)" || error "adb not found. Install Android SDK Platform Tools."
 
-DEVICE_COUNT=$(adb devices | grep -v "List of devices" | grep -v "^$" | wc -l | tr -d ' ')
+DEVICE_COUNT=$("$ADB_BIN" devices | grep -v "List of devices" | grep -v "^$" | wc -l | tr -d ' ')
 if [ "$DEVICE_COUNT" -eq 0 ]; then
   error "No Android devices or emulators connected. Start an emulator or connect a device."
 fi
@@ -99,7 +112,7 @@ log "Installing app on device/emulator..."
 mise exec -- "$ANDROID_DIR/gradlew" -p "$ANDROID_DIR" installDebug --info
 
 log "Launching app..."
-adb shell am start -n com.mealplanner.app/.MainActivity
+"$ADB_BIN" shell am start -n com.mealplanner.app/.MainActivity
 
 log "App launched successfully. Check your device/emulator."
-log "To view logs, run: adb logcat | grep -i mealplanner"
+log "To view logs, run: $ADB_BIN logcat | grep -i mealplanner"

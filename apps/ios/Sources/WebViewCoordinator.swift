@@ -52,11 +52,15 @@ class WebViewCoordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        print("[WebView] Navigation failed: \(error.localizedDescription)")
+        print("!!!!!!!!!! [WebView] Navigation failed !!!!!!!!!!")
+        print("\(error.localizedDescription)")
+        print("\(error)")
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        print("[WebView] Provisional navigation failed: \(error.localizedDescription)")
+        print("!!!!!!!!!! [WebView] Provisional navigation failed !!!!!!!!!!")
+        print("\(error.localizedDescription)")
+        print("\(error)")
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -67,13 +71,20 @@ class WebViewCoordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if let httpResponse = navigationResponse.response as? HTTPURLResponse {
             print("[WebView] Response: \(httpResponse.statusCode) for \(navigationResponse.response.url?.absoluteString ?? "unknown")")
-        } else if let response = navigationResponse.response as? URLResponse {
+        } else {
+            let response = navigationResponse.response
             print("[WebView] File response: \(response.url?.absoluteString ?? "unknown")")
         }
         decisionHandler(.allow)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "consoleHandler", let body = message.body as? [String: Any] {
+            // e.g. { method: "log", args: [...] }
+            print("[JS][\(body["method"] ?? "")] \(body["args"] ?? "")")
+            return
+        }
+
         if message.name == "consoleLog" {
             print("[JS Console] \(message.body)")
             return

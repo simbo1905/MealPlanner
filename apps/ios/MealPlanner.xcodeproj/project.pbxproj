@@ -18,6 +18,7 @@
 		132A732BD9970049430725ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		38ECCCD49A24C73137FA2EDB /* MealPlanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MealPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765DA3FC7C7A6B92BE3B657D /* WebViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCoordinator.swift; sourceTree = "<group>"; };
+		7AC1E1CB33AECC63093107FC /* .gitignore */ = {isa = PBXFileReference; path = .gitignore; sourceTree = "<group>"; };
 		82B3D97C85549D919FADD440 /* MealPlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlannerApp.swift; sourceTree = "<group>"; };
 		9588231C8D45C6B405C025AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A73E911DAA541CFDFBA090E3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -28,6 +29,7 @@
 		134BD7755EEC90076BF4DD8E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7AC1E1CB33AECC63093107FC /* .gitignore */,
 				132A732BD9970049430725ED /* Info.plist */,
 			);
 			path = Resources;

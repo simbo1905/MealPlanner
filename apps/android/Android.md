@@ -4,10 +4,17 @@ Architecture guide for embedding the MealPlanner Svelte + Vite webapp into an An
 
 ## High-Level Architecture
 
+> ⚙️ **Automation commands**
+>
+> - `just build-android` – build the Svelte bundle, copy it into `assets/webapp`, and run the Gradle task defined by `ANDROID_GRADLE_TASK` (defaults to `assembleDebug`).
+> - `just deploy-android` – refresh only the embedded web assets without invoking Gradle.
+> - `bash scripts/launch_android.sh` – build + install + launch on the currently connected emulator/device.
+> - `just android-sdk` – ensure SDK packages exist and open Android Studio with the MealPlanner project.
+
 - **Android app**: Kotlin wrapper with WebView loading bundled Vite static output
 - **Web UI**: Svelte 5 + Vite 6 app built to static HTML/JS/CSS bundle
 - **Communication**: Kotlin ↔ JavaScript bridge via JavascriptInterface
-- **Bundle location**: Static Vite output copied to `app/src/main/assets/web/`
+- **Bundle location**: Static Vite output copied to `app/src/main/assets/webapp/`
 
 The Vite build produces static files served via WebViewAssetLoader under secure origin `https://appassets.androidplatform.net/`.
 
@@ -25,7 +32,7 @@ The Vite build produces static files served via WebViewAssetLoader under secure 
 **build.gradle.kts (module):**
 ```kotlin
 dependencies {
-  implementation("androidx.webkit:webkit:1.12.1")
+  implementation("androidx.webkit:webkit:1.12.0")
 }
 ```
 
@@ -39,7 +46,7 @@ app/
       MainActivity.kt
     res/layout/
       activity_main.xml
-    assets/web/            # Vite bundle copied here
+    assets/webapp/         # Vite bundle copied here
       index.html
       assets/
         *.js
@@ -83,8 +90,7 @@ class MainActivity : AppCompatActivity() {
 
     // Serve assets via secure origin using WebViewAssetLoader
     val assetLoader = WebViewAssetLoader.Builder()
-      .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
-      .addPathHandler("/res/", WebViewAssetLoader.ResourcesPathHandler(this))
+      .addPathHandler("/webapp/", WebViewAssetLoader.AssetsPathHandler(this))
       .build()
 
     webView.webViewClient = object : WebViewClientCompat() {
@@ -105,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     // webView.addJavascriptInterface(RecipeBridge(this), "AndroidBridge")
 
     // Load the Vite bundle from assets
-    webView.loadUrl("https://appassets.androidplatform.net/assets/web/index.html")
+    webView.loadUrl("https://appassets.androidplatform.net/webapp/index.html")
   }
 }
 ```

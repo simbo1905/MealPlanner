@@ -7,22 +7,26 @@ Minimal iOS app with embedded Svelte + Vite WebView showing recipe list with add
 Run these commands from the repository root:
 
 ```bash
-# Complete setup (all-in-one)
-bash scripts/setup_ios.sh
+# Build the Svelte bundle, copy into the iOS resources, and compile for the simulator
+just build-ios
 
-# Or run steps individually:
-bash scripts/build_ios_webapp.sh      # Build Vite app
-bash scripts/copy_ios_webapp.sh       # Copy to iOS Resources
-bash scripts/generate_ios_xcode.sh    # Generate Xcode project
+# Regenerate the bundle without triggering xcodebuild
+just deploy-ios
+
+# Optional: only scaffold Xcode project (no build)
+bash scripts/setup_ios.sh
 ```
 
-## Open in Xcode
+`just build-ios` accepts the following overrides:
+
+- `IOS_DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro" just build-ios`
+- `IOS_CONFIGURATION=Release just build-ios`
+
+After the build succeeds you can open the project in Xcode if you want to run or debug manually:
 
 ```bash
 open apps/ios/MealPlanner.xcodeproj
 ```
-
-Then select a simulator and press Cmd+R to build and run.
 
 ## Architecture
 

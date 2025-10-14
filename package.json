@@ -28,9 +28,10 @@
     "android": "echo 'Android build not configured yet'"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
     "@mealplanner/prettier-config": "workspace:*",
     "@mealplanner/typescript-config": "workspace:*",
+    "@playwright/test": "^1.49.1",
+    "playwright": "^1.56.0",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
     "typescript": "^5.6.3"

@@ -2,45 +2,36 @@
   "name": "@mealplanner/web",
   "version": "0.1.0",
   "private": true,
-  "description": "MealPlanner web application built with Svelte and Vite",
+  "description": "MealPlanner web application built with SvelteKit",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite dev --port 3001",
     "build": "vite build",
     "preview": "vite preview",
-    "clean": "rm -rf dist node_modules",
-    "lint": "eslint src/",
-    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest",
-    "test:e2e": "playwright test -c ./playwright.config.ts"
+    "lint": "eslint src/",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@mealplanner/recipe-database": "workspace:*",
-    "@mealplanner/recipe-types": "workspace:*",
-    "@mealplanner/recipe-validator": "workspace:*",
-    "bits-ui": "^1.0.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "lucide-svelte": "^0.474.0",
     "svelte": "^5.5.4",
-    "svelte-dnd-action": "^0.9.50",
-    "svelte-persisted-store": "^0.11.0",
-    "tailwind-merge": "^2.6.0",
-    "tailwindcss": "^3.4.1",
-    "tailwindcss-animate": "^1.0.7"
+    "svelte-dnd-action": "^0.9.65"
   },
   "devDependencies": {
-    "@mealplanner/eslint-config": "workspace:*",
-    "@mealplanner/typescript-config": "workspace:*",
-    "@sveltejs/vite-plugin-svelte": "^4.0.3",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.8.1",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@tailwindcss/vite": "^4.1.14",
     "@types/node": "^22.9.0",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.14.0",
-    "postcss": "^8.4.49",
-    "svelte-check": "^4.0.0",
+    "postcss": "^8.5.6",
+    "svelte-check": "^4.0.7",
+    "tailwindcss": "^4.1.14",
     "typescript": "^5.6.3",
-    "vite": "^6.0.7",
-    "vitest": "^2.1.4"
+    "vite": "^5.4.11",
+    "vitest": "^2.1.5"
   }
 }

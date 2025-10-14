@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Prototype management script for Next.js prototype
+# Prototype management script for Next.js and SvelteKit prototypes
 # Usage: ./prototype.sh <id> <start|stop|reload>
 # Safety: Use timeout 20 ./prototype.sh <id> start to prevent hanging on slow systems
 
@@ -8,8 +8,11 @@ set -e
 
 PROTOTYPE_ID="$1"
 ACTION="$2"
-PROTOTYPE_DIR="prototype/$PROTOTYPE_ID"
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PROTOTYPE_DIR="$REPO_ROOT/prototype/$PROTOTYPE_ID"
 PID_FILE="$PROTOTYPE_DIR/.pid"
+LOG_FILE="$PROTOTYPE_DIR/.server.log"
+PROTOTYPE_PORT=$((3300 + 10#$PROTOTYPE_ID))
 
 # Validate arguments
 if [ -z "$PROTOTYPE_ID" ] || [ -z "$ACTION" ]; then
@@ -43,24 +46,24 @@ check_process() {
     fi
 }
 
-# Function to check if Next.js is ready by polling health endpoint
-check_nextjs_ready() {
+# Function to check if server is ready by polling health endpoint
+check_server_ready() {
     max_attempts=5
     attempt=1
     
-    echo "Waiting for Next.js to be ready..."
+    echo "Waiting for server to be ready..."
     
     while [ $attempt -le $max_attempts ]; do
         # Try to connect to the server
         if command -v curl >/dev/null 2>&1; then
             # Use curl with timeout
-            if curl -s -f -m 2 "http://localhost:3000" >/dev/null 2>&1; then
+            if curl -s -f -m 2 "http://localhost:$PROTOTYPE_PORT" >/dev/null 2>&1; then
                 echo "Server ready"
                 return 0
             fi
         elif command -v nc >/dev/null 2>&1; then
             # Use netcat to check if port is open
-            if nc -z localhost 3000 2>/dev/null; then
+            if nc -z localhost "$PROTOTYPE_PORT" 2>/dev/null; then
                 echo "Server ready"
                 return 0
             fi
@@ -110,7 +113,7 @@ start_prototype() {
     # Check if package.json exists
     if [ ! -f "$PROTOTYPE_DIR/package.json" ]; then
         echo "Error: No package.json found in $PROTOTYPE_DIR"
-        echo "Are you sure this is a Next.js prototype?"
+        echo "Are you sure this is a valid prototype?"
         exit 1
     fi
     
@@ -123,31 +126,49 @@ start_prototype() {
         exit 1
     fi
     
+    # Detect framework type
+    if grep -q '"@sveltejs/kit"' package.json; then
+        FRAMEWORK="sveltekit"
+        BUILD_DIR=".svelte-kit"
+        echo "Detected SvelteKit framework"
+    else
+        FRAMEWORK="nextjs"
+        BUILD_DIR=".next"
+        echo "Detected Next.js framework"
+    fi
+    
     # Install dependencies if node_modules doesn't exist
     if [ ! -d "node_modules" ]; then
         echo "Installing dependencies..."
         npm install
     fi
     
-    # Build the app if .next doesn't exist or is stale
-    if [ ! -d ".next" ] || [ "package.json" -nt ".next" ]; then
+    # Build the app if build directory doesn't exist or is stale
+    if [ ! -d "$BUILD_DIR" ] || [ "package.json" -nt "$BUILD_DIR" ]; then
         echo "Building prototype $PROTOTYPE_ID..."
         npm run build
     fi
     
-    # Start Next.js production server in background
-    npm run start &
+    # Start server in background with logging
+    echo "Starting server on port $PROTOTYPE_PORT..."
+    if [ "$FRAMEWORK" = "sveltekit" ]; then
+        npm run preview -- --port "$PROTOTYPE_PORT" > "$LOG_FILE" 2>&1 &
+    else
+        PORT="$PROTOTYPE_PORT" npm run start > "$LOG_FILE" 2>&1 &
+    fi
     new_pid=$!
     
-    # Wait for Next.js to be ready with health check polling
-    if check_nextjs_ready "$new_pid"; then
+    # Wait for server to be ready with health check polling
+    if check_server_ready "$new_pid"; then
         # Ensure the directory exists for PID file
         mkdir -p "$(dirname "$PID_FILE")"
         echo "$new_pid" > "$PID_FILE"
         echo "Prototype $PROTOTYPE_ID started successfully (PID: $new_pid)"
-        echo "Next.js development server is running on http://localhost:3000"
+        echo "Server running on http://localhost:$PROTOTYPE_PORT"
+        echo "Logs available at: $LOG_FILE"
     else
         echo "Error: Failed to start prototype $PROTOTYPE_ID - server not responding after 20 seconds"
+        echo "Check logs at: $LOG_FILE"
         # Clean up the failed process
         if check_process "$new_pid"; then
             kill "$new_pid" 2>/dev/null
