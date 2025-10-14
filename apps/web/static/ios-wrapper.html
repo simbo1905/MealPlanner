@@ -11,7 +11,13 @@
         console.log('[Wrapper] Decoding and executing bundle...');
         try {
             const encodedScript = `__SVELTE_APP_BUNDLE__`;
-            const decodedScript = atob(encodedScript);
+            const binaryString = atob(encodedScript);
+            const utf8Bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                utf8Bytes[i] = binaryString.charCodeAt(i);
+            }
+            const decodedScript = new TextDecoder().decode(utf8Bytes);
+            console.log(decodedScript);
             const scriptEl = document.createElement('script');
             scriptEl.textContent = decodedScript;
             document.body.appendChild(scriptEl);

@@ -7,33 +7,52 @@ default:
 
 # --- Web App --- #
 
-# Run the web app in development mode with Vite
-web-vite:
-    sh ./scripts/web-vite.sh start
-
-# Stop the Vite dev server
-web-vite-stop:
-    sh ./scripts/web-vite.sh stop
-
-# Create a self-contained web app bundle for native deployment
-web-bundle:
-    sh ./scripts/web-bundle.sh
-
-# Serve the web app bundle locally for testing on port 3333
-web-serve:
-    sh ./scripts/web-serve.sh start
-
-# Stop the local web server
-web-stop:
-    sh ./scripts/web-serve.sh stop
-
-# Build the web app and serve it locally
-web-run:
-    just web-bundle && just web-serve
-
-# Clean the web app build artifacts
-web-clean:
-    rm -rf apps/web/build apps/web/.svelte-kit
+# Manage web app: clean|bundle|dev start|dev stop|start|stop
+web action *args:
+    #!/usr/bin/env bash
+    case "{{action}}" in
+        clean)
+            rm -rf apps/web/build apps/web/.svelte-kit
+            ;;
+        bundle)
+            sh ./scripts/web-bundle.sh
+            ;;
+        dev)
+            case "{{args}}" in
+                start)
+                    sh ./scripts/web-vite.sh start
+                    ;;
+                stop)
+                    sh ./scripts/web-vite.sh stop
+                    ;;
+                *)
+                    echo "Usage: just web dev {start|stop}"
+                    echo ""
+                    echo "  start  - Start Vite development server with HMR"
+                    echo "  stop   - Stop Vite development server"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        start)
+            sh ./scripts/web-serve.sh start
+            ;;
+        stop)
+            sh ./scripts/web-serve.sh stop
+            ;;
+        *)
+            echo "Usage: just web {clean|bundle|dev|start|stop}"
+            echo ""
+            echo "Actions:"
+            echo "  clean        - Remove build artifacts"
+            echo "  bundle       - Create self-contained bundle for native deployment"
+            echo "  dev start    - Start Vite development server with HMR"
+            echo "  dev stop     - Stop Vite development server"
+            echo "  start        - Start bundled app server on port 3333"
+            echo "  stop         - Stop bundled app server"
+            exit 1
+            ;;
+    esac
 
 # --- iOS --- #
 
@@ -84,7 +103,7 @@ repomix platform:
 
 # Clean all build artifacts
 all-clean:
-    just web-clean
+    just web clean
     just ios-clean
     just clean-android
 

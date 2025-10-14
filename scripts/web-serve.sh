@@ -4,8 +4,11 @@ set -euo pipefail
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 WEBAPP_DIST="$ROOT_DIR/apps/web/build"
 PORT=3333
-PID_FILE="/tmp/web-serve.pid"
-LOG_FILE="/tmp/web-serve.log"
+PID_FILE="$ROOT_DIR/.tmp/web-serve.pid"
+LOG_FILE="$ROOT_DIR/.tmp/web-serve.log"
+
+# Ensure .tmp directory exists
+mkdir -p "$ROOT_DIR/.tmp"
 
 log() {
     echo "[web-serve] $1"
@@ -54,7 +57,7 @@ start_server() {
 
     if [ ! -d "$WEBAPP_DIST" ]; then
         log "❌ Web app build directory not found at $WEBAPP_DIST"
-        log "Please run 'just web-bundle' first."
+        log "Please run 'just web bundle' first."
         exit 1
     fi
 
@@ -64,6 +67,7 @@ start_server() {
     new_pid=$!
     echo "$new_pid" > "$PID_FILE"
     log "Server started with PID: $new_pid"
+    log "✅ Bundle server ready at: http://localhost:$PORT"
     log "Logs available at: $LOG_FILE"
 }
 

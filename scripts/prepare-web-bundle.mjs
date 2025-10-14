@@ -20,21 +20,31 @@ async function main() {
     console.log('Building SvelteKit app...');
     execSync('npm --prefix apps/web run build', { stdio: 'inherit' });
 
-    // 3. Read the generated index.html
-    console.log('Reading generated index.html...');
-    const indexContent = await fs.readFile(FINAL_INDEX_HTML, 'utf-8');
+    const manifestPath = path.join(WEBAPP_DIR, '.svelte-kit/output/client/.vite/manifest.json');
+    const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf-8'));
 
-    // 4. Extract the script content
-    console.log('Extracting script content...');
-    const match = indexContent.match(/<script>([\s\S]*?)<\/script>/m);
-    if (!match) {
-      throw new Error('No inline script found in index.html');
+    // 4. Find and read the CSS file from the manifest
+    console.log('Extracting CSS content from manifest...');
+    const cssFile = Object.values(manifest).find(entry => entry.src === 'style.css');
+    if (!cssFile) {
+      throw new Error('No entry CSS found in manifest.json');
     }
-    const scriptContent = match[1];
-    const scriptLength = scriptContent.length;
-    console.log(`Extracted script length: ${scriptLength}`);
+    const cssPath = path.join(WEBAPP_DIR, '.svelte-kit/output/client', cssFile.file);
+    const cssContent = await fs.readFile(cssPath, 'utf-8');
+    console.log(`Extracted CSS from ${cssPath}`);
 
-    // 5. Base64 encode the script content
+    // 5. Extract the script content
+    // 6. Find and read the JS file from the manifest
+    console.log('Extracting JS content from manifest...');
+    const jsFile = Object.values(manifest).find(entry => entry.isEntry && entry.file.endsWith('.js'));
+    if (!jsFile) {
+      throw new Error('No entry JS found in manifest.json');
+    }
+    const jsPath = path.join(WEBAPP_DIR, '.svelte-kit/output/client', jsFile.file);
+    const scriptContent = await fs.readFile(jsPath, 'utf-8');
+    console.log(`Extracted JS from ${jsPath}`);
+
+    // 7. Base64 encode the script content
     console.log('Base64 encoding script content...');
     const encodedScript = base64.encode(scriptContent);
 
@@ -59,8 +69,11 @@ async function main() {
     `;
     finalHtml = finalHtml.replace('</head>', `${buildInfo}</head>`);
 
+    // 8. Inject the CSS content
+    const styleTag = `<style>${cssContent}</style>`;
+    finalHtml = finalHtml.replace('</head>', `${styleTag}</head>`);
 
-    // 8. Write the new index.html
+    // 9. Write the new index.html
     console.log('Writing new index.html...');
     await fs.writeFile(FINAL_INDEX_HTML, finalHtml);
 

@@ -3,8 +3,11 @@
 
 # Set project root relative to the script location
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PID_FILE="/tmp/web-vite.pid"
-LOG_FILE="/tmp/web-vite.log"
+PID_FILE="$PROJECT_ROOT/.tmp/web-vite.pid"
+LOG_FILE="$PROJECT_ROOT/.tmp/web-vite.log"
+
+# Ensure .tmp directory exists
+mkdir -p "$PROJECT_ROOT/.tmp"
 
 # Ensure we are in the project root
 cd "$PROJECT_ROOT" || exit 1
@@ -14,6 +17,13 @@ start() {
         pid=$(cat "$PID_FILE")
         if ps -p "$pid" > /dev/null; then
             echo "Vite server is already running (PID: $pid)."
+            # Try to extract URL from existing log
+            if [ -f "$LOG_FILE" ]; then
+                url=$(grep -a "Local:" "$LOG_FILE" | grep -o "http://localhost:[0-9]*" | tail -1)
+                if [ -n "$url" ]; then
+                    echo "Server available at: $url"
+                fi
+            fi
             exit 0
         else
             echo "Found stale PID file. Removing it."
@@ -32,7 +42,26 @@ start() {
     echo "$pid" > "$PID_FILE"
 
     echo "Vite server started with PID: $pid."
-    echo "Run 'just web-vite-stop' to stop it."
+    
+    # Wait for server to start and extract the URL
+    echo "Waiting for server to start..."
+    for i in {1..30}; do
+        if [ -f "$LOG_FILE" ]; then
+            # Use grep -a to treat as text and extract URL
+            url=$(grep -a "Local:" "$LOG_FILE" | grep -o "http://localhost:[0-9]*" | tail -1)
+            if [ -n "$url" ]; then
+                echo "✅ Vite dev server ready at: $url"
+                echo "Run 'just web dev stop' to stop it."
+                break
+            fi
+        fi
+        sleep 0.5
+    done
+    
+    if [ -z "$url" ]; then
+        echo "⚠️  Server started but URL not detected. Check logs at: $LOG_FILE"
+        echo "Run 'just web dev stop' to stop it."
+    fi
 }
 
 stop() {

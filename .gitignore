@@ -125,4 +125,6 @@ apps/android/app/src/main/assets/webapp/
 **/.claude
 **/CLAUDE.md
 tmp/
+.tmp/
 .colors
+.gemini
