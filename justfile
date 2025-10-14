@@ -45,7 +45,7 @@ web action *args:
             echo ""
             echo "Actions:"
             echo "  clean        - Remove build artifacts"
-            echo "  bundle       - Create self-contained bundle for native deployment"
+            echo "  bundle       - Run the production build for native deployment"
             echo "  dev start    - Start Vite development server with HMR"
             echo "  dev stop     - Stop Vite development server"
             echo "  start        - Start bundled app server on port 3333"

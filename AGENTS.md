@@ -97,13 +97,8 @@ The web app development and deployment process is managed through the `justfile`
 -   **`just web-vite`**: Starts the Vite dev server with Hot Module Replacement (HMR) for rapid development. The server runs on `http://localhost:3001`.
 
 ### Bundling for Native Apps
--   **`just web-bundle`**: Creates a self-contained, single-file bundle of the web app, specifically for embedding in native `WKWebView` controls. This process involves:
-    1.  Building the SvelteKit app with `@sveltejs/adapter-static`.
-    2.  Extracting the inlined JavaScript.
-    3.  Base64-encoding the JavaScript.
-    4.  Injecting the encoded script into a wrapper HTML file.
-    5.  Injecting the Git SHA and build timestamp into the wrapper for verification.
--   **`just web-serve`**: Serves the generated bundle on `http://localhost:3333` for local testing with `curl`, Playwright, or Kapture.
+-   **`just web-bundle`**: Runs the standard SvelteKit static build (`npm --prefix apps/web run build`) so the generated `apps/web/build` output can be embedded directly in native `WKWebView`/`WebView` shells.
+-   **`just web-serve`**: Serves the static build directory on `http://localhost:3333` for local testing with `curl`, Playwright, or Kapture.
 
 ### Deployment to Native Apps
 -   **`just ios-deploy`**: Deploys the generated web app bundle to the iOS project.

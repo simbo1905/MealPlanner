@@ -7,5 +7,5 @@ log() {
     echo "[web-bundle] $1"
 }
 
-log "Preparing web bundle..."
-node "$ROOT_DIR/scripts/prepare-web-bundle.mjs"
+log "Running SvelteKit production build..."
+npm --prefix "$ROOT_DIR/apps/web" run build

@@ -11,17 +11,13 @@ log() {
 }
 
 log "🛠 Building webapp..."
-cd "$WEBAPP_DIR"
-npm run build
+npm --prefix "$WEBAPP_DIR" run build
 
 # Check if build succeeded
 if [ ! -f "$WEBAPP_DIST/index.html" ]; then
     log "❌ Build failed - index.html not found"
     exit 1
 fi
-
-log "Injecting JS bundle into wrapper..."
-node "$ROOT_DIR/scripts/inject-bundle.mjs"
 
 log "📦 Copying webapp into iOS bundle..."
 rm -rf "$IOS_WEBAPP"

@@ -50,6 +50,11 @@ pnpm test             # Run all tests
 pnpm typecheck        # Type checking
 pnpm lint             # Linting
 
+# Native bundle workflow
+timeout 20 just web clean   # Remove prior build artifacts
+timeout 20 just web bundle  # Run SvelteKit production build (apps/web/build)
+timeout 20 just web start   # Serve build locally on :3333 for verification
+
 # Prototypes (legacy Next.js visual mockups only)
 just prototype 02 start   # Start on :3000
 just prototype 02 stop
