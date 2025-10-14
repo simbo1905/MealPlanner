@@ -19,24 +19,17 @@ A family meal planning application built with a modern monorepo architecture.
 - WebView wrappers loading Vite static bundle
 - Native Swift (iOS) and Kotlin (Android)
 
-## Quick Start
+
+## Setup
+
+This project uses `mise` to manage all required tooling, including Node.js, pnpm, just, and bun. To get started, ensure you have `mise` installed, then set up the project environment:
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Build shared packages
-pnpm build:packages
-
-# Start web dev server
-pnpm dev:web
-# Opens at http://localhost:3001
-
-# Or use just commands
-just webapp start
+# Install tools defined in .mise.toml (e.g., node, pnpm, just, bun)
+mise install
 ```
 
-## Development
+## Quick Start
 
 See [AGENTS.md](./AGENTS.md) for comprehensive development guidelines.
 

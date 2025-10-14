@@ -73,6 +73,13 @@ clean-android:
 prototype num action:
     sh ./scripts/prototype.sh {{num}} {{action}}
 
+# --- Tooling --- #
+
+# Run repomix to generate code context for a specific platform
+# Usage: just repomix <platform> (e.g., web, ios, android, jfx)
+repomix platform:
+    sh ./scripts/repomix.sh {{platform}}
+
 # --- Global --- #
 
 # Clean all build artifacts
