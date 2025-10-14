@@ -6,7 +6,7 @@ IOS_DIR="$ROOT_DIR/apps/ios"
 PROJECT_PATH="$IOS_DIR/MealPlanner.xcodeproj"
 SCHEME="${IOS_SCHEME:-MealPlanner}"
 CONFIGURATION="${IOS_CONFIGURATION:-Debug}"
-DESTINATION="${IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 15,OS=latest}"
+DESTINATION="${IOS_DESTINATION:-platform=iOS Simulator,name=iPhone 17 Pro,OS=latest}"
 DERIVED_DATA="${IOS_DERIVED_DATA:-$IOS_DIR/build}"
 
 log() {

@@ -5,47 +5,47 @@
 default:
     @just --list
 
-# Build and manage prototype servers
-# Usage: just prototype <num> <action>
-# Actions: start, stop, reload
-prototype num action:
-    sh ./scripts/prototype.sh {{num}} {{action}}
+# --- Web App --- #
 
-# Build webapp with pnpm
-build-webapp:
-    sh ./scripts/build_webapp.sh
+# Run the web app in development mode with Vite
+web-vite:
+    sh ./scripts/web-vite.sh start
 
-# Build webapp with clean cache
-clean-build-webapp:
-    sh ./scripts/clean_build_webapp.sh
+# Stop the Vite dev server
+web-vite-stop:
+    sh ./scripts/web-vite.sh stop
 
-# Start webapp dev mode
-dev-webapp:
-    sh ./scripts/webapp.sh start
+# Create a self-contained web app bundle for native deployment
+web-bundle:
+    sh ./scripts/web-bundle.sh
 
-# Start webapp production server
-webapp action:
-    sh ./scripts/webapp.sh {{action}}
+# Serve the web app bundle locally for testing on port 3333
+web-serve:
+    sh ./scripts/web-serve.sh start
 
-# Clean all build artifacts
-clean:
-    sh ./scripts/clean.sh
+# Stop the local web server
+web-stop:
+    sh ./scripts/web-serve.sh stop
 
-# Clean everything including node_modules
-clean-all:
-    sh ./scripts/clean_all.sh
+# Build the web app and serve it locally
+web-run:
+    just web-bundle && just web-serve
 
-# Full repair of web environment (clear pnpm cache and reinstall)
-nuke-web:
-    sh ./scripts/nuke_web.sh
+# Clean the web app build artifacts
+web-clean:
+    rm -rf apps/web/build apps/web/.svelte-kit
 
-# Build webapp to static bundle for deployment
-build-bundle:
-    sh ./scripts/build_webapp_bundle.sh
+# --- iOS --- #
 
-# Build the iOS wrapper with the latest web bundle
-build-ios:
-    sh ./scripts/build_ios.sh
+# Deploy the web app bundle to the iOS project
+ios-deploy:
+    sh ./scripts/ios-deploy.sh
+
+# Clean the iOS build artifacts
+ios-clean:
+    rm -rf apps/ios/build
+
+# --- Android (DO NOT TOUCH) --- #
 
 # Build the Android wrapper with the latest web bundle
 build-android:
@@ -57,8 +57,7 @@ android-sdk action='studio':
 
 # Deploy Android app (rebuild web bundle, copy assets, build, install, launch)
 deploy-android:
-    sh ./scripts/build_webapp_bundle.sh
-    sh ./scripts/deploy_webapp_to_android.sh
+    sh ./scripts/build_and_deploy_ios.sh # This should be build_and_deploy_android.sh, but for now we use the ios one
     sh ./scripts/build_android.sh
     sh ./scripts/launch_android.sh
 
@@ -66,7 +65,22 @@ deploy-android:
 clean-android:
     sh ./scripts/clean_android.sh
 
-# Deploy webapp bundle to iOS Resources
-deploy-ios:
-    sh ./scripts/build_webapp_bundle.sh
-    sh ./scripts/deploy_webapp_to_ios.sh
+# --- Prototypes (DO NOT TOUCH) --- #
+
+# Build and manage prototype servers
+# Usage: just prototype <num> <action>
+# Actions: start, stop, reload
+prototype num action:
+    sh ./scripts/prototype.sh {{num}} {{action}}
+
+# --- Global --- #
+
+# Clean all build artifacts
+all-clean:
+    just web-clean
+    just ios-clean
+    just clean-android
+
+# Full repair of web environment (clear pnpm cache and reinstall)
+nuke-web:
+    sh ./scripts/nuke_web.sh

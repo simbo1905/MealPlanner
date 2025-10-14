@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WEBAPP_DIST="$ROOT_DIR/apps/web/build"
+ROOT_DIR="$(git rev-parse --show-toplevel)"
 IOS_WEBAPP="$ROOT_DIR/apps/ios/Resources/webapp"
 DIAGNOSTIC_HTML="$ROOT_DIR/scripts/diagnostic.html"
 
 log() {
-  printf "[deploy-ios] %s\n" "$*"
+  printf "[deploy-diag-ios] %s\n" "$*"
 }
 
 if [ ! -f "$DIAGNOSTIC_HTML" ]; then

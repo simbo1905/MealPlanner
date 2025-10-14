@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+</head>
+<body>
+    <h1>Week Calendar</h1>
+    <div id="weeks"></div>
+    <script>
+        console.log('[Test] Starting simple app');
+        const weeks = document.getElementById('weeks');
+        for(let i = 0; i < 4; i++) {
+            const week = document.createElement('div');
+            week.textContent = `Week ${i + 1}`;
+            week.style.padding = '20px';
+            week.style.border = '1px solid #ccc';
+            week.style.margin = '10px';
+            weeks.appendChild(week);
+        }
+        console.log('[Test] Rendered weeks');
+    </script>
+</body>
+</html>

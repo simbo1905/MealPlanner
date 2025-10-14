@@ -14,35 +14,34 @@ struct WebViewContainer: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> WKWebView {
+        let webpagePreferences = WKWebpagePreferences()
+        webpagePreferences.allowsContentJavaScript = true
+
         let config = WKWebViewConfiguration()
+        config.defaultWebpagePreferences = webpagePreferences
+        
         config.userContentController.add(context.coordinator, name: "recipeHandler")
-        config.userContentController.add(context.coordinator, name: "consoleLog")
+        config.userContentController.add(context.coordinator, name: "consoleHandler")
         
         // Inject console bridge script that captures ALL console methods
-        let consoleBridgeJS = """
+        let consoleOverrideJS = """
         (function() {
+          console.log("[DEBUG] Injected console override script is running.");
           const methods = ['log', 'warn', 'error', 'info'];
           methods.forEach(function(method) {
             const orig = console[method];
             console[method] = function(...args) {
               try {
-                window.webkit.messageHandlers.consoleLog.postMessage(
-                  '[' + method.toUpperCase() + '] ' + args.join(' ')
-                );
+                window.webkit.messageHandlers.consoleHandler.postMessage({ method: method, args: args });
               } catch (err) {
-                orig('Console bridge failed', err);
+                // ignore
               }
               orig.apply(console, args);
             };
           });
-          // Test all console methods
-          console.log('TESTING: console.log bridge working');
-          console.info('TESTING: console.info bridge working');
-          console.warn('TESTING: console.warn bridge working');
-          console.error('TESTING: console.error bridge working');
         })();
         """
-        let script = WKUserScript(source: consoleBridgeJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        let script = WKUserScript(source: consoleOverrideJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         config.userContentController.addUserScript(script)
         
         let webView = WKWebView(frame: .zero, configuration: config)
@@ -50,9 +49,10 @@ struct WebViewContainer: UIViewRepresentable {
         context.coordinator.webView = webView
         
         if let htmlURL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "webapp") {
+            print("[DEBUG] Loading htmlURL: \(htmlURL)")
             webView.loadFileURL(htmlURL, allowingReadAccessTo: htmlURL.deletingLastPathComponent())
         } else {
-            print("Error: Could not find webapp/index.html in bundle")
+            print("[DEBUG] Error: Could not find webapp/index.html in bundle")
         }
         
         return webView

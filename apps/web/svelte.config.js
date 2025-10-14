@@ -1,24 +1,30 @@
-import adapter from "@sveltejs/adapter-static"
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte"
+import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: vitePreprocess(),
-
+  preprocess: [vitePreprocess()],
+  compilerOptions: {
+    experimental: {
+      async: true
+    }
+  },
   kit: {
     adapter: adapter({
-      pages: 'dist',
-      assets: 'dist',
-      fallback: 'index.html',
-      precompress: false,
-      strict: true
+      fallback: 'index.html'
     }),
+    output: {
+      bundleStrategy: 'inline'
+    },
+    router: {
+      type: 'hash'
+    },
     alias: {
       $routes: "./src/routes",
       "$routes/*": "./src/routes/*",
       "$assets/*": "./src/assets/*"
     }
   }
-}
+};
 
-export default config
+export default config;

@@ -28,69 +28,427 @@ The content is organized as follows:
 ## Notes
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
-- Only files matching these patterns are included: **/*.ts, **/*.tsx, **/*.swift, **/*.html, **/*.md
+- Only files matching these patterns are included: **/*.swift, **/*.xcodeproj/**, **/*.md, **/*.plist, **/*.pbxproj, **/*.sh, **/*.js, **/*.css, **/*.ts, **/tsconfig.json, **/app.html
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
 - Files are sorted by Git change count (files with more changes are at the bottom)
 
 # Directory Structure
 ```
+MealPlanner.xcodeproj/
+  project.xcworkspace/
+    xcuserdata/
+      consensussolutions.xcuserdatad/
+        UserInterfaceState.xcuserstate
+    contents.xcworkspacedata
+  xcuserdata/
+    consensussolutions.xcuserdatad/
+      xcschemes/
+        xcschememanagement.plist
+  project.pbxproj
 Resources/
-  webapp/
-    404/
-      index.html
-    404.html
-    index.html
+  Info.plist
 Sources/
   ContentView.swift
   MealPlannerApp.swift
   WebViewCoordinator.swift
-web-placeholder/
-  index.html
-webapp/
-  .next/
-    server/
-      app/
-        _not-found.html
-        index.html
-      pages/
-        404.html
-        500.html
-    types/
-      app/
-        layout.ts
-        page.ts
-      cache-life.d.ts
-      routes.d.ts
-      validator.ts
-  out/
-    404/
-      index.html
-    404.html
-    index.html
-  src/
-    app/
-      layout.tsx
-      page.tsx
-  next-env.d.ts
+iOS.md
 README.md
 ```
 
 # Files
 
-## File: Resources/webapp/404/index.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
+## File: MealPlanner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+````
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "self:">
+   </FileRef>
+</Workspace>
 ````
 
-## File: Resources/webapp/404.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
+## File: MealPlanner.xcodeproj/xcuserdata/consensussolutions.xcuserdatad/xcschemes/xcschememanagement.plist
+````
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>MealPlanner.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+</dict>
+</plist>
 ````
 
-## File: Resources/webapp/index.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><script src="/_next/static/chunks/app/page-32fd2f2b5138bf7e.js" async=""></script><title>MealPlanner</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><main style="padding:20px;max-width:600px;margin:0 auto"><h1 style="font-size:24px;margin-bottom:20px">Hello WebView</h1><button style="background-color:#007AFF;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:16px;margin-bottom:20px;cursor:pointer">➕ Add Recipe</button><ul style="list-style:none;padding:0"></ul><p style="color:#888;text-align:center">No recipes yet</p></main><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[9547,[\"974\",\"static/chunks/app/page-32fd2f2b5138bf7e.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
+## File: MealPlanner.xcodeproj/project.pbxproj
+````
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12CE2C0FDB57B7401CB2AAE6 /* webapp in Resources */ = {isa = PBXBuildFile; fileRef = BB05ECC433C448BD4AA772F8 /* webapp */; };
+		72BD8293050BCD0F8DDDDE92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9588231C8D45C6B405C025AF /* Assets.xcassets */; };
+		901907E7AA09AC491C7E47DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73E911DAA541CFDFBA090E3 /* ContentView.swift */; };
+		A1360EF2663895D417BC4FAD /* MealPlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3D97C85549D919FADD440 /* MealPlannerApp.swift */; };
+		AA1DB9EAF44CD6E72D8FE03A /* WebViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DA3FC7C7A6B92BE3B657D /* WebViewCoordinator.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		132A732BD9970049430725ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		38ECCCD49A24C73137FA2EDB /* MealPlanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MealPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		765DA3FC7C7A6B92BE3B657D /* WebViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCoordinator.swift; sourceTree = "<group>"; };
+		7AC1E1CB33AECC63093107FC /* .gitignore */ = {isa = PBXFileReference; path = .gitignore; sourceTree = "<group>"; };
+		82B3D97C85549D919FADD440 /* MealPlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlannerApp.swift; sourceTree = "<group>"; };
+		9588231C8D45C6B405C025AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A73E911DAA541CFDFBA090E3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BB05ECC433C448BD4AA772F8 /* webapp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = webapp; path = Resources/webapp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		134BD7755EEC90076BF4DD8E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7AC1E1CB33AECC63093107FC /* .gitignore */,
+				132A732BD9970049430725ED /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		64F39675F1172FA47A6368CB = {
+			isa = PBXGroup;
+			children = (
+				9588231C8D45C6B405C025AF /* Assets.xcassets */,
+				BB05ECC433C448BD4AA772F8 /* webapp */,
+				134BD7755EEC90076BF4DD8E /* Resources */,
+				D2E3C118F0342F579EEEB462 /* Sources */,
+				C3DD0896B3E521327766B279 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3DD0896B3E521327766B279 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38ECCCD49A24C73137FA2EDB /* MealPlanner.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D2E3C118F0342F579EEEB462 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A73E911DAA541CFDFBA090E3 /* ContentView.swift */,
+				82B3D97C85549D919FADD440 /* MealPlannerApp.swift */,
+				765DA3FC7C7A6B92BE3B657D /* WebViewCoordinator.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6DFF75702F8AA7F4CE31554E /* MealPlanner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 818BA5CE0F4B605EF5A101F4 /* Build configuration list for PBXNativeTarget "MealPlanner" */;
+			buildPhases = (
+				B838F03CE911CFC6D200BA75 /* Sources */,
+				1875E04848DC264DD58F443E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MealPlanner;
+			packageProductDependencies = (
+			);
+			productName = MealPlanner;
+			productReference = 38ECCCD49A24C73137FA2EDB /* MealPlanner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		153CBAD90565AEE864DF4F46 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 4AD4CE0F9F30F553F4722450 /* Build configuration list for PBXProject "MealPlanner" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 64F39675F1172FA47A6368CB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6DFF75702F8AA7F4CE31554E /* MealPlanner */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1875E04848DC264DD58F443E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72BD8293050BCD0F8DDDDE92 /* Assets.xcassets in Resources */,
+				12CE2C0FDB57B7401CB2AAE6 /* webapp in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B838F03CE911CFC6D200BA75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				901907E7AA09AC491C7E47DA /* ContentView.swift in Sources */,
+				A1360EF2663895D417BC4FAD /* MealPlannerApp.swift in Sources */,
+				AA1DB9EAF44CD6E72D8FE03A /* WebViewCoordinator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		25B2311705E811CE881F1B52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		2C4EEBEF6AB26116485248CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mealplanner.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		324293B219269605D66F64E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		BEDD6490986061C674B8F04A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mealplanner.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4AD4CE0F9F30F553F4722450 /* Build configuration list for PBXProject "MealPlanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25B2311705E811CE881F1B52 /* Debug */,
+				324293B219269605D66F64E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		818BA5CE0F4B605EF5A101F4 /* Build configuration list for PBXNativeTarget "MealPlanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEDD6490986061C674B8F04A /* Debug */,
+				2C4EEBEF6AB26116485248CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 153CBAD90565AEE864DF4F46 /* Project object */;
+}
+````
+
+## File: Resources/Info.plist
+````
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>MealPlanner</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>UILaunchStoryboardName</key>
+    <string></string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+</dict>
+</plist>
 ````
 
 ## File: Sources/ContentView.swift
@@ -111,35 +469,34 @@ struct WebViewContainer: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> WKWebView {
+        let webpagePreferences = WKWebpagePreferences()
+        webpagePreferences.allowsContentJavaScript = true
+
         let config = WKWebViewConfiguration()
+        config.defaultWebpagePreferences = webpagePreferences
+        
         config.userContentController.add(context.coordinator, name: "recipeHandler")
-        config.userContentController.add(context.coordinator, name: "consoleLog")
+        config.userContentController.add(context.coordinator, name: "consoleHandler")
         
         // Inject console bridge script that captures ALL console methods
-        let consoleBridgeJS = """
+        let consoleOverrideJS = """
         (function() {
+          console.log("[DEBUG] Injected console override script is running.");
           const methods = ['log', 'warn', 'error', 'info'];
           methods.forEach(function(method) {
             const orig = console[method];
             console[method] = function(...args) {
               try {
-                window.webkit.messageHandlers.consoleLog.postMessage(
-                  '[' + method.toUpperCase() + '] ' + args.join(' ')
-                );
+                window.webkit.messageHandlers.consoleHandler.postMessage({ method: method, args: args });
               } catch (err) {
-                orig('Console bridge failed', err);
+                // ignore
               }
               orig.apply(console, args);
             };
           });
-          // Test all console methods
-          console.log('TESTING: console.log bridge working');
-          console.info('TESTING: console.info bridge working');
-          console.warn('TESTING: console.warn bridge working');
-          console.error('TESTING: console.error bridge working');
         })();
         """
-        let script = WKUserScript(source: consoleBridgeJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        let script = WKUserScript(source: consoleOverrideJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         config.userContentController.addUserScript(script)
         
         let webView = WKWebView(frame: .zero, configuration: config)
@@ -147,9 +504,10 @@ struct WebViewContainer: UIViewRepresentable {
         context.coordinator.webView = webView
         
         if let htmlURL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "webapp") {
+            print("[DEBUG] Loading htmlURL: \(htmlURL)")
             webView.loadFileURL(htmlURL, allowingReadAccessTo: htmlURL.deletingLastPathComponent())
         } else {
-            print("Error: Could not find webapp/index.html in bundle")
+            print("[DEBUG] Error: Could not find webapp/index.html in bundle")
         }
         
         return webView
@@ -233,7 +591,40 @@ class WebViewCoordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler
         print("[WebView] Page loaded successfully")
     }
     
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("!!!!!!!!!! [WebView] Navigation failed !!!!!!!!!!")
+        print("\(error.localizedDescription)")
+        print("\(error)")
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("!!!!!!!!!! [WebView] Provisional navigation failed !!!!!!!!!!")
+        print("\(error.localizedDescription)")
+        print("\(error)")
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        print("[WebView] Navigation request: \(navigationAction.request.url?.absoluteString ?? "unknown")")
+        decisionHandler(.allow)
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if let httpResponse = navigationResponse.response as? HTTPURLResponse {
+            print("[WebView] Response: \(httpResponse.statusCode) for \(navigationResponse.response.url?.absoluteString ?? "unknown")")
+        } else {
+            let response = navigationResponse.response
+            print("[WebView] File response: \(response.url?.absoluteString ?? "unknown")")
+        }
+        decisionHandler(.allow)
+    }
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "consoleHandler", let body = message.body as? [String: Any] {
+            // e.g. { method: "log", args: [...] }
+            print("[JS][\(body["method"] ?? "")] \(body["args"] ?? "")")
+            return
+        }
+
         if message.name == "consoleLog" {
             print("[JS Console] \(message.body)")
             return
@@ -302,541 +693,212 @@ class WebViewCoordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler
 }
 ````
 
-## File: web-placeholder/index.html
-````html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MealPlanner Web Placeholder</title>
-</head>
-<body>
-  <main>
-    <h1>MealPlanner Web Placeholder</h1>
-    <p>Swap this bundle with the Next.js export once ready.</p>
-  </main>
-</body>
-</html>
-````
+## File: iOS.md
+````markdown
+# iOS WebView Integration for MealPlanner
 
-## File: webapp/.next/server/app/_not-found.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
-````
+Detailed architecture for embedding the MealPlanner Svelte + Vite webapp into an iOS native app using WKWebView.
 
-## File: webapp/.next/server/app/index.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><script src="/_next/static/chunks/app/page-32fd2f2b5138bf7e.js" async=""></script><title>MealPlanner</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><main style="padding:20px;max-width:600px;margin:0 auto"><h1 style="font-size:24px;margin-bottom:20px">Hello WebView</h1><button style="background-color:#007AFF;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:16px;margin-bottom:20px;cursor:pointer">➕ Add Recipe</button><ul style="list-style:none;padding:0"></ul><p style="color:#888;text-align:center">No recipes yet</p></main><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[9547,[\"974\",\"static/chunks/app/page-32fd2f2b5138bf7e.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
-````
+## High-Level Architecture
 
-## File: webapp/.next/server/pages/404.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
-````
+> ⚙️ **Automation commands**
+>
+> - `just build-ios` – build the Svelte bundle, copy it into `Resources/webapp`, and run `xcodebuild` for a simulator target.
+> - `just deploy-ios` – refresh only the embedded web assets without running Xcode.
+> - `bash scripts/setup_ios.sh` – rebuild the bundle and regenerate `MealPlanner.xcodeproj` (no simulator build).
 
-## File: webapp/.next/server/pages/500.html
-````html
-<!DOCTYPE html><html><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">500: Internal Server Error</title><noscript data-n-css=""></noscript><script defer="" noModule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-d7602772852bf587.js" defer=""></script><script src="/_next/static/chunks/framework-cf6f4dd230f15c2d.js" defer=""></script><script src="/_next/static/chunks/main-a24ee67ef733465b.js" defer=""></script><script src="/_next/static/chunks/pages/_app-7d307437aca18ad4.js" defer=""></script><script src="/_next/static/chunks/pages/_error-cb2a52f75f2162e2.js" defer=""></script><script src="/_next/static/cmFsAaRIRxCkgg94AJESy/_buildManifest.js" defer=""></script><script src="/_next/static/cmFsAaRIRxCkgg94AJESy/_ssgManifest.js" defer=""></script></head><body><div id="__next"><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="line-height:48px"><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding-right:23px;font-size:24px;font-weight:500;vertical-align:top">500</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:28px">Internal Server Error<!-- -->.</h2></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"statusCode":500}},"page":"/_error","query":{},"buildId":"cmFsAaRIRxCkgg94AJESy","nextExport":true,"isFallback":false,"gip":true,"scriptLoader":[]}</script></body></html>
-````
+- **iOS app**: Thin wrapper around WKWebView that loads bundled Vite static output
+- **Web UI**: Svelte 5 + Vite 6 app built to static HTML/JS/CSS bundle
+- **Communication**: Swift ↔ JavaScript bridge via WKScriptMessageHandler
+- **Bundle location**: Static Vite output copied to iOS app Resources/webapp/
 
-## File: webapp/.next/types/app/layout.ts
-````typescript
-// File: /Users/Shared/MealPlanner/apps/ios/webapp/src/app/layout.tsx
-import * as entry from '../../../src/app/layout.js'
-import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
+The Vite build produces static files, making it perfect for WebView embedding.
 
-type TEntry = typeof import('../../../src/app/layout.js')
+---
 
-type SegmentParams<T extends Object = any> = T extends Record<string, any>
-  ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }
-  : T
+## iOS Side: WebView Integration
 
-// Check that the entry is a valid entry
-checkFields<Diff<{
-  default: Function
-  config?: {}
-  generateStaticParams?: Function
-  revalidate?: RevalidateRange<TEntry> | false
-  dynamic?: 'auto' | 'force-dynamic' | 'error' | 'force-static'
-  dynamicParams?: boolean
-  fetchCache?: 'auto' | 'force-no-store' | 'only-no-store' | 'default-no-store' | 'default-cache' | 'only-cache' | 'force-cache'
-  preferredRegion?: 'auto' | 'global' | 'home' | string | string[]
-  runtime?: 'nodejs' | 'experimental-edge' | 'edge'
-  maxDuration?: number
+### Platform Requirements
+- Swift (UIKit or SwiftUI)
+- iOS deployment target supporting WKWebView (iOS 8+)
+- WebKit framework
+
+### Embedding WKWebView
+
+**UIKit approach:**
+```swift
+import UIKit
+import WebKit
+
+class WebViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+  var webView: WKWebView!
   
-  metadata?: any
-  generateMetadata?: Function
-  viewport?: any
-  generateViewport?: Function
-  experimental_ppr?: boolean
-  
-}, TEntry, ''>>()
-
-
-// Check the prop type of the entry function
-checkFields<Diff<LayoutProps, FirstArg<TEntry['default']>, 'default'>>()
-
-// Check the arguments and return type of the generateMetadata function
-if ('generateMetadata' in entry) {
-  checkFields<Diff<LayoutProps, FirstArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
-  checkFields<Diff<ResolvingMetadata, SecondArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
-}
-
-// Check the arguments and return type of the generateViewport function
-if ('generateViewport' in entry) {
-  checkFields<Diff<LayoutProps, FirstArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
-  checkFields<Diff<ResolvingViewport, SecondArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
-}
-
-// Check the arguments and return type of the generateStaticParams function
-if ('generateStaticParams' in entry) {
-  checkFields<Diff<{ params: SegmentParams }, FirstArg<MaybeField<TEntry, 'generateStaticParams'>>, 'generateStaticParams'>>()
-  checkFields<Diff<{ __tag__: 'generateStaticParams', __return_type__: any[] | Promise<any[]> }, { __tag__: 'generateStaticParams', __return_type__: ReturnType<MaybeField<TEntry, 'generateStaticParams'>> }>>()
-}
-
-export interface PageProps {
-  params?: Promise<SegmentParams>
-  searchParams?: Promise<any>
-}
-export interface LayoutProps {
-  children?: React.ReactNode
-
-  params?: Promise<SegmentParams>
-}
-
-// =============
-// Utility types
-type RevalidateRange<T> = T extends { revalidate: any } ? NonNegative<T['revalidate']> : never
-
-// If T is unknown or any, it will be an empty {} type. Otherwise, it will be the same as Omit<T, keyof Base>.
-type OmitWithTag<T, K extends keyof any, _M> = Omit<T, K>
-type Diff<Base, T extends Base, Message extends string = ''> = 0 extends (1 & T) ? {} : OmitWithTag<T, keyof Base, Message>
-
-type FirstArg<T extends Function> = T extends (...args: [infer T, any]) => any ? unknown extends T ? any : T : never
-type SecondArg<T extends Function> = T extends (...args: [any, infer T]) => any ? unknown extends T ? any : T : never
-type MaybeField<T, K extends string> = T extends { [k in K]: infer G } ? G extends Function ? G : never : never
-
-
-
-function checkFields<_ extends { [k in keyof any]: never }>() {}
-
-// https://github.com/sindresorhus/type-fest
-type Numeric = number | bigint
-type Zero = 0 | 0n
-type Negative<T extends Numeric> = T extends Zero ? never : `${T}` extends `-${string}` ? T : never
-type NonNegative<T extends Numeric> = T extends Zero ? T : Negative<T> extends never ? T : '__invalid_negative_number__'
-````
-
-## File: webapp/.next/types/app/page.ts
-````typescript
-// File: /Users/Shared/MealPlanner/apps/ios/webapp/src/app/page.tsx
-import * as entry from '../../../src/app/page.js'
-import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
-
-type TEntry = typeof import('../../../src/app/page.js')
-
-type SegmentParams<T extends Object = any> = T extends Record<string, any>
-  ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }
-  : T
-
-// Check that the entry is a valid entry
-checkFields<Diff<{
-  default: Function
-  config?: {}
-  generateStaticParams?: Function
-  revalidate?: RevalidateRange<TEntry> | false
-  dynamic?: 'auto' | 'force-dynamic' | 'error' | 'force-static'
-  dynamicParams?: boolean
-  fetchCache?: 'auto' | 'force-no-store' | 'only-no-store' | 'default-no-store' | 'default-cache' | 'only-cache' | 'force-cache'
-  preferredRegion?: 'auto' | 'global' | 'home' | string | string[]
-  runtime?: 'nodejs' | 'experimental-edge' | 'edge'
-  maxDuration?: number
-  
-  metadata?: any
-  generateMetadata?: Function
-  viewport?: any
-  generateViewport?: Function
-  experimental_ppr?: boolean
-  
-}, TEntry, ''>>()
-
-
-// Check the prop type of the entry function
-checkFields<Diff<PageProps, FirstArg<TEntry['default']>, 'default'>>()
-
-// Check the arguments and return type of the generateMetadata function
-if ('generateMetadata' in entry) {
-  checkFields<Diff<PageProps, FirstArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
-  checkFields<Diff<ResolvingMetadata, SecondArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
-}
-
-// Check the arguments and return type of the generateViewport function
-if ('generateViewport' in entry) {
-  checkFields<Diff<PageProps, FirstArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
-  checkFields<Diff<ResolvingViewport, SecondArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
-}
-
-// Check the arguments and return type of the generateStaticParams function
-if ('generateStaticParams' in entry) {
-  checkFields<Diff<{ params: SegmentParams }, FirstArg<MaybeField<TEntry, 'generateStaticParams'>>, 'generateStaticParams'>>()
-  checkFields<Diff<{ __tag__: 'generateStaticParams', __return_type__: any[] | Promise<any[]> }, { __tag__: 'generateStaticParams', __return_type__: ReturnType<MaybeField<TEntry, 'generateStaticParams'>> }>>()
-}
-
-export interface PageProps {
-  params?: Promise<SegmentParams>
-  searchParams?: Promise<any>
-}
-export interface LayoutProps {
-  children?: React.ReactNode
-
-  params?: Promise<SegmentParams>
-}
-
-// =============
-// Utility types
-type RevalidateRange<T> = T extends { revalidate: any } ? NonNegative<T['revalidate']> : never
-
-// If T is unknown or any, it will be an empty {} type. Otherwise, it will be the same as Omit<T, keyof Base>.
-type OmitWithTag<T, K extends keyof any, _M> = Omit<T, K>
-type Diff<Base, T extends Base, Message extends string = ''> = 0 extends (1 & T) ? {} : OmitWithTag<T, keyof Base, Message>
-
-type FirstArg<T extends Function> = T extends (...args: [infer T, any]) => any ? unknown extends T ? any : T : never
-type SecondArg<T extends Function> = T extends (...args: [any, infer T]) => any ? unknown extends T ? any : T : never
-type MaybeField<T, K extends string> = T extends { [k in K]: infer G } ? G extends Function ? G : never : never
-
-
-
-function checkFields<_ extends { [k in keyof any]: never }>() {}
-
-// https://github.com/sindresorhus/type-fest
-type Numeric = number | bigint
-type Zero = 0 | 0n
-type Negative<T extends Numeric> = T extends Zero ? never : `${T}` extends `-${string}` ? T : never
-type NonNegative<T extends Numeric> = T extends Zero ? T : Negative<T> extends never ? T : '__invalid_negative_number__'
-````
-
-## File: webapp/.next/types/cache-life.d.ts
-````typescript
-// Type definitions for Next.js cacheLife configs
-
-declare module 'next/cache' {
-  export { unstable_cache } from 'next/dist/server/web/spec-extension/unstable-cache'
-  export {
-    revalidateTag,
-    revalidatePath,
-    unstable_expireTag,
-    unstable_expirePath,
-  } from 'next/dist/server/web/spec-extension/revalidate'
-  export { unstable_noStore } from 'next/dist/server/web/spec-extension/unstable-no-store'
-
-  
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"default"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 900 seconds (15 minutes)
-     *   expire:     never
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 15 minutes, start revalidating new values in the background.
-     * It lives for the maximum age of the server cache. If this entry has no traffic for a while, it may serve an old value the next request.
-     */
-    export function unstable_cacheLife(profile: "default"): void
+  override func loadView() {
+    let contentController = WKUserContentController()
+    contentController.add(self, name: "recipeHandler")
     
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"seconds"` profile.
-     * ```
-     *   stale:      30 seconds
-     *   revalidate: 1 seconds
-     *   expire:     60 seconds (1 minute)
-     * ```
-     * 
-     * This cache may be stale on clients for 30 seconds before checking with the server.
-     * If the server receives a new request after 1 seconds, start revalidating new values in the background.
-     * If this entry has no traffic for 1 minute it will expire. The next request will recompute it.
-     */
-    export function unstable_cacheLife(profile: "seconds"): void
+    let config = WKWebViewConfiguration()
+    config.userContentController = contentController
     
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"minutes"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 60 seconds (1 minute)
-     *   expire:     3600 seconds (1 hour)
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 1 minute, start revalidating new values in the background.
-     * If this entry has no traffic for 1 hour it will expire. The next request will recompute it.
-     */
-    export function unstable_cacheLife(profile: "minutes"): void
-    
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"hours"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 3600 seconds (1 hour)
-     *   expire:     86400 seconds (1 day)
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 1 hour, start revalidating new values in the background.
-     * If this entry has no traffic for 1 day it will expire. The next request will recompute it.
-     */
-    export function unstable_cacheLife(profile: "hours"): void
-    
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"days"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 86400 seconds (1 day)
-     *   expire:     604800 seconds (1 week)
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 1 day, start revalidating new values in the background.
-     * If this entry has no traffic for 1 week it will expire. The next request will recompute it.
-     */
-    export function unstable_cacheLife(profile: "days"): void
-    
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"weeks"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 604800 seconds (1 week)
-     *   expire:     2592000 seconds (30 days)
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 1 week, start revalidating new values in the background.
-     * If this entry has no traffic for 30 days it will expire. The next request will recompute it.
-     */
-    export function unstable_cacheLife(profile: "weeks"): void
-    
-    /**
-     * Cache this `"use cache"` for a timespan defined by the `"max"` profile.
-     * ```
-     *   stale:      300 seconds (5 minutes)
-     *   revalidate: 2592000 seconds (30 days)
-     *   expire:     never
-     * ```
-     * 
-     * This cache may be stale on clients for 5 minutes before checking with the server.
-     * If the server receives a new request after 30 days, start revalidating new values in the background.
-     * It lives for the maximum age of the server cache. If this entry has no traffic for a while, it may serve an old value the next request.
-     */
-    export function unstable_cacheLife(profile: "max"): void
-    
-    /**
-     * Cache this `"use cache"` using a custom timespan.
-     * ```
-     *   stale: ... // seconds
-     *   revalidate: ... // seconds
-     *   expire: ... // seconds
-     * ```
-     *
-     * This is similar to Cache-Control: max-age=`stale`,s-max-age=`revalidate`,stale-while-revalidate=`expire-revalidate`
-     *
-     * If a value is left out, the lowest of other cacheLife() calls or the default, is used instead.
-     */
-    export function unstable_cacheLife(profile: {
-      /**
-       * This cache may be stale on clients for ... seconds before checking with the server.
-       */
-      stale?: number,
-      /**
-       * If the server receives a new request after ... seconds, start revalidating new values in the background.
-       */
-      revalidate?: number,
-      /**
-       * If this entry has no traffic for ... seconds it will expire. The next request will recompute it.
-       */
-      expire?: number
-    }): void
-  
-
-  export { cacheTag as unstable_cacheTag } from 'next/dist/server/use-cache/cache-tag'
-}
-````
-
-## File: webapp/.next/types/routes.d.ts
-````typescript
-// This file is generated automatically by Next.js
-// Do not edit this file manually
-
-type AppRoutes = "/"
-type PageRoutes = never
-type LayoutRoutes = "/"
-type RedirectRoutes = never
-type RewriteRoutes = never
-type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
-
-
-interface ParamMap {
-  "/": {}
-}
-
-
-export type ParamsOf<Route extends Routes> = ParamMap[Route]
-
-interface LayoutSlotMap {
-  "/": never
-}
-
-
-export type { AppRoutes, PageRoutes, LayoutRoutes, RedirectRoutes, RewriteRoutes, ParamMap }
-
-declare global {
-  /**
-   * Props for Next.js App Router page components
-   * @example
-   * ```tsx
-   * export default function Page(props: PageProps<'/blog/[slug]'>) {
-   *   const { slug } = await props.params
-   *   return <div>Blog post: {slug}</div>
-   * }
-   * ```
-   */
-  interface PageProps<AppRoute extends AppRoutes> {
-    params: Promise<ParamMap[AppRoute]>
-    searchParams: Promise<Record<string, string | string[] | undefined>>
+    webView = WKWebView(frame: .zero, configuration: config)
+    webView.navigationDelegate = self
+    view = webView
   }
-
-  /**
-   * Props for Next.js App Router layout components
-   * @example
-   * ```tsx
-   * export default function Layout(props: LayoutProps<'/dashboard'>) {
-   *   return <div>{props.children}</div>
-   * }
-   * ```
-   */
-  type LayoutProps<LayoutRoute extends LayoutRoutes> = {
-    params: Promise<ParamMap[LayoutRoute]>
-    children: React.ReactNode
-  } & {
-    [K in LayoutSlotMap[LayoutRoute]]: React.ReactNode
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    loadBundledWebApp()
+  }
+  
+  func loadBundledWebApp() {
+    guard let htmlURL = Bundle.main.url(
+      forResource: "index", 
+      withExtension: "html", 
+      subdirectory: "webapp"
+    ) else {
+      print("Error: webapp bundle not found")
+      return
+    }
+    
+    // Allow read access to entire webapp directory
+    let webappDir = htmlURL.deletingLastPathComponent()
+    webView.loadFileURL(htmlURL, allowingReadAccessTo: webappDir)
+  }
+  
+  // MARK: - WKNavigationDelegate
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    print("Webapp loaded successfully")
+  }
+  
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    print("Failed to load webapp: \(error.localizedDescription)")
   }
 }
-````
+```
 
-## File: webapp/.next/types/validator.ts
-````typescript
-// This file is generated automatically by Next.js
-// Do not edit this file manually
-// This file validates that all pages and layouts export the correct types
+**SwiftUI approach (iOS 14+) using UIViewRepresentable:**
+```swift
+import SwiftUI
+import WebKit
 
-import type { AppRoutes, LayoutRoutes, ParamMap } from "./routes.js"
-import type { ResolvingMetadata, ResolvingViewport } from "next/types.js"
-
-type AppPageConfig<Route extends AppRoutes = AppRoutes> = {
-  default: React.ComponentType<{ params: Promise<ParamMap[Route]> } & any> | ((props: { params: Promise<ParamMap[Route]> } & any) => React.ReactNode | Promise<React.ReactNode> | never | void | Promise<void>)
-  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<any[]> | any[]
-  generateMetadata?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
-    parent: ResolvingMetadata
-  ) => Promise<any> | any
-  generateViewport?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
-    parent: ResolvingViewport
-  ) => Promise<any> | any
-  metadata?: any
-  viewport?: any
+struct WebViewRepresentable: UIViewRepresentable {
+  func makeUIView(context: Context) -> WKWebView {
+    let config = WKWebViewConfiguration()
+    config.userContentController.add(context.coordinator, name: "recipeHandler")
+    
+    let webView = WKWebView(frame: .zero, configuration: config)
+    webView.navigationDelegate = context.coordinator
+    
+    if let htmlURL = Bundle.main.url(
+      forResource: "index",
+      withExtension: "html",
+      subdirectory: "webapp"
+    ) {
+      let webappDir = htmlURL.deletingLastPathComponent()
+      webView.loadFileURL(htmlURL, allowingReadAccessTo: webappDir)
+    }
+    
+    return webView
+  }
+  
+  func updateUIView(_ uiView: WKWebView, context: Context) {}
+  
+  func makeCoordinator() -> Coordinator {
+    Coordinator()
+  }
+  
+  class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+    func userContentController(
+      _ userContentController: WKUserContentController,
+      didReceive message: WKScriptMessage
+    ) {
+      // Handle messages from webapp
+      if message.name == "recipeHandler",
+         let body = message.body as? [String: Any] {
+        print("Received message from webapp: \(body)")
+      }
+    }
+    
+    // IMPORTANT: Remove message handler to prevent retain cycles
+    deinit {
+      // Note: In production, store reference to WKUserContentController
+      // and call removeScriptMessageHandler(forName:) here
+    }
+  }
 }
+```
 
-type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
-  default: React.ComponentType<LayoutProps<Route>> | ((props: LayoutProps<Route>) => React.ReactNode | Promise<React.ReactNode> | never | void | Promise<void>)
-  generateStaticParams?: (props: { params: ParamMap[Route] }) => Promise<any[]> | any[]
-  generateMetadata?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
-    parent: ResolvingMetadata
-  ) => Promise<any> | any
-  generateViewport?: (
-    props: { params: Promise<ParamMap[Route]> } & any,
-    parent: ResolvingViewport
-  ) => Promise<any> | any
-  metadata?: any
-  viewport?: any
+### JavaScript ↔ Swift Bridge
+
+**Swift side (receiving from JS):**
+```swift
+extension WebViewController: WKScriptMessageHandler {
+  func userContentController(
+    _ userContentController: WKUserContentController,
+    didReceive message: WKScriptMessage
+  ) {
+    guard message.name == "recipeHandler",
+          let body = message.body as? [String: Any],
+          let action = body["action"] as? String else {
+      return
+    }
+    
+    switch action {
+    case "saveRecipe":
+      if let recipe = body["recipe"] as? [String: Any] {
+        handleSaveRecipe(recipe)
+      }
+    case "getRecipes":
+      sendRecipesToWebApp()
+    default:
+      break
+    }
+  }
+  
+  func sendRecipesToWebApp() {
+    let recipes = loadRecipes() // Your data source
+    if let jsonData = try? JSONSerialization.data(withJSONObject: recipes),
+       let jsonString = String(data: jsonData, encoding: .utf8) {
+      let js = "window.receiveRecipes(\(jsonString));"
+      webView.evaluateJavaScript(js, completionHandler: nil)
+    }
+  }
 }
+```
 
+---
 
-// Validate ../../src/app/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
-  const handler = {} as typeof import("../../src/app/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
+## Web Side: Svelte + Vite
 
+### Project Structure
 
+```
+apps/web/
+  src/
+    lib/
+      components/
+        RecipeList.svelte
+        RecipeForm.svelte
+      stores/
+        recipes.ts
+      types/
+        bridge.ts
+    App.svelte
+    main.ts
+  index.html
+  vite.config.ts
+  package.json
+```
 
+### TypeScript Bridge Interface
 
-
-
-
-// Validate ../../src/app/layout.tsx
-{
-  type __IsExpected<Specific extends LayoutConfig<"/">> = Specific
-  const handler = {} as typeof import("../../src/app/layout.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-````
-
-## File: webapp/out/404/index.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
-````
-
-## File: webapp/out/404.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><meta name="robots" content="noindex"/><title>MealPlanner</title><title>404: This page could not be found.</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px">404</h1><div style="display:inline-block"><h2 style="font-size:14px;font-weight:400;line-height:49px;margin:0">This page could not be found.</h2></div></div></div><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[4431,[],\"OutletBoundary\"]\n6:I[5278,[],\"AsyncMetadataOutlet\"]\n8:I[4431,[],\"ViewportBoundary\"]\na:I[4431,[],\"MetadataBoundary\"]\nb:\"$Sreact.suspense\"\nd:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"_not-found\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"/_not-found\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"/_not-found\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],null,[\"$\",\"$L4\",null,{\"children\":[\"$L5\",[\"$\",\"$L6\",null,{\"promise\":\"$@7\"}]]}]]}],{},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[[\"$\",\"meta\",null,{\"name\":\"robots\",\"content\":\"noindex\"}],[[\"$\",\"$L8\",null,{\"children\":\"$L9\"}],null],[\"$\",\"$La\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$b\",null,{\"fallback\":null,\"children\":\"$Lc\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$d\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"9:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n5:null\n"])</script><script>self.__next_f.push([1,"7:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"c:\"$7:metadata\"\n"])</script></body></html>
-````
-
-## File: webapp/out/index.html
-````html
-<!DOCTYPE html><!--cmFsAaRIRxCkgg94AJESy--><html lang="en"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-d7602772852bf587.js"/><script src="/_next/static/chunks/4bd1b696-3f2bd674b29168f8.js" async=""></script><script src="/_next/static/chunks/255-95bb71114c88f3a1.js" async=""></script><script src="/_next/static/chunks/main-app-0380a785709a9dc6.js" async=""></script><script src="/_next/static/chunks/app/page-32fd2f2b5138bf7e.js" async=""></script><title>MealPlanner</title><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body style="margin:0;font-family:system-ui, sans-serif"><div hidden=""><!--$--><!--/$--></div><main style="padding:20px;max-width:600px;margin:0 auto"><h1 style="font-size:24px;margin-bottom:20px">Hello WebView</h1><button style="background-color:#007AFF;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:16px;margin-bottom:20px;cursor:pointer">➕ Add Recipe</button><ul style="list-style:none;padding:0"></ul><p style="color:#888;text-align:center">No recipes yet</p></main><!--$--><!--/$--><script src="/_next/static/chunks/webpack-d7602772852bf587.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[9766,[],\"\"]\n3:I[8924,[],\"\"]\n4:I[1959,[],\"ClientPageRoot\"]\n5:I[9547,[\"974\",\"static/chunks/app/page-32fd2f2b5138bf7e.js\"],\"default\"]\n8:I[4431,[],\"OutletBoundary\"]\na:I[5278,[],\"AsyncMetadataOutlet\"]\nc:I[4431,[],\"ViewportBoundary\"]\ne:I[4431,[],\"MetadataBoundary\"]\nf:\"$Sreact.suspense\"\n11:I[7150,[],\"\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"cmFsAaRIRxCkgg94AJESy\",\"p\":\"\",\"c\":[\"\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"title\",null,{\"children\":\"MealPlanner\"}]]}],[\"$\",\"body\",null,{\"style\":{\"margin\":0,\"fontFamily\":\"system-ui, sans-serif\"},\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}],null,[\"$\",\"$L8\",null,{\"children\":[\"$L9\",[\"$\",\"$La\",null,{\"promise\":\"$@b\"}]]}]]}],{},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],null],[\"$\",\"$Le\",null,{\"children\":[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$f\",null,{\"fallback\":null,\"children\":\"$L10\"}]}]}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$11\",[]],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:2:children:1:props:children:0:props:params\"\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n9:null\n"])</script><script>self.__next_f.push([1,"b:{\"metadata\":[],\"error\":null,\"digest\":\"$undefined\"}\n"])</script><script>self.__next_f.push([1,"10:\"$b:metadata\"\n"])</script></body></html>
-````
-
-## File: webapp/src/app/layout.tsx
-````typescript
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>MealPlanner</title>
-      </head>
-      <body style={{ margin: 0, fontFamily: 'system-ui, sans-serif' }}>
-        {children}
-      </body>
-    </html>
-  )
-}
-````
-
-## File: webapp/src/app/page.tsx
-````typescript
-'use client'
-
-import React, { useEffect, useState } from 'react'
-
-interface Recipe {
-  id: string
-  title: string
-  image_url: string
-  description: string
-  notes: string
-  total_time: number
+**src/lib/types/bridge.ts:**
+```typescript
+export interface Recipe {
+  id: string;
+  title: string;
+  ingredients: string[];
+  instructions: string;
 }
 
 declare global {
@@ -844,195 +906,256 @@ declare global {
     webkit?: {
       messageHandlers: {
         recipeHandler: {
-          postMessage: (msg: any) => void
-        }
-        consoleLog: {
-          postMessage: (msg: any) => void
+          postMessage: (msg: any) => void;
         }
       }
-    }
-    onNativeRecipesUpdate?: (recipes: Recipe[]) => void
+    };
+    receiveRecipes?: (recipes: Recipe[]) => void;
   }
 }
 
-function log(message: string, data?: any) {
-  const msg = data ? `${message} ${JSON.stringify(data)}` : message
-  console.log(msg)
-  if (window.webkit?.messageHandlers?.consoleLog) {
-    window.webkit.messageHandlers.consoleLog.postMessage(msg)
+export const sendToNative = (action: string, data?: any) => {
+  if (window.webkit?.messageHandlers.recipeHandler) {
+    window.webkit.messageHandlers.recipeHandler.postMessage({
+      action,
+      ...data
+    });
+  } else {
+    console.warn('Native bridge not available');
   }
-}
+};
+```
 
-export default function Home() {
-  const [recipes, setRecipes] = useState<Recipe[]>([])
-  const [buttonMounted, setButtonMounted] = useState(false)
+### Svelte Component Example
 
-  useEffect(() => {
-    log('[React] Component mounted')
+**src/lib/components/RecipeList.svelte:**
+```svelte
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import type { Recipe } from '$lib/types/bridge';
+  import { sendToNative } from '$lib/types/bridge';
+  
+  let recipes = $state<Recipe[]>([]);
+  
+  onMount(() => {
+    // Set up receiver for native messages
+    window.receiveRecipes = (newRecipes: Recipe[]) => {
+      recipes = newRecipes;
+    };
     
-    window.onNativeRecipesUpdate = (newRecipes: Recipe[]) => {
-      log('[React] Received recipes from native:', newRecipes)
-      log('[React] Number of recipes received: ' + newRecipes.length)
-      setRecipes(newRecipes)
+    // Request initial data from native
+    sendToNative('getRecipes');
+  });
+  
+  const saveRecipe = (recipe: Recipe) => {
+    sendToNative('saveRecipe', { recipe });
+  };
+</script>
+
+<div class="recipe-list">
+  {#each recipes as recipe (recipe.id)}
+    <article class="recipe-card">
+      <h3>{recipe.title}</h3>
+      <p>{recipe.instructions}</p>
+    </article>
+  {/each}
+</div>
+```
+
+### Vite Configuration
+
+**vite.config.ts:**
+```typescript
+import { defineConfig } from 'vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [svelte()],
+  resolve: {
+    alias: {
+      '$lib': path.resolve('./src/lib')
     }
-
-    log('[React] Checking for webkit bridge...')
-    if (window.webkit?.messageHandlers?.recipeHandler) {
-      log('[React] Bridge found, requesting recipe list')
-      window.webkit.messageHandlers.recipeHandler.postMessage({ action: 'list' })
-    } else {
-      log('[React] ERROR: webkit bridge not available!')
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!buttonMounted) {
-      setButtonMounted(true)
-      log('[React] Add Recipe button mounted')
-    }
-  }, [buttonMounted])
-
-  useEffect(() => {
-    log('[React] Recipes state updated, count: ' + recipes.length)
-  }, [recipes])
-
-  const addRecipe = () => {
-    log('[React] ===== ADD BUTTON CLICKED =====')
-    try {
-      const title = prompt('Enter new recipe name') || 'Untitled'
-      const description = prompt('Enter description') || ''
-      log('[React] User input:', { title, description })
-      if (window.webkit?.messageHandlers?.recipeHandler) {
-        log('[React] Sending add recipe message')
-        window.webkit.messageHandlers.recipeHandler.postMessage({
-          action: 'add',
-          recipe: { title, description, image_url: '', notes: '', total_time: 30 }
-        })
-      } else {
-        log('[React] ERROR: Cannot add recipe, bridge not available')
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    // Ensure assets use relative paths for iOS bundle
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
       }
-    } catch (err) {
-      log('[React] ERROR in addRecipe: ' + err)
     }
+  },
+  base: './' // Critical for iOS file:// loading
+})
+```
+
+---
+
+## Build & Bundle Process
+
+### 1. Build Vite Static Bundle
+
+```bash
+# From repository root
+cd apps/web
+pnpm build
+# Output: apps/web/dist/
+```
+
+### 2. Copy to iOS Resources
+
+```bash
+# Clear old bundle
+rm -rf apps/ios/Resources/webapp
+
+# Copy new bundle
+mkdir -p apps/ios/Resources/webapp
+cp -r apps/web/dist/* apps/ios/Resources/webapp/
+```
+
+### 3. Xcode Integration
+
+1. Add `Resources/webapp` folder to Xcode project as **folder reference** (blue folder, not group)
+2. Ensure target membership includes main app target
+3. Verify `Info.plist` settings if needed
+
+### 4. Automated Script
+
+**scripts/deploy_webapp_to_ios.sh:**
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+WEBAPP_DIST="$ROOT_DIR/apps/web/dist"
+IOS_WEBAPP="$ROOT_DIR/apps/ios/Resources/webapp"
+
+echo "Building webapp..."
+cd "$ROOT_DIR" && pnpm build:web
+
+echo "Deploying to iOS..."
+rm -rf "$IOS_WEBAPP"
+mkdir -p "$IOS_WEBAPP"
+cp -r "$WEBAPP_DIST"/* "$IOS_WEBAPP/"
+
+echo "✅ Webapp deployed to iOS Resources"
+```
+
+**Important notes:**
+- Deployment scripts expect pre-built bundle in `apps/web/dist/` (run `just build-bundle` first)
+- Scripts copy entire dist directory including dotfiles for completeness
+- For safer JSON bridging, consider base64 encoding or structured message passing to avoid injection issues
+
+---
+
+## Testing & Debugging
+
+### Safari Web Inspector
+1. Build and run iOS app in Simulator or device
+2. Open Safari on Mac
+3. Navigate to Develop → [Device Name] → [App Name]
+4. Inspect WebView content just like a browser
+
+### Console Logging
+```typescript
+// In Svelte app
+console.log('Message from webapp:', data);
+
+// Will appear in Safari Web Inspector console
+```
+
+### Bridge Testing
+```swift
+// In Swift
+webView.evaluateJavaScript("console.log('Hello from Swift')") { result, error in
+  if let error = error {
+    print("JS error: \(error)")
   }
-
-  const deleteRecipe = (id: string) => {
-    if (window.webkit?.messageHandlers?.recipeHandler) {
-      window.webkit.messageHandlers.recipeHandler.postMessage({
-        action: 'delete',
-        recipeId: id
-      })
-    }
-  }
-
-  return (
-    <main style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>Hello WebView</h1>
-      
-      <button
-        onClick={addRecipe}
-        style={{
-          backgroundColor: '#007AFF',
-          color: 'white',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '8px',
-          fontSize: '16px',
-          marginBottom: '20px',
-          cursor: 'pointer'
-        }}
-      >
-        ➕ Add Recipe
-      </button>
-
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {recipes.map((r) => (
-          <li
-            key={r.id}
-            style={{
-              backgroundColor: '#fff',
-              padding: '15px',
-              marginBottom: '12px',
-              borderRadius: '8px',
-              border: '1px solid #ddd'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
-                <strong style={{ fontSize: '18px', display: 'block', marginBottom: '8px' }}>
-                  {r.title}
-                </strong>
-                <p style={{ fontSize: '14px', color: '#666', margin: '0 0 8px 0' }}>
-                  {r.description}
-                </p>
-                <div style={{ fontSize: '13px', color: '#888' }}>
-                  ⏱️ {r.total_time} minutes
-                </div>
-              </div>
-              <button
-                onClick={() => deleteRecipe(r.id)}
-                style={{
-                  backgroundColor: '#ff3b30',
-                  color: 'white',
-                  border: 'none',
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  marginLeft: '12px'
-                }}
-              >
-                🗑️
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {recipes.length === 0 && (
-        <p style={{ color: '#888', textAlign: 'center' }}>No recipes yet</p>
-      )}
-    </main>
-  )
 }
-````
+```
 
-## File: webapp/next-env.d.ts
-````typescript
-/// <reference types="next" />
-/// <reference types="next/image-types/global" />
-/// <reference path="./.next/types/routes.d.ts" />
+---
 
-// NOTE: This file should not be edited
-// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+## Security Considerations
+
+1. **Local file access:** Use `loadFileURL(_:allowingReadAccessTo:)` to grant directory access
+2. **Content Security Policy:** Consider adding CSP meta tag in index.html
+3. **Message validation:** Always validate messages from JavaScript
+4. **HTTPS only:** If loading remote content, enforce HTTPS
+
+---
+
+## Common Pitfalls
+
+### Resource Loading Failures
+**Problem:** Assets (CSS, JS) fail to load with 404 errors
+
+**Solution:** 
+- Ensure `vite.config.ts` has `base: './'`
+- Use `loadFileURL` with directory access grant
+- Verify folder reference in Xcode (not group)
+
+### Bridge Communication Issues
+**Problem:** Messages not received from JavaScript
+
+**Solution:**
+- Verify script message handler is registered before page load
+- Check message name matches exactly
+- Ensure page has fully loaded before sending messages
+
+### State Synchronization
+**Problem:** Swift and JS states get out of sync
+
+**Solution:**
+- Designate Swift as single source of truth
+- JS sends mutations to Swift, receives updates back
+- Use callbacks to confirm state changes
+
+---
+
+## References
+
+- [WKWebView Apple Documentation](https://developer.apple.com/documentation/webkit/wkwebview)
+- [WKScriptMessageHandler](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler)
+- [Loading Local Content](https://developer.apple.com/documentation/webkit/wkwebview/1414973-loadfileurl)
+- [Vite Static Build](https://vitejs.dev/guide/static-deploy.html)
+- [Svelte Documentation](https://svelte.dev/docs)
 ````
 
 ## File: README.md
 ````markdown
 # iOS Hello WebView App
 
-Minimal iOS app with embedded Next.js WebView showing recipe list with add/delete functionality.
+Minimal iOS app with embedded Svelte + Vite WebView showing recipe list with add/delete functionality.
 
 ## Setup & Build
 
 Run these commands from the repository root:
 
 ```bash
-# Complete setup (all-in-one)
-bash scripts/setup_ios.sh
+# Build the Svelte bundle, copy into the iOS resources, and compile for the simulator
+just build-ios
 
-# Or run steps individually:
-bash scripts/build_ios_webapp.sh      # Build Next.js app
-bash scripts/copy_ios_webapp.sh       # Copy to iOS Resources
-bash scripts/generate_ios_xcode.sh    # Generate Xcode project
+# Regenerate the bundle without triggering xcodebuild
+just deploy-ios
+
+# Optional: only scaffold Xcode project (no build)
+bash scripts/setup_ios.sh
 ```
 
-## Open in Xcode
+`just build-ios` accepts the following overrides:
+
+- `IOS_DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro" just build-ios`
+- `IOS_CONFIGURATION=Release just build-ios`
+
+After the build succeeds you can open the project in Xcode if you want to run or debug manually:
 
 ```bash
 open apps/ios/MealPlanner.xcodeproj
 ```
-
-Then select a simulator and press Cmd+R to build and run.
 
 ## Architecture
 
@@ -1041,9 +1164,9 @@ Then select a simulator and press Cmd+R to build and run.
   - JS-Swift bridge via message handlers
   - In-memory recipe storage (5 default recipes)
   
-- **Web Side**: `webapp/src/app/page.tsx`
-  - Next.js static export
-  - TypeScript + React
+- **Web Side**: `webapp/src/App.svelte`
+  - Vite static export
+  - TypeScript + Svelte
   - Communicates via `window.webkit.messageHandlers.recipeHandler`
 
 ## How It Works
@@ -1065,13 +1188,14 @@ apps/ios/
 ├── Resources/
 │   ├── Info.plist
 │   └── webapp/ (copied from webapp/out/)
-├── webapp/ (new Next.js project)
-│   ├── src/app/
-│   │   ├── layout.tsx
-│   │   └── page.tsx
+├── webapp/ (Svelte + Vite project)
+│   ├── src/
+│   │   ├── App.svelte
+│   │   ├── main.ts
+│   │   └── lib/
 │   ├── package.json
 │   ├── tsconfig.json
-│   └── next.config.js
+│   └── vite.config.ts
 └── project.yml (modified - added webapp resources)
 ```
 
@@ -1083,9 +1207,10 @@ apps/ios/
 
 **Build fails?**
 - Ensure xcodegen is installed: `brew install xcodegen`
-- Ensure Node.js is installed for Next.js build
+- Ensure Node.js is installed for Vite build
 
 **WebView blank?**
 - Check Safari Web Inspector (Develop menu → Simulator → index.html)
 - Verify console for JavaScript errors
+end
 ````
