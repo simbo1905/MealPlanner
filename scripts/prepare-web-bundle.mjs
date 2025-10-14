@@ -7,6 +7,8 @@ const ROOT_DIR = execSync('git rev-parse --show-toplevel').toString().trim();
 const WEBAPP_DIR = path.join(ROOT_DIR, 'apps/web');
 const WEBAPP_DIST = path.join(WEBAPP_DIR, 'build');
 const FINAL_INDEX_HTML = path.join(WEBAPP_DIST, 'index.html');
+const ORIGINAL_INDEX_HTML = path.join(WEBAPP_DIST, 'index.original.html');
+const INLINE_INDEX_HTML = path.join(WEBAPP_DIST, 'index.inline.html');
 const WRAPPER_HTML_TPL = path.join(WEBAPP_DIR, 'static/ios-wrapper.html');
 
 async function main() {
@@ -19,6 +21,11 @@ async function main() {
     // 2. Build the SvelteKit app
     console.log('Building SvelteKit app...');
     execSync('npm --prefix apps/web run build', { stdio: 'inherit' });
+
+    // 3. Preserve the original SvelteKit output for side-by-side inspection
+    const originalHtml = await fs.readFile(FINAL_INDEX_HTML, 'utf-8');
+    await fs.writeFile(ORIGINAL_INDEX_HTML, originalHtml);
+    console.log(`Saved SvelteKit output to ${ORIGINAL_INDEX_HTML}`);
 
     const manifestPath = path.join(WEBAPP_DIR, '.svelte-kit/output/client/.vite/manifest.json');
     const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf-8'));
@@ -53,7 +60,7 @@ async function main() {
     const wrapperContent = await fs.readFile(WRAPPER_HTML_TPL, 'utf-8');
     let finalHtml = wrapperContent.replace('`__SVELTE_APP_BUNDLE__`', "`" + encodedScript + "`");
 
-    // 7. Inject build info
+    // 7. Inject build info and CSS content together
     const buildInfo = `
     <!-- Build Info:
       Commit: ${gitSha} (${gitBranch})
@@ -67,15 +74,12 @@ async function main() {
       });
     </script>
     `;
-    finalHtml = finalHtml.replace('</head>', `${buildInfo}</head>`);
-
-    // 8. Inject the CSS content
     const styleTag = `<style>${cssContent}</style>`;
-    finalHtml = finalHtml.replace('</head>', `${styleTag}</head>`);
+    finalHtml = finalHtml.replace('</head>', `${buildInfo}${styleTag}</head>`);
 
-    // 9. Write the new index.html
-    console.log('Writing new index.html...');
-    await fs.writeFile(FINAL_INDEX_HTML, finalHtml);
+    // 9. Write the inline-bundle HTML without replacing the original entry point
+    console.log('Writing inline bundle to index.inline.html...');
+    await fs.writeFile(INLINE_INDEX_HTML, finalHtml);
 
     console.log('✅ Web bundle preparation complete!');
 

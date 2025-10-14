@@ -17,7 +17,7 @@
                 utf8Bytes[i] = binaryString.charCodeAt(i);
             }
             const decodedScript = new TextDecoder().decode(utf8Bytes);
-            console.log(decodedScript);
+            console.log('[Wrapper] Script decoded, length:', decodedScript.length);
             const scriptEl = document.createElement('script');
             scriptEl.textContent = decodedScript;
             document.body.appendChild(scriptEl);
