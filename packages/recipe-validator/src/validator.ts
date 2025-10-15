@@ -27,6 +27,8 @@ const VALID_ALLERGEN_CODES = [
   'SHELLFISH', 'TREENUT', 'WHEAT'
 ] as const
 
+const VALID_MEAL_TYPES = ['breakfast', 'brunch', 'lunch', 'dinner', 'snack', 'dessert'] as const
+
 const REQUIRED_INGREDIENT_FIELDS = [
   'name',
   'ucum-unit',
@@ -49,7 +51,7 @@ const REQUIRED_RECIPE_FIELDS = [
   'steps'
 ]
 
-const OPTIONAL_RECIPE_FIELDS: string[] = []
+const OPTIONAL_RECIPE_FIELDS: string[] = ['meal_type']
 
 /**
  * Helper: determine if number is integer
@@ -453,6 +455,23 @@ export function validateRecipeJson(data: unknown, path = 'root'): ValidationResu
       ValidationMessages.ARRAY_STRING_ITEMS,
       { value: recipe.steps, expected: 'string[]', path: `${path}.steps` }
     ))
+  }
+
+  if (recipe.meal_type !== undefined) {
+    const mealType = recipe.meal_type
+    if (typeof mealType !== 'string') {
+      errors.push(createValidationError(
+        'meal_type',
+        ValidationMessages.STRING_REQUIRED,
+        { value: mealType, expected: VALID_MEAL_TYPES.join(', '), path: `${path}.meal_type` }
+      ))
+    } else if (!VALID_MEAL_TYPES.includes(mealType as typeof VALID_MEAL_TYPES[number])) {
+      errors.push(createValidationError(
+        'meal_type',
+        ValidationMessages.ENUM_INVALID([...VALID_MEAL_TYPES]),
+        { value: mealType, expected: VALID_MEAL_TYPES.join(', '), path: `${path}.meal_type` }
+      ))
+    }
   }
 
   const hasErrors = errors.some(error => error.severity === 'error')

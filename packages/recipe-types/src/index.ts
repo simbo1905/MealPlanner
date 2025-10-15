@@ -3,6 +3,7 @@ export type {
   UcumUnit,
   MetricUnit,
   AllergenCode,
+  MealType,
   Ingredient,
   Recipe,
   GeneratedRecipeType,
@@ -14,6 +15,7 @@ export {
   isUcumUnit,
   isMetricUnit,
   isAllergenCode,
+  isMealType,
   isIngredient,
   isRecipe
 } from './types.js';

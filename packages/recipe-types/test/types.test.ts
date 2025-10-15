@@ -4,6 +4,7 @@ import {
   isUcumUnit,
   isMetricUnit,
   isAllergenCode,
+  isMealType,
   isIngredient,
   isRecipe,
   // Helper functions
@@ -13,6 +14,7 @@ import {
   UcumUnit,
   MetricUnit,
   AllergenCode,
+  MealType,
   Ingredient,
   Recipe
 } from '../src/index.js';
@@ -105,6 +107,35 @@ describe('recipe-types', () => {
         expect(isAllergenCode(123)).toBe(false);
         expect(isAllergenCode({})).toBe(false);
         expect(isAllergenCode([])).toBe(false);
+      });
+    });
+
+    describe('isMealType', () => {
+      it('should return true for valid meal types', () => {
+        const validMealTypes: MealType[] = [
+          'breakfast', 'brunch', 'lunch', 'dinner', 'snack', 'dessert'
+        ];
+        
+        validMealTypes.forEach(mealType => {
+          expect(isMealType(mealType)).toBe(true);
+        });
+      });
+
+      it('should return false for invalid meal types', () => {
+        const invalidMealTypes = ['BREAKFAST', 'supper', 'appetizer', 'invalid', 123, null, undefined, {}];
+        
+        invalidMealTypes.forEach(mealType => {
+          expect(isMealType(mealType)).toBe(false);
+        });
+      });
+
+      it('should handle edge cases correctly', () => {
+        expect(isMealType('')).toBe(false);
+        expect(isMealType(null)).toBe(false);
+        expect(isMealType(undefined)).toBe(false);
+        expect(isMealType(123)).toBe(false);
+        expect(isMealType({})).toBe(false);
+        expect(isMealType([])).toBe(false);
       });
     });
 
@@ -368,6 +399,80 @@ describe('recipe-types', () => {
         invalidRecipes.forEach(invalidRecipe => {
           expect(isRecipe(invalidRecipe)).toBe(false);
         });
+      });
+
+      it('should return true for recipes with valid meal_type', () => {
+        const recipeWithMealType: Recipe = {
+          title: 'Pancakes',
+          image_url: 'https://example.com/pancakes.jpg',
+          description: 'Fluffy pancakes',
+          notes: 'Perfect for breakfast',
+          pre_reqs: [],
+          total_time: 20,
+          ingredients: [
+            {
+              name: 'Flour',
+              'ucum-unit': 'cup_us',
+              'ucum-amount': 1.0,
+              'metric-unit': 'g',
+              'metric-amount': 120,
+              notes: 'All-purpose'
+            }
+          ],
+          steps: ['Mix and cook'],
+          meal_type: 'breakfast'
+        };
+
+        expect(isRecipe(recipeWithMealType)).toBe(true);
+      });
+
+      it('should return true for recipes without meal_type', () => {
+        const recipeWithoutMealType: Recipe = {
+          title: 'Generic Recipe',
+          image_url: 'https://example.com/recipe.jpg',
+          description: 'A generic recipe',
+          notes: '',
+          pre_reqs: [],
+          total_time: 30,
+          ingredients: [
+            {
+              name: 'Ingredient',
+              'ucum-unit': 'cup_us',
+              'ucum-amount': 1.0,
+              'metric-unit': 'g',
+              'metric-amount': 100,
+              notes: ''
+            }
+          ],
+          steps: ['Cook']
+        };
+
+        expect(isRecipe(recipeWithoutMealType)).toBe(true);
+      });
+
+      it('should return false for recipes with invalid meal_type', () => {
+        const recipeWithInvalidMealType = {
+          title: 'Invalid Recipe',
+          image_url: 'https://example.com/recipe.jpg',
+          description: 'Recipe with invalid meal type',
+          notes: '',
+          pre_reqs: [],
+          total_time: 30,
+          ingredients: [
+            {
+              name: 'Ingredient',
+              'ucum-unit': 'cup_us',
+              'ucum-amount': 1.0,
+              'metric-unit': 'g',
+              'metric-amount': 100,
+              notes: ''
+            }
+          ],
+          steps: ['Cook'],
+          meal_type: 'invalid_type'
+        };
+
+        expect(isRecipe(recipeWithInvalidMealType)).toBe(false);
       });
     });
   });

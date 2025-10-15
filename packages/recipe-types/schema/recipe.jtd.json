@@ -35,5 +35,10 @@
     "total_time": { "type": "float64" },
     "ingredients": { "elements": { "ref": "Ingredient" } },
     "steps": { "elements": { "type": "string" } }
+  },
+  "optionalProperties": {
+    "meal_type": {
+      "enum": ["breakfast", "brunch", "lunch", "dinner", "snack", "dessert"]
+    }
   }
 }

@@ -56,6 +56,40 @@ describe('recipe-validator', () => {
         expect(result.errors[0].field).toBe('total_time');
         expect(result.summary).toContain('validation failed'); // Summary mentions the warning
       });
+
+      it('should validate recipe with valid meal_type', () => {
+        const recipeWithMealType = {
+          ...validRecipe,
+          meal_type: 'breakfast'
+        };
+        const result = validateRecipeJson(recipeWithMealType);
+        
+        expect(result.isValid).toBe(true);
+        expect(result.errors).toHaveLength(0);
+        expect(result.summary).toBe('Recipe validation passed');
+      });
+
+      it('should validate recipe without meal_type (optional field)', () => {
+        const result = validateRecipeJson(validRecipe);
+        
+        expect(result.isValid).toBe(true);
+        expect(result.errors).toHaveLength(0);
+      });
+
+      it('should validate all valid meal_type values', () => {
+        const mealTypes = ['breakfast', 'brunch', 'lunch', 'dinner', 'snack', 'dessert'];
+        
+        mealTypes.forEach(mealType => {
+          const recipeWithMealType = {
+            ...validRecipe,
+            meal_type: mealType
+          };
+          const result = validateRecipeJson(recipeWithMealType);
+          
+          expect(result.isValid).toBe(true);
+          expect(result.errors).toHaveLength(0);
+        });
+      });
     });
 
     describe('Invalid Recipes', () => {
@@ -122,6 +156,30 @@ describe('recipe-validator', () => {
         expect(result.isValid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
         expect(result.errors.some(error => error.field.includes('ingredients[1]'))).toBe(true);
+      });
+
+      it('should reject recipe with invalid meal_type', () => {
+        const recipeWithInvalidMealType = {
+          ...validRecipe,
+          meal_type: 'invalid_type'
+        };
+        const result = validateRecipeJson(recipeWithInvalidMealType);
+        
+        expect(result.isValid).toBe(false);
+        expect(result.errors.length).toBeGreaterThan(0);
+        expect(result.errors.some(error => error.field === 'meal_type')).toBe(true);
+      });
+
+      it('should reject recipe with non-string meal_type', () => {
+        const recipeWithNonStringMealType = {
+          ...validRecipe,
+          meal_type: 123
+        };
+        const result = validateRecipeJson(recipeWithNonStringMealType);
+        
+        expect(result.isValid).toBe(false);
+        expect(result.errors.length).toBeGreaterThan(0);
+        expect(result.errors.some(error => error.field === 'meal_type')).toBe(true);
       });
     });
 

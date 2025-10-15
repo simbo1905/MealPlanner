@@ -36,7 +36,7 @@ export function generateWeekData(startDate: Date, weekNumber: number): Week {
       date: currentDate.toISOString().split('T')[0], // YYYY-MM-DD format
       dayName: currentDate.toLocaleDateString('en-US', { weekday: 'long' }),
       activities,
-      meals: []
+      recipes: []
     });
   }
   

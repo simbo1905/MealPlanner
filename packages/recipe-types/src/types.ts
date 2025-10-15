@@ -35,6 +35,7 @@ export interface Recipe {
   total_time: GeneratedRecipe['totalTime']
   ingredients: Ingredient[]
   steps: GeneratedRecipe['steps']
+  meal_type?: GeneratedRecipe['mealType']
 }
 
 /**
@@ -44,6 +45,7 @@ export interface Recipe {
 export type UcumUnit = GeneratedIngredient['ucumUnit']
 export type MetricUnit = GeneratedIngredient['metricUnit']
 export type AllergenCode = NonNullable<GeneratedIngredient['allergenCode']>
+export type MealType = NonNullable<GeneratedRecipe['mealType']>
 
 const VALID_UCUM_UNITS = new Set<UcumUnit>([
   'cup_us', 'cup_m', 'cup_imp',
@@ -59,6 +61,10 @@ const VALID_ALLERGEN_CODES = new Set<AllergenCode>([
   'SHELLFISH', 'TREENUT', 'WHEAT'
 ])
 
+const VALID_MEAL_TYPES = new Set<MealType>([
+  'breakfast', 'brunch', 'lunch', 'dinner', 'snack', 'dessert'
+])
+
 /**
  * Type guard utilities remain to assist runtime validation in UI layers.
  */
@@ -72,6 +78,10 @@ export function isMetricUnit(value: unknown): value is MetricUnit {
 
 export function isAllergenCode(value: unknown): value is AllergenCode {
   return typeof value === 'string' && VALID_ALLERGEN_CODES.has(value as AllergenCode)
+}
+
+export function isMealType(value: unknown): value is MealType {
+  return typeof value === 'string' && VALID_MEAL_TYPES.has(value as MealType)
 }
 
 export function isIngredient(value: unknown): value is Ingredient {
@@ -105,7 +115,8 @@ export function isRecipe(value: unknown): value is Recipe {
     Array.isArray(recipe.pre_reqs) && recipe.pre_reqs.every(item => typeof item === 'string') &&
     typeof recipe.total_time === 'number' && Number.isInteger(recipe.total_time) && recipe.total_time >= 1 &&
     Array.isArray(recipe.ingredients) && recipe.ingredients.length >= 1 && recipe.ingredients.every(isIngredient) &&
-    Array.isArray(recipe.steps) && recipe.steps.length >= 1 && recipe.steps.every(step => typeof step === 'string' && step.trim().length > 0)
+    Array.isArray(recipe.steps) && recipe.steps.length >= 1 && recipe.steps.every(step => typeof step === 'string' && step.trim().length > 0) &&
+    (recipe.meal_type === undefined || isMealType(recipe.meal_type))
   )
 }
 
@@ -137,7 +148,8 @@ export function createRecipe(overrides: Partial<Recipe> & Pick<Recipe, 'title' |
     pre_reqs: overrides.pre_reqs ?? [],
     total_time: overrides.total_time ?? 30,
     ingredients: overrides.ingredients,
-    steps: overrides.steps
+    steps: overrides.steps,
+    meal_type: overrides.meal_type
   }
 }
 
@@ -178,7 +190,8 @@ export function toGeneratedRecipe(recipe: Recipe): GeneratedRecipe {
     preReqs: recipe.pre_reqs,
     totalTime: recipe.total_time,
     ingredients: recipe.ingredients.map(toGeneratedIngredient),
-    steps: recipe.steps
+    steps: recipe.steps,
+    mealType: recipe.meal_type
   }
 }
 
@@ -191,6 +204,7 @@ export function fromGeneratedRecipe(recipe: GeneratedRecipe): Recipe {
     pre_reqs: recipe.preReqs,
     total_time: recipe.totalTime,
     ingredients: recipe.ingredients.map(fromGeneratedIngredient),
-    steps: recipe.steps
+    steps: recipe.steps,
+    meal_type: recipe.mealType
   }
 }

@@ -94,35 +94,35 @@
 </script>
 
 <section class="bg-white border-b border-gray-200">
-  <div class="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-20">
+  <div class="bg-white border-b border-gray-200 px-4 py-2 sticky top-0 z-20">
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <h2 class="text-lg font-semibold text-gray-900">{formatDate(week.startDate)} - {formatDate(week.endDate)} {formatYear(week.startDate)}</h2>
-        <span class="bg-black text-white text-xs font-semibold px-3 py-1 rounded-full">WEEK {week.weekNumber}</span>
+      <div class="flex items-center gap-2">
+        <h2 class="text-sm font-semibold text-gray-900">{formatDate(week.startDate)} - {formatDate(week.endDate)} {formatYear(week.startDate)}</h2>
+        <span class="bg-black text-white text-xs font-semibold px-2 py-0.5 rounded-full">WEEK {week.weekNumber}</span>
       </div>
-      <button class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw w-4 h-4">
+      <button class="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-900 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw w-3.5 h-3.5">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
           <path d="M3 3v5h5"></path>
         </svg>
         Reset
       </button>
     </div>
-    <p class="text-sm text-gray-500 mt-1">Total: {week.totalActivities} activit{week.totalActivities !== 1 ? 'ies' : 'y'}</p>
+    <p class="text-xs text-gray-500 mt-0.5">Total: {week.totalActivities} activit{week.totalActivities !== 1 ? 'ies' : 'y'}</p>
   </div>
 
   <!-- Days -->
   <div>
     {#each week.days as day, dayIndex}
-      <div class="flex border-b border-gray-200 min-h-[80px] transition-colors">
-        <div class="sticky left-0 z-10 bg-white flex flex-col justify-center items-center w-20 min-w-[80px] border-r border-gray-100 py-3">
-          <div class="text-xs text-gray-400 font-medium mb-1">{formatDayName(day.date)}</div>
-          <div class="flex items-center justify-center w-10 h-10 rounded-full font-semibold text-lg {dayIndex === 0 ? 'bg-black text-white' : 'text-gray-900'}">
+      <div class="flex border-b border-gray-200 min-h-[56px] transition-colors">
+        <div class="sticky left-0 z-10 bg-white flex flex-col justify-center items-center w-16 min-w-[64px] border-r border-gray-100 py-2">
+          <div class="text-[10px] text-gray-400 font-medium mb-0.5 uppercase">{formatDayName(day.date)}</div>
+          <div class="flex items-center justify-center w-7 h-7 rounded-full font-semibold text-base {dayIndex === 0 ? 'bg-black text-white' : 'text-gray-900'}">
             {new Date(day.date).getDate()}
           </div>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="flex gap-3 px-3 py-2 overflow-x-auto" style="scroll-snap-type: x mandatory;">
+          <div class="flex gap-2 px-2 py-1.5 overflow-x-auto" style="scroll-snap-type: x mandatory;">
             <!-- Meal cards drag and drop zone -->
             <div 
               use:dndzone={{
@@ -135,7 +135,7 @@
               }}
               onconsider={(e) => handleDndConsider(e, day.date)}
               onfinalize={(e) => handleDndFinalize(e, day.date)}
-              class="flex gap-3 min-h-[88px] w-full"
+              class="flex gap-2 min-h-[52px] w-full"
               data-date={day.date}
             >
               {#each day.meals || [] as meal (meal.id)}
@@ -145,21 +145,21 @@
                   tabindex="0" 
                   aria-disabled="false" 
                   aria-roledescription="draggable" 
-                  class="flex-shrink-0 w-52 p-4 bg-white rounded-xl shadow-sm border border-gray-100 {getBorderColor(meal.color)} border-l-4 cursor-move transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start"
+                  class="flex-shrink-0 w-36 p-2 bg-white rounded-lg shadow-sm border border-gray-100 {getBorderColor(meal.color)} border-l-4 cursor-move transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start"
                 >
                   <div class="flex items-start justify-between">
                     <div class="flex-1 min-w-0">
-                      <div class="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{meal.icon} w-4 h-4 text-gray-500 flex-shrink-0">
+                      <div class="flex items-center gap-1.5 mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{meal.icon} w-3 h-3 text-gray-500 flex-shrink-0">
                           {@html getIconSvg(meal.icon)}
                         </svg>
-                        <h3 class="font-semibold text-sm text-gray-900 truncate">{meal.name}</h3>
+                        <h3 class="font-semibold text-xs text-gray-900 truncate">{meal.name}</h3>
                       </div>
                       <div class="flex items-center gap-2">
-                        <p class="text-xs text-gray-500">{meal.time}</p>
+                        <p class="text-[10px] text-gray-500">{meal.time}</p>
                       </div>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-4 h-4 text-gray-400 flex-shrink-0 ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-3 h-3 text-gray-400 flex-shrink-0 ml-1">
                       <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
                     </svg>
                   </div>
@@ -169,14 +169,14 @@
               <!-- Add button -->
               <button 
                 onclick={() => openMealModal(day.date)}
-                class="flex-shrink-0 w-36 h-[88px] rounded-xl border flex items-center gap-1 text-gray-500 hover:bg-white hover:border-white hover:text-gray-700 transition-colors scroll-snap-align-start"
-                style="background-color: rgb(249, 250, 251); border-color: rgb(249, 250, 251); justify-content: flex-start; padding-left: 0.75rem;"
+                class="flex-shrink-0 w-24 h-[52px] rounded-lg border flex items-center gap-1 text-gray-500 hover:bg-white hover:border-white hover:text-gray-700 transition-colors scroll-snap-align-start"
+                style="background-color: rgb(249, 250, 251); border-color: rgb(249, 250, 251); justify-content: flex-start; padding-left: 0.5rem;"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-4 h-4 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-3.5 h-3.5 flex-shrink-0">
                   <path d="M5 12h14"></path>
                   <path d="M12 5v14"></path>
                 </svg>
-                <span class="font-medium text-sm whitespace-nowrap">Add</span>
+                <span class="font-medium text-xs whitespace-nowrap">Add</span>
               </button>
             </div>
           </div>

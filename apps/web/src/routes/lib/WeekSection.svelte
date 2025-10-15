@@ -1,22 +1,17 @@
 <script lang="ts">
   import { dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
-  import type { Week, Day, Meal, DndEvent } from './types';
+  import type { Week, Day, CalendarRecipe, DndEvent } from './types';
+  import type { Recipe } from '@mealplanner/recipe-types';
   import MealSelectionModal from './MealSelectionModal.svelte';
   
-  const { week, onAddActivity, onMoveMeal } = $props<{ 
+  const { week, onAddRecipe, onMoveRecipe } = $props<{ 
     week: Week; 
-    onAddActivity: (date: string, meal: any) => void;
-    onMoveMeal?: (fromDate: string, toDate: string, mealId: string) => void;
+    onAddRecipe: (date: string, recipe: Recipe) => void;
+    onMoveRecipe?: (fromDate: string, toDate: string, recipeId: string) => void;
   }>();
 
-  // Sample meal data
-  const sampleMeals = [
-    { name: "Chicken Stir-Fry", time: "30 min", icon: "utensils", color: "green" },
-    { name: "Hill Repeats", time: "45 min", icon: "chef-hat", color: "green" },
-    { name: "parkrun", time: "5 km", icon: "utensils", color: "teal" },
-    { name: "Gradual Build", time: "3.1 km", icon: "utensils", color: "yellow" }
-  ];
+  const generateId = () => Math.random().toString(36).substr(2, 9);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -33,61 +28,39 @@
     return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
 
-  const getBorderColor = (color: string) => {
-    switch (color) {
-      case 'green': return 'border-l-green-500';
-      case 'teal': return 'border-l-teal-500';
-      case 'yellow': return 'border-l-yellow-500';
-      default: return 'border-l-green-500';
-    }
-  };
-
-  const getIconSvg = (icon: string) => {
-    switch (icon) {
-      case 'utensils':
-        return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>';
-      case 'chef-hat':
-        return '<path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path><path d="M6 17h12"></path>';
-      default:
-        return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>';
-    }
-  };
-
-  // Modal state
   let isModalOpen = $state(false);
   let selectedDate = $state('');
 
-  const openMealModal = (date: string) => {
+  const openRecipeModal = (date: string) => {
     selectedDate = date;
     isModalOpen = true;
   };
 
-  const handleSelectMeal = (meal: any) => {
-    onAddActivity(selectedDate, meal);
+  const handleSelectRecipe = (recipe: Recipe) => {
+    const recipeWithId: CalendarRecipe = {
+      ...recipe,
+      id: generateId()
+    };
+    onAddRecipe(selectedDate, recipeWithId);
   };
 
   // Drag and drop handlers
   const handleDndConsider = (e: CustomEvent<any>, date: string) => {
-    // Update the meals array during drag operation
     const dayIndex = week.days.findIndex((day: Day) => day.date === date);
-    if (dayIndex !== -1 && week.days[dayIndex].meals) {
-      week.days[dayIndex].meals = e.detail.items as Meal[];
-      // Trigger reactivity
+    if (dayIndex !== -1 && week.days[dayIndex].recipes) {
+      week.days[dayIndex].recipes = e.detail.items as CalendarRecipe[];
       week.days = [...week.days];
     }
   };
 
   const handleDndFinalize = (e: CustomEvent<any>, date: string) => {
-    // Finalize the meal arrangement for the current day
     const dayIndex = week.days.findIndex((day: Day) => day.date === date);
     if (dayIndex !== -1) {
-      week.days[dayIndex].meals = e.detail.items as Meal[];
-      week.days[dayIndex].activities = (e.detail.items as Meal[]).length;
+      week.days[dayIndex].recipes = e.detail.items as CalendarRecipe[];
+      week.days[dayIndex].activities = (e.detail.items as CalendarRecipe[]).length;
       
-      // Update total activities for the week
-      week.totalActivities = week.days.reduce((sum: number, day: Day) => sum + (day.meals?.length || 0), 0);
+      week.totalActivities = week.days.reduce((sum: number, day: Day) => sum + (day.recipes?.length || 0), 0);
       
-      // Trigger reactivity
       week.days = [...week.days];
     }
   };
@@ -123,12 +96,11 @@
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex gap-3 px-3 py-2 overflow-x-auto" style="scroll-snap-type: x mandatory;">
-            <!-- Meal cards drag and drop zone -->
             <div 
               use:dndzone={{
-                items: day.meals || [],
+                items: day.recipes || [],
                 flipDurationMs: 200,
-                type: 'meal',
+                type: 'recipe',
                 dropTargetClasses: ['drag-over'],
                 dropTargetStyle: { outline: '2px solid #3b82f6' },
                 centreDraggedOnCursor: true
@@ -138,37 +110,35 @@
               class="flex gap-3 min-h-[88px] w-full"
               data-date={day.date}
             >
-              {#each day.meals || [] as meal (meal.id)}
+              {#each day.recipes || [] as recipe (recipe.id)}
                 <div 
                   animate:flip={{duration: 200}}
                   role="button" 
                   tabindex="0" 
                   aria-disabled="false" 
                   aria-roledescription="draggable" 
-                  class="flex-shrink-0 w-52 p-4 bg-white rounded-xl shadow-sm border border-gray-100 {getBorderColor(meal.color)} border-l-4 cursor-move transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start"
+                  class="flex-shrink-0 w-52 p-4 bg-white rounded-xl shadow-sm border border-gray-100 border-l-green-500 border-l-4 cursor-move transition-all hover:shadow-md active:scale-[0.98] scroll-snap-align-start"
                 >
                   <div class="flex items-start justify-between">
                     <div class="flex-1 min-w-0">
                       <div class="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{meal.icon} w-4 h-4 text-gray-500 flex-shrink-0">
-                          {@html getIconSvg(meal.icon)}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils w-4 h-4 text-gray-500 flex-shrink-0">
+                          <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                          <path d="M7 2v20"></path>
+                          <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
                         </svg>
-                        <h3 class="font-semibold text-sm text-gray-900 truncate">{meal.name}</h3>
+                        <h3 class="font-semibold text-sm text-gray-900 truncate">{recipe.title}</h3>
                       </div>
                       <div class="flex items-center gap-2">
-                        <p class="text-xs text-gray-500">{meal.time}</p>
+                        <p class="text-xs text-gray-500">{recipe.total_time} min</p>
                       </div>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-4 h-4 text-gray-400 flex-shrink-0 ml-2">
-                      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
-                    </svg>
                   </div>
                 </div>
               {/each}
               
-              <!-- Add button -->
               <button 
-                onclick={() => openMealModal(day.date)}
+                onclick={() => openRecipeModal(day.date)}
                 class="flex-shrink-0 w-36 h-[88px] rounded-xl border flex items-center gap-1 text-gray-500 hover:bg-white hover:border-white hover:text-gray-700 transition-colors scroll-snap-align-start"
                 style="background-color: rgb(249, 250, 251); border-color: rgb(249, 250, 251); justify-content: flex-start; padding-left: 0.75rem;"
               >
@@ -185,10 +155,10 @@
     {/each}
   </div>
 
-  <!-- Meal Selection Modal -->
+  <!-- Recipe Selection Modal -->
   <MealSelectionModal 
     bind:isOpen={isModalOpen}
-    onSelectMeal={handleSelectMeal}
+    onSelectRecipe={handleSelectRecipe}
   />
 </section>
 

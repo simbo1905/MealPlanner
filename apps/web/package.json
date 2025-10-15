@@ -15,6 +15,9 @@
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "@mealplanner/recipe-database": "workspace:*",
+    "@mealplanner/recipe-types": "workspace:*",
+    "@mealplanner/recipe-validator": "workspace:*",
     "date-fns": "^3.6.0",
     "svelte": "^5.5.4",
     "svelte-dnd-action": "^0.9.65"

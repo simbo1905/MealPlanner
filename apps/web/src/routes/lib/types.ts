@@ -1,16 +1,14 @@
-export interface Meal {
+import type { Recipe } from '@mealplanner/recipe-types';
+
+export interface CalendarRecipe extends Recipe {
   id: string;
-  name: string;
-  time: string;
-  icon: string;
-  color: string;
 }
 
 export interface Day {
   date: string;
   dayName: string;
   activities: number;
-  meals?: Meal[];
+  recipes?: CalendarRecipe[];
 }
 
 export interface Week {

@@ -1,39 +1,25 @@
 <script lang="ts">
-  let { isOpen = $bindable(), onSelectMeal } = $props<{
+  import { recipeDB } from './recipeStore.svelte';
+  import type { Recipe } from '@mealplanner/recipe-types';
+
+  let { isOpen = $bindable(), onSelectRecipe } = $props<{
     isOpen: boolean;
-    onSelectMeal: (meal: any) => void;
+    onSelectRecipe: (recipe: Recipe) => void;
   }>();
 
-  // Generate unique ID for meals
   const generateId = () => Math.random().toString(36).substr(2, 9);
-
-  // Sample meal data for the modal
-  const availableMeals = [
-    { name: "Spaghetti Bolognese", time: "45 min", icon: "utensils", color: "green" },
-    { name: "Chicken Stir-Fry", time: "30 min", icon: "utensils", color: "green" },
-    { name: "Fish and Chips", time: "40 min", icon: "utensils", color: "teal" },
-    { name: "Vegetable Curry", time: "35 min", icon: "utensils", color: "yellow" },
-    { name: "Roast Chicken", time: "90 min", icon: "chef-hat", color: "green" },
-    { name: "Beef Tacos", time: "25 min", icon: "utensils", color: "teal" },
-    { name: "Salmon Teriyaki", time: "20 min", icon: "utensils", color: "green" },
-    { name: "Mushroom Risotto", time: "35 min", icon: "chef-hat", color: "yellow" }
-  ];
 
   let searchTerm = $state("");
 
-  const filteredMeals = $derived(
-    availableMeals.filter(meal => 
-      meal.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const searchResults = $derived(
+    recipeDB.searchRecipes({ 
+      query: searchTerm,
+      sortBy: 'relevance'
+    })
   );
 
-  const handleSelectMeal = (meal: any) => {
-    // Add unique ID to the meal for drag and drop tracking
-    const mealWithId = {
-      ...meal,
-      id: generateId()
-    };
-    onSelectMeal(mealWithId);
+  const handleSelectRecipe = (recipe: Recipe) => {
+    onSelectRecipe(recipe);
     isOpen = false;
   };
 
@@ -93,33 +79,31 @@
 
       <!-- Meal list -->
       <div class="space-y-2 h-[400px] overflow-y-auto mt-4">
-        {#each filteredMeals as meal}
+        {#each searchResults as result}
           <button 
             class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100 text-left"
-            onclick={() => handleSelectMeal(meal)}
+            onclick={() => handleSelectRecipe(result.recipe)}
           >
             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-{meal.icon} w-5 h-5 text-gray-600">
-                {#if meal.icon === 'utensils'}
-                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
-                  <path d="M7 2v20"></path>
-                  <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
-                {:else if meal.icon === 'chef-hat'}
-                  <path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path>
-                  <path d="M6 17h12"></path>
-                {/if}
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils w-5 h-5 text-gray-600">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                <path d="M7 2v20"></path>
+                <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
               </svg>
             </div>
             <div class="flex-1 text-left">
-              <div class="font-medium text-gray-900">{meal.name}</div>
-              <div class="text-sm text-gray-500">{meal.time}</div>
+              <div class="font-medium text-gray-900">{result.recipe.title}</div>
+              <div class="text-sm text-gray-500">{result.recipe.total_time} min</div>
+              {#if result.recipe.description}
+                <div class="text-xs text-gray-400 mt-1 line-clamp-1">{result.recipe.description}</div>
+              {/if}
             </div>
           </button>
         {/each}
         
-        {#if filteredMeals.length === 0}
+        {#if searchResults.length === 0}
           <div class="text-center text-gray-500 py-8">
-            No meals found matching "{searchTerm}"
+            No recipes found matching "{searchTerm}"
           </div>
         {/if}
       </div>
