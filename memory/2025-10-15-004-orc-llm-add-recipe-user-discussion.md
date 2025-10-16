@@ -95,3 +95,16 @@
 ---
 
 **Next Steps**: These architectural decisions should be incorporated into the implementation plan and task breakdown for the 004-orc-llm-add-recipe feature.
+
+---
+
+## 2025-10-28 Update – Storage & iOS Constraints
+
+- **Safari IndexedDB risk**: The 2024 “History of Safari Showstoppers” recap highlights two blocking defects still affecting iOS 17—(1) the *Connection Lost* regression that randomly severs IndexedDB transactions in long-lived WKWebView contexts and (2) aggressive storage eviction that purges databases without warning when PWA storage pressure spikes. Together they make Safari IndexedDB an unacceptable primary store for MealPlanner.
+- **Platform pivot**: Adopt a storage abstraction with identical APIs across implementations. Default adapter = IndexedDB (prototype/web) for fast iteration; production iOS adapter = Swift bridge backed by CloudKit private database; future Android adapter = bridge to Google’s syncable store (TBD). Same TypeScript surface prevents UI rewrites.
+- **Bridge contract**: Expose a Promise-based CRUD + query interface to WKWebView via `window.mealplannerStorage`. Native implementations must guarantee: idempotent `putRecipe`, soft-deletes via tombstones, ordered change feeds, and eventual consistency when reconnecting.
+- **Collections**: 
+  - `recipes_v1`: canonical recipe documents keyed by optional time-ordered UUID (`uuid` field) with snake_case payload from JTD schema. Same identifier doubles as primary key in CloudKit (`CKRecord.ID`) and in IndexedDB.
+  - `days_v1`: per-day log collection keyed by ISO date string. Each entry stores an append-only array of events (`$ts-add-$uuid` / `$ts-del-$uuid`). UI materialises the day view by replaying the log in timestamp order, enabling merge-friendly sync and offline tombstones.
+- **Search strategy**: With ≤512 recipes, initial implementation can run linear scans in adapters while leaving hooks for indexed search backends later. Documented fallback avoids premature optimisation.
+- **Sync posture**: Treat CloudKit as authoritative; adapters should queue events offline and reconcile using last-seen change tokens. Tombstones ensure deletions survive multi-device merges without conflict.
