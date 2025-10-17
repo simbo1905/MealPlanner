@@ -28,8 +28,16 @@ Where the targets can be:
 
 The verbs will be things like `clean|build|package|deploy|retart`
 
-### Long-Running Command Discipline
-You MUST always guard ALL scripts with shell timeouts: start with `timeout 20 just <command>` as the prior section says that there should be pid management you can then `sleep 30 hup -0 ${pid} ; tail -100 /tmp/<script_name>.log` to monitor what is going on and that progress is being made. 
+### Command Execution Discipline
+
+To prevent any possibility of the agent hanging, ALL shell commands executed via `run_shell_command` MUST be wrapped in a `timeout` command (e.g., `timeout 20 <command>`). This is a strict, non-negotiable rule.
+
+For long-running processes like web servers or test drivers, a more robust scripting discipline is required to manage them in the background:
+
+1.  **Backgrounding**: The primary command in the wrapper script MUST be launched as a background process using `&`.
+2.  **PID File Management**: The script MUST immediately write the process ID (PID) of the backgrounded command to a file named after the script and placed in the project's `./.tmp/` directory (e.g., `./.tmp/my_script.sh.pid`).
+3.  **Log Redirection**: All `stdout` and `stderr` MUST be redirected to a log file, also named after the script and placed in `./.tmp/` (e.g., `./.tmp/my_script.sh.log`), which is overwritten on each run.
+4.  **Process Monitoring**: After launching, the agent will monitor the process by sleeping for a short interval, reading the PID file, and using `kill -0 $PID` to check the status before reading the log file for results. 
 
 ## Coding Style & Naming Conventions
 Source is TypeScript-first; maintain strict typing and prefer discriminated unions in shared packages. Follow the repo Prettier and ESLint presets using two-space indentation and trailing commas. Component files should use `PascalCase` (`FamilyPlanner.svelte`), stores and utilities `camelCase` (`useOfflineSync.ts`), and constants `SCREAMING_SNAKE_CASE`. Keep Svelte components lean and mobile responsive from the outset.
@@ -338,3 +346,20 @@ As an agent working on this project, you are required to use all available tools
 -   **Kapture MCP:** For interacting with and testing the web application in the Edge browser.
 
 You must not rely on the user to perform basic testing and verification of your work. It is your responsibility to ensure that the code you produce is functional and meets the user's requirements.
+
+## Flutter Web Integration Testing Dependencies
+- **`chromedriver`**: Required for running Flutter integration tests on the web. Install via `brew install chromedriver`.
+
+### Flutter Web Integration Test Runner (`meal_planner/flutter_test_server.sh`)
+- **Log location**: `/Users/Shared/MealPlanner/.tmp/flutter_test_server.sh.log` is truncated at start of each invocation; tail it to track progress markers (`Chromedriver readiness`, `flutter drive still running`, success banner).
+- **PID tracking**: `/Users/Shared/MealPlanner/.tmp/flutter_test_server.sh.pid` stores the runner PID. Use `kill -0 $(cat …pid)` to confirm the controller is still alive.
+- **Lifecycle**: Script launches chromedriver and `flutter drive` in background, polls every 5 s, and immediately terminates both when the log contains `All tests passed!`. Successful exits remove all Chrome/chromedriver children (headless + renderer helpers).
+- **Dirty state recovery**:
+  - If the log shows `The Dart compiler exited unexpectedly.` or tests hang at “Waiting for connection…”, run `timeout 120 flutter clean` inside `meal_planner/` before re-running the script.
+  - Check for stray processes with `timeout 5 pgrep -fl "Google Chrome"` and `timeout 5 pgrep -fl chromedriver`; kill any leftovers before restarting to avoid port binds.
+- **Cold start expectations**: First launch after `flutter clean` takes ~60 s (package fetch + compile). Subsequent runs should finish <40 s.
+- **Troubleshooting loop**:
+  1. `timeout 180 ./meal_planner/flutter_test_server.sh`
+  2. Tail log; if no progress in 60 s, inspect for stuck compiler lines.
+  3. Kill remaining Chrome/chromedriver processes.
+  4. Run `flutter clean` (timeout-wrapped) and retry.
