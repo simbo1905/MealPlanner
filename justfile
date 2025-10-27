@@ -5,58 +5,9 @@
 default:
     @just --list
 
-# --- Web App --- #
-
-# Manage web app: clean|bundle|dev start|dev stop|start|stop
-web action *args:
-    #!/usr/bin/env bash
-    case "{{action}}" in
-        clean)
-            rm -rf apps/web/build apps/web/.svelte-kit
-            ;;
-        bundle)
-            sh ./scripts/web-bundle.sh
-            ;;
-        dev)
-            case "{{args}}" in
-                start)
-                    sh ./scripts/web-vite.sh start
-                    ;;
-                stop)
-                    sh ./scripts/web-vite.sh stop
-                    ;;
-                *)
-                    echo "Usage: just web dev {start|stop}"
-                    echo ""
-                    echo "  start  - Start Vite development server with HMR"
-                    echo "  stop   - Stop Vite development server"
-                    exit 1
-                    ;;
-            esac
-            ;;
-        start)
-            sh ./scripts/web-serve.sh start
-            ;;
-        stop)
-            sh ./scripts/web-serve.sh stop
-            ;;
-        *)
-            echo "Usage: just web {clean|bundle|dev|start|stop}"
-            echo ""
-            echo "Actions:"
-            echo "  clean        - Remove build artifacts"
-            echo "  bundle       - Run the production build for native deployment"
-            echo "  dev start    - Start Vite development server with HMR"
-            echo "  dev stop     - Stop Vite development server"
-            echo "  start        - Start bundled app server on port 3333"
-            echo "  stop         - Stop bundled app server"
-            exit 1
-            ;;
-    esac
-
 # --- iOS --- #
 
-# Deploy the web app bundle to the iOS project
+# Deploy to the iOS project
 ios-deploy:
     sh ./scripts/ios-deploy.sh
 
@@ -103,10 +54,31 @@ repomix platform:
 
 # Clean all build artifacts
 all-clean:
-    just web clean
     just ios-clean
     just clean-android
 
-# Full repair of web environment (clear pnpm cache and reinstall)
-nuke-web:
-    sh ./scripts/nuke_web.sh
+# --- PocketBase Backend --- #
+
+# Setup PocketBase local development environment (Dart-based, probes for free port)
+# Requirements: .env file with PB_ADMIN_USER and PB_ADMIN_PASSWORD
+pocketbase-setup:
+    dart scripts/setup_pocketbase.dart
+
+# Manage PocketBase dev server
+# Usage: just pocketbase {stop|status|logs|test}
+pocketbase action:
+    sh ./scripts/pocketbase_dev.sh {{action}}
+
+# --- Testing --- #
+
+# Run all unit tests for event store
+test-event-store:
+    cd meal_planner && flutter test test/unit/services/entity_handle_test.dart test/unit/services/local_buffer_test.dart test/unit/services/merge_arbitrator_test.dart test/unit/services/uuid_generator_test.dart test/unit/models/store_event_test.dart
+
+# Run integration tests for offline sync
+test-offline-sync:
+    cd meal_planner && flutter test integration_test/offline_sync_test.dart
+
+# Run all unit tests
+test-all-unit:
+    cd meal_planner && flutter test test/unit/

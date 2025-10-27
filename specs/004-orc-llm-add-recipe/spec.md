@@ -8,10 +8,10 @@
 
 ## Storage & Platform Notes (2025-10-28)
 
-- **Unified storage abstraction**: The recipe onboarding flow must persist data via a pluggable storage layer with identical TypeScript APIs. Default adapter = IndexedDB (prototype/web); production iOS adapter = WKWebView bridge to CloudKit; future Android adapter = equivalent native bridge.
+- **Unified storage abstraction**: The recipe onboarding flow must persist data via PocketBase backend API. All platforms (web, iOS, Android) use the PocketBase Dart/TypeScript SDK with offline-first caching.
 - **Recipe identity**: All completed recipes carry an optional time-ordered UUID (`uuid`). When absent in inbound payloads the storage layer assigns one before persistence. The identifier is used for cross-device reconciliation, day logs, and future sync.
 - **Day meal logs**: Assigning or removing recipes on the calendar writes to a per-day append-only log. Each entry encodes `$timestamp-op-uuid` (add/del) plus minimal recipe snapshot for UI display. Replaying the log reconstructs the day's meals and supports eventual consistency.
-- **Tombstones**: Deletions are represented as `del` events. No hard deletes; compaction is a future optimisation. This enables conflict-free merges across CloudKit, IndexedDB, and future sync stores.
+- **Soft Deletes**: Deletions set `is_deleted = true` flag in PocketBase collections. No hard deletes; enables recovery and audit trail.
 - **Search posture**: With <512 recipes, adapters may satisfy search requirements through linear scans while keeping hooks for indexed backends. UX expectations remain unchanged.
 
 ## Execution Flow (main)
@@ -100,7 +100,7 @@ As a MealPlanner user, I want to quickly add my existing recipes to the app by e
 - **FR-017**: System MUST require AI to provide placeholder sentinel values for missing data to maintain JTD schema compliance
 - **FR-018**: System MUST implement dynamic timeout for MistralAI responses based on extracted text word count [NEEDS CLARIFICATION: timeout constant/formula TBD]
 - **FR-019**: System MUST send new MistralAI request with missing field context when user selects "AI Best Guess" option
-- **FR-020**: System MUST persist recipes and day assignments through the storage abstraction described above, ensuring optional UUID assignment, append-only day logs, and adapter interchangeability across web, iOS (CloudKit bridge), and future Android implementations.
+- **FR-020**: System MUST persist recipes and day assignments through PocketBase backend API with offline-first caching, ensuring consistent behavior across web, iOS, and Android platforms.
 
 ### Key Entities
 - **Recipe**: Contains structured recipe data (name, ingredients, instructions, timing, etc.) conforming to JTD schema

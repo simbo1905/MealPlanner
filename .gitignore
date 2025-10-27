@@ -129,3 +129,16 @@ tmp/
 .tmp/
 .colors
 .gemini
+
+# PocketBase
+.tmp/pocketbase/
+.tmp/pb_*/
+!.tmp/pb_*/pb_hooks/README.md
+
+# Environment files (contain credentials)
+.env
+.env.local
+.env.*.local
+
+# PocketBase instance config (may contain sensitive data in production)
+pb_config.local.json

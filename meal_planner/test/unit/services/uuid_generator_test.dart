@@ -2,154 +2,117 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:meal_planner/services/uuid_generator.dart';
 
 void main() {
-  group('UUIDGenerator', () {
-    test('should generate valid UUID format', () {
-      final uuid = UUIDGenerator.generateUUID();
-      final pattern = RegExp(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$');
-      expect(uuid, matches(pattern));
+  group('UuidGenerator (3×64-bit)', () {
+    test('generates valid 3-part format', () async {
+      final uuid = await UuidGenerator.next();
+      final parts = uuid.split(':');
+
+      expect(parts, hasLength(3));
+      expect(int.tryParse(parts[0]), isNotNull); // msb1 (time)
+      expect(int.tryParse(parts[1]), isNotNull); // msb2 (counter)
+      expect(int.tryParse(parts[2]), isNotNull); // lsb (device hash)
     });
 
-    test('should generate unique UUIDs', () {
-      final uuids = <String>{};
-      for (int i = 0; i < 10000; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
-      }
-      expect(uuids.length, 10000);
+    test('generates time-ordered UUIDs', () async {
+      final uuid1 = await UuidGenerator.next();
+      await Future.delayed(const Duration(milliseconds: 5));
+      final uuid2 = await UuidGenerator.next();
+
+      expect(uuid2.compareTo(uuid1), greaterThan(0));
     });
 
-    test('should generate time-ordered UUIDs', () async {
-      final uuid1 = UUIDGenerator.generateUUID();
-      await Future.delayed(const Duration(milliseconds: 10));
-      final uuid2 = UUIDGenerator.generateUUID();
-      await Future.delayed(const Duration(milliseconds: 10));
-      final uuid3 = UUIDGenerator.generateUUID();
+    test('increments counter for rapid generation', () async {
+      final uuid1 = await UuidGenerator.next();
+      final uuid2 = await UuidGenerator.next();
 
-      final time1 = UUIDGenerator.dissect(uuid1);
-      final time2 = UUIDGenerator.dissect(uuid2);
-      final time3 = UUIDGenerator.dissect(uuid3);
+      final (time1, counter1, device1) = UuidGenerator.parse(uuid1);
+      final (time2, counter2, device2) = UuidGenerator.parse(uuid2);
 
-      expect(time1 < time2, true);
-      expect(time2 < time3, true);
-    });
-
-    test('should maintain ordering for rapid generation', () {
-      final uuids = <String>[];
-      for (int i = 0; i < 1000; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
+      // If same millisecond, counter increments
+      if (time1 == time2) {
+        expect(counter2, greaterThan(counter1));
       }
 
-      final timestamps = uuids.map((uuid) => UUIDGenerator.dissect(uuid)).toList();
-      
-      for (int i = 1; i < timestamps.length; i++) {
-        expect(timestamps[i] >= timestamps[i - 1], true,
-            reason: 'UUID at index $i has timestamp ${timestamps[i]} which is less than previous ${timestamps[i - 1]}');
-      }
+      // Device should be same
+      expect(device1, equals(device2));
     });
 
-    test('should dissect UUID to extract timestamp', () {
-      final uuid = UUIDGenerator.generateUUID();
+    test('parse extracts all three components', () async {
+      final uuid = await UuidGenerator.next();
+      final (msb1, msb2, lsb) = UuidGenerator.parse(uuid);
+
+      expect(msb1, greaterThan(0)); // timestamp > 0
+      expect(msb2, greaterThan(0)); // counter > 0
+      expect(lsb, isNotNull);
+    });
+
+    test('getTimeMs extracts timestamp', () async {
+      final uuid = await UuidGenerator.next();
+      final timeMs = UuidGenerator.getTimeMs(uuid);
+
       final nowMs = DateTime.now().millisecondsSinceEpoch;
-      final extractedMs = UUIDGenerator.dissect(uuid);
 
-      // Should be within 50ms tolerance
-      expect((extractedMs - nowMs).abs(), lessThan(50));
+      // Should be within 50ms
+      expect((timeMs - nowMs).abs(), lessThan(50));
     });
 
-    test('should extract both timestamp and sequence from UUID', () {
-      final uuids = <String>[];
-      
-      // Generate multiple UUIDs rapidly (likely same millisecond)
-      for (int i = 0; i < 10; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
-      }
+    test('getEntityId extracts first part', () async {
+      final uuid = await UuidGenerator.next();
+      final entityId = UuidGenerator.getEntityId(uuid);
 
-      // Dissect each UUID
-      for (int i = 0; i < uuids.length; i++) {
-        final result = UUIDGenerator.dissectFull(uuids[i]);
-        expect(result.timestampMs, isNotNull);
-        expect(result.sequence, greaterThanOrEqualTo(0));
-        expect(result.sequence, lessThan(0x100000)); // 20-bit max
-        
-        // If same millisecond, sequence should increment
-        if (i > 0) {
-          final prev = UUIDGenerator.dissectFull(uuids[i - 1]);
-          if (result.timestampMs == prev.timestampMs) {
-            expect(result.sequence, greaterThan(prev.sequence));
-          }
-        }
-      }
+      final parts = uuid.split(':');
+      expect(entityId, equals(parts[0]));
     });
 
-    test('should round-trip timestamp correctly', () async {
-      final uuid = UUIDGenerator.generateUUID();
-      final extracted = UUIDGenerator.dissect(uuid);
-      
-      // Generate another UUID with similar time
-      await Future.delayed(const Duration(milliseconds: 1));
-      final uuid2 = UUIDGenerator.generateUUID();
-      final extracted2 = UUIDGenerator.dissect(uuid2);
-
-      expect(extracted, isNotNull);
-      expect(extracted2, isNotNull);
-      expect(extracted2 >= extracted, true);
-    });
-
-    test('should handle sub-millisecond generation with counter', () {
-      final uuids = <String>[];
-      
-      // Generate many UUIDs rapidly (within same millisecond)
+    test('generates unique UUIDs across calls', () async {
+      final uuids = <String>{};
       for (int i = 0; i < 100; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
+        uuids.add(await UuidGenerator.next());
       }
 
-      // All UUIDs should be unique even if generated in same millisecond
-      final uniqueUuids = uuids.toSet();
-      expect(uniqueUuids.length, 100);
-
-      // Extract timestamps - some may be same millisecond, but UUIDs must be unique
-      final timestamps = uuids.map((uuid) => UUIDGenerator.dissect(uuid)).toList();
-      expect(timestamps, isNotNull);
+      expect(uuids, hasLength(100));
     });
 
-    test('should reset counter when millisecond changes', () async {
-      final uuid1 = UUIDGenerator.generateUUID();
-      
-      // Wait for millisecond to change
-      await Future.delayed(const Duration(milliseconds: 2));
-      
-      final uuid2 = UUIDGenerator.generateUUID();
-      
-      final time1 = UUIDGenerator.dissect(uuid1);
-      final time2 = UUIDGenerator.dissect(uuid2);
-      
-      expect(time2 > time1, true);
-      expect(uuid1, isNot(equals(uuid2)));
+    test('device hash is consistent', () async {
+      final uuid1 = await UuidGenerator.next();
+      final uuid2 = await UuidGenerator.next();
+
+      final (_, _, device1) = UuidGenerator.parse(uuid1);
+      final (_, _, device2) = UuidGenerator.parse(uuid2);
+
+      expect(device1, equals(device2));
     });
 
-    test('should generate different random portions', () {
-      final uuids = <String>[];
-      for (int i = 0; i < 100; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
+    test('counter resets after millisecond changes', () async {
+      final uuid1 = await UuidGenerator.next();
+      await Future.delayed(const Duration(milliseconds: 5));
+      final uuid2 = await UuidGenerator.next();
+
+      final (time1, counter1, _) = UuidGenerator.parse(uuid1);
+      final (time2, counter2, _) = UuidGenerator.parse(uuid2);
+
+      if (time1 != time2) {
+        // New millisecond, counter should reset to 1
+        expect(counter2, equals(1));
       }
-
-      // Extract last 12 chars (random portion)
-      final randomPortions = uuids.map((uuid) => uuid.substring(uuid.length - 12)).toSet();
-      
-      // Should have many unique random portions
-      expect(randomPortions.length, greaterThan(90));
     });
 
-    test('should handle edge case of maximum counter value', () {
-      // Generate enough UUIDs to potentially overflow 20-bit counter
-      // 2^20 = 1,048,576
-      final uuids = <String>[];
-      
-      for (int i = 0; i < 1000; i++) {
-        uuids.add(UUIDGenerator.generateUUID());
-      }
-      
-      // Should still generate valid, unique UUIDs
-      expect(uuids.toSet().length, 1000);
+    test('parse throws on invalid format', () {
+      expect(
+        () => UuidGenerator.parse('invalid'),
+        throwsFormatException,
+      );
+
+      expect(
+        () => UuidGenerator.parse('1:2'), // only 2 parts
+        throwsFormatException,
+      );
+    });
+
+    test('handles mock device generation', () async {
+      final uuid = await UuidGenerator.next();
+      expect(uuid, isNotEmpty);
+      expect(uuid.contains(':'), isTrue);
     });
   });
 }
