@@ -6,7 +6,29 @@ part of 'user_preferences_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userPreferencesHash() => r'168ad5d6e763e037580531007054dd8cbc889825';
+String _$userPreferencesRepositoryHash() =>
+    r'304671ab1955768e0e2b013239798c92ec328ee6';
+
+/// Provider for the repository (can be overridden in tests)
+///
+/// Copied from [userPreferencesRepository].
+@ProviderFor(userPreferencesRepository)
+final userPreferencesRepositoryProvider =
+    AutoDisposeProvider<UserPreferencesRepository>.internal(
+      userPreferencesRepository,
+      name: r'userPreferencesRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$userPreferencesRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UserPreferencesRepositoryRef =
+    AutoDisposeProviderRef<UserPreferencesRepository>;
+String _$userPreferencesHash() => r'5cd6026625503172b87b079aa9d12be416aa550f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,16 +51,24 @@ class _SystemHash {
   }
 }
 
-/// See also [userPreferences].
+/// Load user preferences from repository
+///
+/// Copied from [userPreferences].
 @ProviderFor(userPreferences)
 const userPreferencesProvider = UserPreferencesFamily();
 
-/// See also [userPreferences].
+/// Load user preferences from repository
+///
+/// Copied from [userPreferences].
 class UserPreferencesFamily extends Family<AsyncValue<UserPreferences>> {
-  /// See also [userPreferences].
+  /// Load user preferences from repository
+  ///
+  /// Copied from [userPreferences].
   const UserPreferencesFamily();
 
-  /// See also [userPreferences].
+  /// Load user preferences from repository
+  ///
+  /// Copied from [userPreferences].
   UserPreferencesProvider call(String userId) {
     return UserPreferencesProvider(userId);
   }
@@ -65,10 +95,14 @@ class UserPreferencesFamily extends Family<AsyncValue<UserPreferences>> {
   String? get name => r'userPreferencesProvider';
 }
 
-/// See also [userPreferences].
+/// Load user preferences from repository
+///
+/// Copied from [userPreferences].
 class UserPreferencesProvider
     extends AutoDisposeFutureProvider<UserPreferences> {
-  /// See also [userPreferences].
+  /// Load user preferences from repository
+  ///
+  /// Copied from [userPreferences].
   UserPreferencesProvider(String userId)
     : this._internal(
         (ref) => userPreferences(ref as UserPreferencesRef, userId),
@@ -149,7 +183,7 @@ class _UserPreferencesProviderElement
 }
 
 String _$userPreferencesNotifierHash() =>
-    r'5b272d29b716b5fe2154fef500eace715897d829';
+    r'ef7cb4bf40970331888ce638c9fc4fe571b851c6';
 
 abstract class _$UserPreferencesNotifier
     extends BuildlessAutoDisposeAsyncNotifier<void> {
@@ -158,16 +192,24 @@ abstract class _$UserPreferencesNotifier
   FutureOr<void> build(String userId);
 }
 
-/// See also [UserPreferencesNotifier].
+/// Notifier for updating preferences
+///
+/// Copied from [UserPreferencesNotifier].
 @ProviderFor(UserPreferencesNotifier)
 const userPreferencesNotifierProvider = UserPreferencesNotifierFamily();
 
-/// See also [UserPreferencesNotifier].
+/// Notifier for updating preferences
+///
+/// Copied from [UserPreferencesNotifier].
 class UserPreferencesNotifierFamily extends Family<AsyncValue<void>> {
-  /// See also [UserPreferencesNotifier].
+  /// Notifier for updating preferences
+  ///
+  /// Copied from [UserPreferencesNotifier].
   const UserPreferencesNotifierFamily();
 
-  /// See also [UserPreferencesNotifier].
+  /// Notifier for updating preferences
+  ///
+  /// Copied from [UserPreferencesNotifier].
   UserPreferencesNotifierProvider call(String userId) {
     return UserPreferencesNotifierProvider(userId);
   }
@@ -194,11 +236,15 @@ class UserPreferencesNotifierFamily extends Family<AsyncValue<void>> {
   String? get name => r'userPreferencesNotifierProvider';
 }
 
-/// See also [UserPreferencesNotifier].
+/// Notifier for updating preferences
+///
+/// Copied from [UserPreferencesNotifier].
 class UserPreferencesNotifierProvider
     extends
         AutoDisposeAsyncNotifierProviderImpl<UserPreferencesNotifier, void> {
-  /// See also [UserPreferencesNotifier].
+  /// Notifier for updating preferences
+  ///
+  /// Copied from [UserPreferencesNotifier].
   UserPreferencesNotifierProvider(String userId)
     : this._internal(
         () => UserPreferencesNotifier()..userId = userId,

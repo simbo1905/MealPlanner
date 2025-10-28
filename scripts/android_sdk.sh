@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ANDROID_DIR="$ROOT_DIR/apps/android"
+ANDROID_DIR="$ROOT_DIR/meal_planner/android"
 DEFAULT_AVD_NAME="${ANDROID_AVD_NAME:-MealPlanner_API_34}"
 DEFAULT_AVD_DEVICE="${ANDROID_AVD_DEVICE:-pixel_6}"
 DEFAULT_SYSTEM_IMAGE="${ANDROID_SYSTEM_IMAGE:-system-images;android-34;google_apis_playstore;arm64-v8a}"

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/recipe.freezed_model.dart';
 import 'recipe_providers.dart';
@@ -18,23 +19,13 @@ Future<List<Recipe>> recipesForDay(
     data: (assignmentList) {
       return allRecipes.when(
         data: (recipeList) {
+          // Build recipe lookup map for O(1) access
+          final recipeById = {for (var r in recipeList) r.id: r};
+          
           final result = <Recipe>[];
           for (var assignment in assignmentList) {
-            final recipe = recipeList.firstWhere(
-              (r) => r.id == assignment.recipeId,
-              orElse: () => Recipe(
-                id: '',
-                title: 'Unknown Recipe',
-                imageUrl: '',
-                description: '',
-                notes: '',
-                preReqs: [],
-                totalTime: 0,
-                ingredients: [],
-                steps: [],
-              ),
-            );
-            if (recipe.id.isNotEmpty) {
+            final recipe = recipeById[assignment.recipeId];
+            if (recipe != null) {
               result.add(recipe);
             }
           }
@@ -83,24 +74,14 @@ Future<double> weekTotalTime(
     data: (assignmentMap) {
       return allRecipes.when(
         data: (recipeList) {
+          // Build recipe lookup map for O(1) access
+          final recipeById = {for (var r in recipeList) r.id: r};
+          
           double total = 0.0;
           assignmentMap.forEach((_, assignments) {
             for (var assignment in assignments) {
-              final recipe = recipeList.firstWhere(
-                (r) => r.id == assignment.recipeId,
-                orElse: () => Recipe(
-                  id: '',
-                  title: '',
-                  imageUrl: '',
-                  description: '',
-                  notes: '',
-                  preReqs: [],
-                  totalTime: 0,
-                  ingredients: [],
-                  steps: [],
-                ),
-              );
-              if (recipe.id.isNotEmpty) {
+              final recipe = recipeById[assignment.recipeId];
+              if (recipe != null) {
                 total += recipe.totalTime;
               }
             }

@@ -6,7 +6,24 @@ part of 'recipe_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recipesHash() => r'9a4cfc301eaacced8d16e78cd5a27fe243422540';
+String _$recipeRepositoryHash() => r'9083bb6a801ae825f9f5bda65ee079127178dbaa';
+
+/// See also [recipeRepository].
+@ProviderFor(recipeRepository)
+final recipeRepositoryProvider = AutoDisposeProvider<RecipeRepository>.internal(
+  recipeRepository,
+  name: r'recipeRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$recipeRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RecipeRepositoryRef = AutoDisposeProviderRef<RecipeRepository>;
+String _$recipesHash() => r'a67b6015a993e3dc71678f8ad5e220f0b63211b9';
 
 /// See also [recipes].
 @ProviderFor(recipes)
@@ -23,7 +40,7 @@ final recipesProvider = AutoDisposeStreamProvider<List<Recipe>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RecipesRef = AutoDisposeStreamProviderRef<List<Recipe>>;
-String _$recipeHash() => r'9edd69cbfe01361410081ed2f5c76eb8605f1465';
+String _$recipeHash() => r'cb126709e659fc14b18ec2070b798e20cf4d8a98';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -159,7 +176,7 @@ class _RecipeProviderElement extends AutoDisposeFutureProviderElement<Recipe?>
 }
 
 String _$recipeSaveNotifierHash() =>
-    r'70926895bcf8217055aeba0641b4bc0e93ed3de3';
+    r'2a726c13ec64940c54cafb072b99e64b07e29d05';
 
 /// See also [RecipeSaveNotifier].
 @ProviderFor(RecipeSaveNotifier)
@@ -176,7 +193,7 @@ final recipeSaveNotifierProvider =
 
 typedef _$RecipeSaveNotifier = AutoDisposeAsyncNotifier<void>;
 String _$recipeSearchNotifierHash() =>
-    r'e1a740d5a0d6e1cc88a01757f20d03888a77e0ce';
+    r'bc139fbc9b404db1e8fe3fc0f4c56934d5bda382';
 
 /// See also [RecipeSearchNotifier].
 @ProviderFor(RecipeSearchNotifier)

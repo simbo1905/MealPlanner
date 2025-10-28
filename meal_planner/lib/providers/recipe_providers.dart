@@ -1,36 +1,89 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/recipe.freezed_model.dart';
 import '../models/search_models.freezed_model.dart';
 
 part 'recipe_providers.g.dart';
 
-// Stream of all recipes from Firestore
+// Repository interface for testing
+abstract class RecipeRepository {
+  Stream<List<Recipe>> watchAllRecipes();
+  Future<Recipe?> getRecipe(String id);
+  Future<String> save(Recipe recipe);
+  Future<void> delete(String id);
+}
+
+// Firebase implementation
+class FirebaseRecipeRepository implements RecipeRepository {
+  @override
+  Stream<List<Recipe>> watchAllRecipes() {
+    return FirebaseFirestore.instance
+        .collection('recipes')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Recipe.fromJson({...doc.data(), 'id': doc.id}))
+          .toList();
+    });
+  }
+
+  @override
+  Future<Recipe?> getRecipe(String id) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('recipes')
+          .doc(id)
+          .get();
+      if (!doc.exists) return null;
+      return Recipe.fromJson({...doc.data()!, 'id': doc.id});
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<String> save(Recipe recipe) async {
+    if (recipe.id.isEmpty) {
+      final ref = FirebaseFirestore.instance.collection('recipes').doc();
+      await ref.set(recipe.copyWith(id: ref.id).toJson());
+      return ref.id;
+    } else {
+      await FirebaseFirestore.instance
+          .collection('recipes')
+          .doc(recipe.id)
+          .set(recipe.toJson());
+      return recipe.id;
+    }
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await FirebaseFirestore.instance
+        .collection('recipes')
+        .doc(id)
+        .delete();
+  }
+}
+
+// Riverpod provider for repository
+@riverpod
+RecipeRepository recipeRepository(Ref ref) {
+  return FirebaseRecipeRepository();
+}
+
+// Stream of all recipes from repository
 @riverpod
 Stream<List<Recipe>> recipes(Ref ref) {
-  return FirebaseFirestore.instance
-      .collection('recipes')
-      .snapshots()
-      .map((snapshot) {
-    return snapshot.docs
-        .map((doc) => Recipe.fromJson({...doc.data(), 'id': doc.id}))
-        .toList();
-  });
+  final repo = ref.watch(recipeRepositoryProvider);
+  return repo.watchAllRecipes();
 }
 
 // Get single recipe by ID
 @riverpod
 Future<Recipe?> recipe(Ref ref, String recipeId) async {
-  try {
-    final doc = await FirebaseFirestore.instance
-        .collection('recipes')
-        .doc(recipeId)
-        .get();
-    if (!doc.exists) return null;
-    return Recipe.fromJson({...doc.data()!, 'id': doc.id});
-  } catch (e) {
-    return null;
-  }
+  final repo = ref.watch(recipeRepositoryProvider);
+  return repo.getRecipe(recipeId);
 }
 
 // Notifier for save/delete operations
@@ -45,19 +98,8 @@ class RecipeSaveNotifier extends _$RecipeSaveNotifier {
     String savedId = '';
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      if (recipe.id.isEmpty) {
-        // Create new
-        final ref = FirebaseFirestore.instance.collection('recipes').doc();
-        await ref.set(recipe.copyWith(id: ref.id).toJson());
-        savedId = ref.id;
-      } else {
-        // Update existing
-        await FirebaseFirestore.instance
-            .collection('recipes')
-            .doc(recipe.id)
-            .set(recipe.toJson());
-        savedId = recipe.id;
-      }
+      final repo = ref.read(recipeRepositoryProvider);
+      savedId = await repo.save(recipe);
     });
     return savedId.isEmpty ? recipe.id : savedId;
   }
@@ -65,10 +107,8 @@ class RecipeSaveNotifier extends _$RecipeSaveNotifier {
   Future<void> delete(String recipeId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await FirebaseFirestore.instance
-          .collection('recipes')
-          .doc(recipeId)
-          .delete();
+      final repo = ref.read(recipeRepositoryProvider);
+      await repo.delete(recipeId);
     });
   }
 }
@@ -84,7 +124,9 @@ class RecipeSearchNotifier extends _$RecipeSearchNotifier {
   Future<void> search(SearchOptions options) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final allRecipesAsync = ref.watch(recipesProvider);
+      final allRecipesAsync = ref.read(recipesProvider);
+      
+      List<SearchResult> searchResults = [];
       
       allRecipesAsync.when(
         data: (recipes) {
@@ -109,7 +151,6 @@ class RecipeSearchNotifier extends _$RecipeSearchNotifier {
           }
 
           // Text search
-          List<SearchResult> searchResults = [];
           if (options.query != null && options.query!.isNotEmpty) {
             final queryLower = options.query!.toLowerCase();
             for (var recipe in results) {
@@ -178,11 +219,12 @@ class RecipeSearchNotifier extends _$RecipeSearchNotifier {
             searchResults = searchResults.take(options.limit!).toList();
           }
 
-          state = AsyncValue.data(searchResults);
         },
-        loading: () => state = const AsyncValue.data([]),
-        error: (err, st) => state = const AsyncValue.data([]),
+        loading: () {},
+        error: (err, st) {},
       );
+      
+      return searchResults;
     });
   }
 }

@@ -2,10 +2,10 @@
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/_ensure_env.sh" "bun @1.3"
 
-PLATFORM="${1:-web}"
-shift || true
+PLATFORM="${1:-flutter}"
+ACTION="${2:-run}"
+shift 2 || shift 1 || true
 
 SCRIPT_NAME="repomix_${PLATFORM}"
 PID_FILE="/tmp/${SCRIPT_NAME}.pid"
@@ -13,117 +13,72 @@ LOG_FILE="/tmp/${SCRIPT_NAME}.log"
 OUTPUT_FILE="repomix-${PLATFORM}.md"
 
 cleanup() {
-  if [[ "${ACTION}" == "run" ]]; then
-    rm -f "${PID_FILE}"
-  fi
+  [[ "${ACTION}" == "run" ]] && rm -f "${PID_FILE}"
 }
 trap cleanup EXIT
 
-ensure_log_files() {
-  mkdir -p "$(dirname "${LOG_FILE}")"
-  : > "${LOG_FILE}"
-}
+if ! command -v bunx >/dev/null 2>&1; then
+  echo "Error: bunx not found. Please install bun: https://bun.sh" >&2
+  exit 1
+fi
 
-# Default includes for all platforms
-include_patterns="package.json,pnpm-workspace.yaml,justfile,AGENTS.md,mise.toml,packages/**,tooling/**"
-ignore_patterns="**/node_modules/**,**/.git/**,**/build/**,**/dist/**,**/.svelte-kit/**,prototype/**,*.log,*.pid"
+include_patterns="package.json,justfile,AGENTS.md,mise.toml"
+ignore_patterns="**/node_modules/**,**/.git/**,**/build/**,**/dist/**,**/.svelte-kit/**,*.log,*.pid"
 
 case "${PLATFORM}" in
-  web)
-    include_patterns+=",apps/web/**"
-    ignore_patterns+=",apps/ios/**,apps/android/**,apps/jfx/**"
-    ;;
-  ios)
-    include_patterns+=",apps/ios/**,*.xcodeproj/**"
-    ignore_patterns+=",apps/web/**,apps/android/**,apps/jfx/**,**/*.app/**,**/build/**"
-    ;;
-  android)
-    include_patterns+=",apps/android/**,*.gradle*,gradle.properties"
-    ignore_patterns+=",apps/web/**,apps/ios/**,apps/jfx/**,**/build/**,**/.gradle/**"
-    ;;
-  jfx)
-    include_patterns+=",apps/jfx/**,*.gradle"
-    ignore_patterns+=",apps/web/**,apps/ios/**,apps/android/**,**/build/**,**/.gradle/**"
+  flutter)
+    cd "${SCRIPT_DIR}/../meal_planner"
+    include_patterns="**/*.dart,**/*.md,pubspec.yaml,analysis_options.yaml"
+    ignore_patterns="build/**,.dart_tool/**,*.g.dart,*.freezed.dart"
     ;;
   *)
-    echo "Usage: $0 [web|ios|android|jfx] [repomix flags...]" >&2
+    echo "Usage: $0 [flutter] [run|status|stop|tail] [repomix flags...]" >&2
     exit 2
     ;;
 esac
 
 command_args=(
-  bunx
-  --bun
-  repomix
-  --style
-  markdown
+  bunx --bun repomix
+  --style markdown
   --output "${OUTPUT_FILE}"
   --include "${include_patterns}"
   --ignore "${ignore_patterns}"
   "$@"
 )
 
-ACTION="${1:-run}"
-
-if ! command -v bunx >/dev/null 2>&1; then
-    cat >&2 <<'EOF'
-bunx (from bun) is required to run repomix. Install via `mise install bun @1.3` or `brew install bun`.
-EOF
-    exit 1
-fi
-
 case "${ACTION}" in
   run)
-    ensure_log_files
-    echo "Launching repomix for ${PLATFORM} (log: ${LOG_FILE}, output: ${OUTPUT_FILE})"
-    echo "Command: ${command_args[*]}"
+    mkdir -p "$(dirname "${LOG_FILE}")"
+    echo "Generating repomix for ${PLATFORM} → ${OUTPUT_FILE}"
     "${command_args[@]}" &> "${LOG_FILE}" &
     pid=$!
     echo "${pid}" > "${PID_FILE}"
-    if ! wait "${pid}"; then
-      status=$?
-      echo "repomix export failed, inspect ${LOG_FILE}" >&2
-      exit "${status}"
+    if wait "${pid}"; then
+      echo "✓ Created ${OUTPUT_FILE}"
+    else
+      echo "✗ Failed. See ${LOG_FILE}" >&2
+      exit 1
     fi
-    cat "${LOG_FILE}"
-    echo "Repomix context file created at ${OUTPUT_FILE}"
     ;;
   status)
-    if [[ -f "${PID_FILE}" ]]; then
-      pid=$(<"${PID_FILE}")
-      if kill -0 "${pid}" 2>/dev/null; then
-        echo "${SCRIPT_NAME} running with PID ${pid}"
-        exit 0
-      fi
-    fi
-    echo "${SCRIPT_NAME} is not running"
+    [[ -f "${PID_FILE}" ]] && pid=$(<"${PID_FILE}") && kill -0 "${pid}" 2>/dev/null && \
+      echo "${SCRIPT_NAME} running (PID ${pid})" && exit 0
+    echo "${SCRIPT_NAME} not running"
     exit 1
     ;;
   stop)
     if [[ -f "${PID_FILE}" ]]; then
       pid=$(<"${PID_FILE}")
-      if kill -0 "${pid}" 2>/dev/null; then
-        kill "${pid}"
-        wait "${pid}" || true
-        echo "Stopped ${SCRIPT_NAME}"
-      else
-        echo "Process ${pid} not running"
-      fi
+      kill "${pid}" 2>/dev/null && wait "${pid}" 2>/dev/null || true
       rm -f "${PID_FILE}"
-    else
-      echo "No PID file found for ${SCRIPT_NAME}"
+      echo "Stopped ${SCRIPT_NAME}"
     fi
     ;;
   tail)
-    if [[ -f "${LOG_FILE}" ]]; then
-      tail -100 "${LOG_FILE}"
-    else
-      echo "Log file ${LOG_FILE} not found"
-      exit 1
-    fi
+    [[ -f "${LOG_FILE}" ]] && tail -100 "${LOG_FILE}" || { echo "No log file" >&2; exit 1; }
     ;;
   *)
-    echo "Usage: $0 [run|status|stop|tail] [repomix flags...]" >&2
+    echo "Usage: $0 [flutter] [run|status|stop|tail] [repomix flags...]" >&2
     exit 2
     ;;
 esac

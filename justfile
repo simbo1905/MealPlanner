@@ -1,61 +1,25 @@
-# MealPlanner Build Automation
+# MealPlanner - Flutter App Build Automation
+# App location: ./meal_planner
 # Use `just` to list all available commands
+#
+# Pass-through: Use `just flutter <args>` to run Flutter CLI in the app directory
+# Example: just flutter run, just flutter build apk, just flutter analyze
 
 # Default recipe: list all available commands
 default:
     @just --list
 
-# --- iOS --- #
+# --- Flutter App --- #
 
-# Deploy to the iOS project
-ios-deploy:
-    sh ./scripts/ios-deploy.sh
-
-# Clean the iOS build artifacts
-ios-clean:
-    rm -rf apps/ios/build
-
-# --- Android (DO NOT TOUCH) --- #
-
-# Build the Android wrapper with the latest web bundle
-build-android:
-    sh ./scripts/build_android.sh
-
-# Manage Android SDK / launch Android Studio
-android-sdk action='studio':
-    sh ./scripts/android_sdk.sh {{action}}
-
-# Deploy Android app (rebuild web bundle, copy assets, build, install, launch)
-deploy-android:
-    sh ./scripts/build_and_deploy_ios.sh # This should be build_and_deploy_android.sh, but for now we use the ios one
-    sh ./scripts/build_android.sh
-    sh ./scripts/launch_android.sh
-
-# Clean Android build artifacts (web bundle untouched)
-clean-android:
-    sh ./scripts/clean_android.sh
-
-# --- Prototypes (DO NOT TOUCH) --- #
-
-# Build and manage prototype servers
-# Usage: just prototype <num> <action>
-# Actions: start, stop, reload
-prototype num action:
-    sh ./scripts/prototype.sh {{num}} {{action}}
-
-# --- Tooling --- #
-
-# Run repomix to generate code context for a specific platform
-# Usage: just repomix <platform> (e.g., web, ios, android, jfx)
-repomix platform:
-    sh ./scripts/repomix.sh {{platform}}
-
-# --- Global --- #
-
-# Clean all build artifacts
-all-clean:
-    just ios-clean
-    just clean-android
+# Pass through Flutter CLI commands
+# Usage: just flutter <flutter-args>
+# Examples:
+#   just flutter run
+#   just flutter build apk
+#   just flutter analyze
+#   just flutter pub get
+flutter +args='--help':
+    cd meal_planner && flutter {{args}}
 
 # --- PocketBase Backend --- #
 
@@ -82,3 +46,16 @@ test-offline-sync:
 # Run all unit tests
 test-all-unit:
     cd meal_planner && flutter test test/unit/
+
+# --- Tooling --- #
+
+# Run repomix to generate code context
+# Usage: just repomix [platform]
+# Default: flutter
+repomix platform='flutter':
+    sh ./scripts/repomix.sh {{platform}}
+
+# Manage Android SDK / launch Android Studio
+# Usage: just android-sdk [studio|ensure|avd|emulator|doctor]
+android-sdk action='studio':
+    sh ./scripts/android_sdk.sh {{action}}
