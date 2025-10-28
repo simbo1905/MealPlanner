@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required to scan text from images</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo library access is required to select images for text recognition</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Photo library access is required to save processed images</string>
 </dict>
 </plist>

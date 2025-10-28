@@ -176,7 +176,7 @@ class _RecipeProviderElement extends AutoDisposeFutureProviderElement<Recipe?>
 }
 
 String _$recipeSaveNotifierHash() =>
-    r'2a726c13ec64940c54cafb072b99e64b07e29d05';
+    r'16a31e00267545f62bf8d2b4a04362e131086d8a';
 
 /// See also [RecipeSaveNotifier].
 @ProviderFor(RecipeSaveNotifier)
@@ -193,7 +193,7 @@ final recipeSaveNotifierProvider =
 
 typedef _$RecipeSaveNotifier = AutoDisposeAsyncNotifier<void>;
 String _$recipeSearchNotifierHash() =>
-    r'bc139fbc9b404db1e8fe3fc0f4c56934d5bda382';
+    r'b027a6154a1226833a59e615f374f3e1dd464820';
 
 /// See also [RecipeSearchNotifier].
 @ProviderFor(RecipeSearchNotifier)

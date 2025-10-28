@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
+import 'screens/calendar/infinite_calendar_screen.dart';
+import 'providers/meal_providers.dart';
+import 'repositories/in_memory_meal_repository.dart';
+import 'repositories/in_memory_meal_template_repository.dart';
+
 
 void main() async {
   // Set up error handling
@@ -48,7 +53,27 @@ void main() async {
     }
 
     debugPrint('🎨 Launching app UI...');
-    runApp(const ProviderScope(child: MyApp()));
+    
+    // Initialize repositories for demo (with production clock by default)
+    final mealRepo = InMemoryMealRepository();
+    
+    // Seed demo meals only in debug mode
+    if (kDebugMode) {
+      mealRepo.seedDemoMeals();
+    }
+    
+    final templateRepo = InMemoryMealTemplateRepository();
+    
+    runApp(
+      ProviderScope(
+        overrides: [
+          mealRepositoryProvider.overrideWithValue(mealRepo),
+          mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
+          // Production uses real clock (nowProvider default)
+        ],
+        child: const MyApp(),
+      ),
+    );
     debugPrint('✅ App launched successfully');
   } catch (e, stackTrace) {
     debugPrint('🔴 FATAL ERROR during startup: $e');
@@ -58,7 +83,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +93,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const InfiniteCalendarScreen(),
     );
   }
 }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +120,7 @@ class ErrorApp extends StatelessWidget {
   final String error;
   final String? stackTrace;
   
-  const ErrorApp({Key? key, required this.error, this.stackTrace}) : super(key: key);
+  const ErrorApp({super.key, required this.error, this.stackTrace});
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ void main() {
           Ingredient(
             name: 'Pasta',
             ucumAmount: 2.0,
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             metricAmount: 500.0,
             metricUnit: MetricUnit.g,
             notes: '',

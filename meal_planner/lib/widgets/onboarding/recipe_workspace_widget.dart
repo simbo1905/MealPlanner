@@ -124,7 +124,7 @@ class RecipeWorkspaceWidget extends StatelessWidget {
                     final newIngredient = const Ingredient(
                       name: '',
                       ucumAmount: 0.0,
-                      ucumUnit: UcumUnit.cup_us,
+                      ucumUnit: UcumUnit.cupUs,
                       metricAmount: 0.0,
                       metricUnit: MetricUnit.g,
                       notes: '',

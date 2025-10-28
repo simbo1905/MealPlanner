@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 /// RecipeSearchBar provides a search input field with clear button.
 class RecipeSearchBar extends StatefulWidget {
-  final Function(String query) onChanged;
-  final Function(String query)? onSearchTriggered;
+  final void Function(String query) onChanged;
+  final void Function(String query)? onSearchTriggered;
   final String? hintText;
 
   const RecipeSearchBar({

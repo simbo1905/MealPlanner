@@ -12,7 +12,7 @@ void main() {
       testIngredient = const Ingredient(
         name: 'Pasta',
         ucumAmount: 2.0,
-        ucumUnit: UcumUnit.cup_us,
+        ucumUnit: UcumUnit.cupUs,
         metricAmount: 500.0,
         metricUnit: MetricUnit.g,
         notes: 'Dry pasta',
@@ -92,7 +92,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(changedIngredient, isNotNull);
-      expect(changedIngredient!.ucumUnit, UcumUnit.cup_m);
+      expect(changedIngredient!.ucumUnit, UcumUnit.cupM);
     });
 
     testWidgets('change metric unit dropdown', (tester) async {

@@ -35,7 +35,7 @@ Future<WorkspaceRecipe> processRecipeImage(
       Ingredient(
         name: 'Flour',
         ucumAmount: 2.0,
-        ucumUnit: UcumUnit.cup_us,
+        ucumUnit: UcumUnit.cupUs,
         metricAmount: 240.0,
         metricUnit: MetricUnit.g,
         notes: 'All-purpose',
@@ -43,7 +43,7 @@ Future<WorkspaceRecipe> processRecipeImage(
       Ingredient(
         name: 'Sugar',
         ucumAmount: 1.0,
-        ucumUnit: UcumUnit.cup_us,
+        ucumUnit: UcumUnit.cupUs,
         metricAmount: 200.0,
         metricUnit: MetricUnit.g,
         notes: 'Granulated',
@@ -51,7 +51,7 @@ Future<WorkspaceRecipe> processRecipeImage(
       Ingredient(
         name: 'Eggs',
         ucumAmount: 2.0,
-        ucumUnit: UcumUnit.cup_us,
+        ucumUnit: UcumUnit.cupUs,
         metricAmount: 100.0,
         metricUnit: MetricUnit.g,
         notes: 'Large',

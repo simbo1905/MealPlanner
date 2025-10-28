@@ -6,7 +6,7 @@ part of 'calendar_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recipesForDayHash() => r'36f05de27207c7da18df212f85d32ec8e1e1ee81';
+String _$recipesForDayHash() => r'a9749bb53dc0f8d2cafc4852fddb14c56a178ad3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -269,7 +269,7 @@ class _WeekMealCountsProviderElement
   String get startIsoDate => (origin as WeekMealCountsProvider).startIsoDate;
 }
 
-String _$weekTotalTimeHash() => r'd6cfdab49d8310928c14eacc09565691f6454f10';
+String _$weekTotalTimeHash() => r'188d9f91aa4e2f949cddef79b677e40a88cbe6bc';
 
 /// See also [weekTotalTime].
 @ProviderFor(weekTotalTime)

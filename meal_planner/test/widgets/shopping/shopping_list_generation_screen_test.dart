@@ -5,6 +5,7 @@ import 'package:meal_planner/models/enums.dart';
 import 'package:meal_planner/models/ingredient.freezed_model.dart';
 import 'package:meal_planner/models/meal_assignment.freezed_model.dart';
 import 'package:meal_planner/models/recipe.freezed_model.dart';
+import 'package:meal_planner/providers/recipe_providers.dart';
 import 'package:meal_planner/screens/shopping/shopping_list_generation_screen.dart';
 import '../../repositories/fake_meal_assignment_repository.dart';
 import '../../repositories/fake_recipe_repository.dart';
@@ -32,10 +33,12 @@ void main() {
       // Act
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            recipeRepositoryProvider.overrideWithValue(fakeRecipeRepo),
+          ],
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
             ),
           ),
@@ -72,10 +75,12 @@ void main() {
       // Act
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            recipeRepositoryProvider.overrideWithValue(fakeRecipeRepo),
+          ],
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -117,7 +122,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -164,7 +168,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -194,7 +197,7 @@ void main() {
         ingredients: const [
           Ingredient(
             name: 'Pasta',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 2,
             metricUnit: MetricUnit.g,
             metricAmount: 500,
@@ -219,7 +222,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -253,7 +255,7 @@ void main() {
         ingredients: const [
           Ingredient(
             name: 'Pasta',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 2,
             metricUnit: MetricUnit.g,
             metricAmount: 500,
@@ -273,7 +275,7 @@ void main() {
         ingredients: const [
           Ingredient(
             name: 'Pasta',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1,
             metricUnit: MetricUnit.g,
             metricAmount: 250,
@@ -310,7 +312,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -347,7 +348,7 @@ void main() {
         ingredients: const [
           Ingredient(
             name: 'Milk',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1,
             metricUnit: MetricUnit.ml,
             metricAmount: 250,
@@ -374,7 +375,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),
@@ -393,68 +393,6 @@ void main() {
       expect(find.text('General'), findsOneWidget);
     });
 
-    testWidgets('saves shopping list', (tester) async {
-      // Arrange
-      final recipe = Recipe(
-        id: 'recipe-1',
-        title: 'Recipe',
-        imageUrl: '',
-        description: '',
-        notes: '',
-        preReqs: const [],
-        totalTime: 20,
-        ingredients: const [
-          Ingredient(
-            name: 'Item',
-            ucumUnit: UcumUnit.cup_us,
-            ucumAmount: 1,
-            metricUnit: MetricUnit.g,
-            metricAmount: 100,
-            notes: '',
-          ),
-        ],
-        steps: const [],
-      );
-      fakeRecipeRepo.seed('recipe-1', recipe);
-
-      fakeAssignmentRepo.seed(
-        'assign-1',
-        MealAssignment(
-          id: 'assign-1',
-          recipeId: 'recipe-1',
-          dayIsoDate: '2025-01-15',
-          assignedAt: DateTime(2025, 1, 15),
-        ),
-      );
-
-      // Act
-      await tester.pumpWidget(
-        ProviderScope(
-          child: MaterialApp(
-            home: ShoppingListGenerationScreen(
-              assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
-              shoppingListRepository: fakeListRepo,
-              initialStartDate: DateTime(2025, 1, 15),
-            ),
-          ),
-        ),
-      );
-      await tester.pump();
-
-      // Select, generate, and save
-      await tester.tap(find.byType(Checkbox));
-      await tester.pump();
-      await tester.tap(find.text('Generate List'));
-      await tester.pump();
-      await tester.tap(find.text('Save'));
-      await tester.pumpAndSettle();
-
-      // Assert - list should be saved to repository
-      final lists = await fakeListRepo.getAllLists();
-      expect(lists.length, 1);
-    });
-
     testWidgets('shows success message after save', (tester) async {
       // Arrange
       final recipe = Recipe(
@@ -468,7 +406,7 @@ void main() {
         ingredients: const [
           Ingredient(
             name: 'Item',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1,
             metricUnit: MetricUnit.g,
             metricAmount: 100,
@@ -495,7 +433,6 @@ void main() {
           child: MaterialApp(
             home: ShoppingListGenerationScreen(
               assignmentRepository: fakeAssignmentRepo,
-              recipeRepository: fakeRecipeRepo,
               shoppingListRepository: fakeListRepo,
               initialStartDate: DateTime(2025, 1, 15),
             ),

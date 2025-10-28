@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meal_planner/models/meal_assignment.freezed_model.dart';
 import 'package:meal_planner/models/recipe.freezed_model.dart';
 import 'package:meal_planner/models/shopping_list.freezed_model.dart';
 import 'package:meal_planner/repositories/meal_assignment_repository.dart';
-import 'package:meal_planner/repositories/recipe_repository.dart';
+import 'package:meal_planner/providers/recipe_providers.dart';
 import 'package:meal_planner/repositories/shopping_list_repository.dart';
 
 /// Screen for selecting meal assignments and generating a shopping list.
 /// Aggregates ingredients from selected recipes and groups by section.
-class ShoppingListGenerationScreen extends StatefulWidget {
+class ShoppingListGenerationScreen extends ConsumerStatefulWidget {
   final MealAssignmentRepository assignmentRepository;
-  final RecipeRepository recipeRepository;
+
   final ShoppingListRepository shoppingListRepository;
   
   final DateTime? initialStartDate;
@@ -19,18 +20,18 @@ class ShoppingListGenerationScreen extends StatefulWidget {
   const ShoppingListGenerationScreen({
     super.key,
     required this.assignmentRepository,
-    required this.recipeRepository,
+
     required this.shoppingListRepository,
     this.initialStartDate,
   });
 
   @override
-  State<ShoppingListGenerationScreen> createState() =>
+  ConsumerState<ShoppingListGenerationScreen> createState() =>
       _ShoppingListGenerationScreenState();
 }
 
 class _ShoppingListGenerationScreenState
-    extends State<ShoppingListGenerationScreen> {
+    extends ConsumerState<ShoppingListGenerationScreen> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(const Duration(days: 7));
   List<MealAssignment> _assignments = [];
@@ -63,8 +64,9 @@ class _ShoppingListGenerationScreenState
     }).toList();
 
     // Load recipes for these assignments
+    final recipeRepository = ref.watch(recipeRepositoryProvider);
     for (var assignment in filteredAssignments) {
-      final recipe = await widget.recipeRepository.getRecipe(assignment.recipeId);
+      final recipe = await recipeRepository.getRecipe(assignment.recipeId);
       if (recipe != null) {
         _recipeCache[assignment.recipeId] = recipe;
       }
@@ -96,6 +98,7 @@ class _ShoppingListGenerationScreenState
     // Aggregate ingredients from selected assignments
     final Map<String, ShoppingItem> itemMap = {};
 
+    final recipeRepository = ref.watch(recipeRepositoryProvider);
     for (var assignmentId in _selectedAssignmentIds) {
       final assignment = _assignments.firstWhere((a) => a.id == assignmentId);
       final recipe = _recipeCache[assignment.recipeId];

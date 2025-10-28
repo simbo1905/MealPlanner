@@ -25,7 +25,7 @@ void main() {
           Ingredient(
             name: 'Test Ingredient',
             ucumAmount: 1.0,
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             metricAmount: 100.0,
             metricUnit: MetricUnit.g,
             notes: '',

@@ -71,7 +71,7 @@ class WorkspaceIngredientField extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: DropdownButtonFormField<UcumUnit>(
-                    value: ingredient.ucumUnit,
+                    initialValue: ingredient.ucumUnit,
                     decoration: const InputDecoration(
                       labelText: 'UCUM Unit',
                       isDense: true,
@@ -80,7 +80,7 @@ class WorkspaceIngredientField extends StatelessWidget {
                     items: UcumUnit.values
                         .map((unit) => DropdownMenuItem(
                               value: unit,
-                              child: Text(unit.name),
+                              child: Text(_ucumLabel(unit)),
                             ))
                         .toList(),
                     onChanged: readOnly
@@ -116,7 +116,7 @@ class WorkspaceIngredientField extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: DropdownButtonFormField<MetricUnit>(
-                    value: ingredient.metricUnit,
+                    initialValue: ingredient.metricUnit,
                     decoration: const InputDecoration(
                       labelText: 'Metric Unit',
                       isDense: true,
@@ -155,5 +155,28 @@ class WorkspaceIngredientField extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+String _ucumLabel(UcumUnit unit) {
+  switch (unit) {
+    case UcumUnit.cupUs:
+      return 'cup_us';
+    case UcumUnit.cupM:
+      return 'cup_m';
+    case UcumUnit.cupImp:
+      return 'cup_imp';
+    case UcumUnit.tbspUs:
+      return 'tbsp_us';
+    case UcumUnit.tbspM:
+      return 'tbsp_m';
+    case UcumUnit.tbspImp:
+      return 'tbsp_imp';
+    case UcumUnit.tspUs:
+      return 'tsp_us';
+    case UcumUnit.tspM:
+      return 'tsp_m';
+    case UcumUnit.tspImp:
+      return 'tsp_imp';
   }
 }

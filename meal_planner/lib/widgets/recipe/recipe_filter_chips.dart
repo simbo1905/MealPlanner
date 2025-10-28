@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 /// RecipeFilterChips provides filter controls for allergens, max cook time, and ingredients.
 class RecipeFilterChips extends StatelessWidget {
-  final Function(List<String> allergens) onAllergenChanged;
-  final Function(int? maxMinutes) onMaxTimeChanged;
-  final Function(List<String> ingredients) onIngredientsChanged;
+  final void Function(List<String> allergens) onAllergenChanged;
+  final void Function(int? maxMinutes) onMaxTimeChanged;
+  final void Function(List<String> ingredients) onIngredientsChanged;
   final List<String> selectedAllergens;
   final int? selectedMaxTime;
   final List<String> selectedIngredients;
@@ -97,7 +97,7 @@ class RecipeFilterChips extends StatelessWidget {
 
         // Max cook time slider
         Text(
-          'Max Cook Time: ${selectedMaxTime != null ? "${selectedMaxTime} min" : "Any"}',
+          'Max Cook Time: ${selectedMaxTime != null ? '$selectedMaxTime min' : 'Any'}',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         Slider(
@@ -105,7 +105,7 @@ class RecipeFilterChips extends StatelessWidget {
           min: 0,
           max: 120,
           divisions: 12,
-          label: selectedMaxTime != null ? '${selectedMaxTime} min' : 'Any',
+          label: selectedMaxTime != null ? '$selectedMaxTime min' : 'Any',
           onChanged: (value) {
             final intValue = value.toInt();
             onMaxTimeChanged(intValue == 0 ? null : intValue);

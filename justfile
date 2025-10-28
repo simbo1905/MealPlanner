@@ -21,14 +21,12 @@ default:
 flutter +args='--help':
     cd meal_planner && flutter {{args}}
 
-# --- PocketBase Backend --- #
+# --- Firebase Backend --- #
 
-# Setup PocketBase local development environment (Dart-based, probes for free port)
-# Requirements: .env file with PB_ADMIN_USER and PB_ADMIN_PASSWORD
-pocketbase-setup:
-    dart scripts/setup_pocketbase.dart
+# (Removed) PocketBase Dart setup script
+# Previous target `pocketbase-setup` referenced a non-existent Dart script.
 
-# Manage PocketBase dev server
+# Manage Firebase dev server
 # Usage: just pocketbase {stop|status|logs|test}
 pocketbase action:
     sh ./scripts/pocketbase_dev.sh {{action}}
@@ -59,3 +57,10 @@ repomix platform='flutter':
 # Usage: just android-sdk [studio|ensure|avd|emulator|doctor]
 android-sdk action='studio':
     sh ./scripts/android_sdk.sh {{action}}
+
+# --- Promptfoo Testing --- #
+
+# Run promptfoo commands via Bun
+# Usage: just promptfoo test, just promptfoo eval, etc.
+promptfoo +args='--help':
+    sh ./scripts/promptfoo.sh {{args}}

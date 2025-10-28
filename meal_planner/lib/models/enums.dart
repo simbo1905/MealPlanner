@@ -2,14 +2,14 @@
 enum MealType { breakfast, brunch, lunch, dinner, snack, dessert }
 
 enum AllergenCode {
-  GLUTEN, CRUSTACEAN, EGG, FISH, PEANUT, SOY, MILK, NUT, CELERY,
-  MUSTARD, SESAME, SULPHITE, LUPIN, MOLLUSC, SHELLFISH, TREENUT, WHEAT
+  gluten, crustacean, egg, fish, peanut, soy, milk, nut, celery,
+  mustard, sesame, sulphite, lupin, mollusc, shellfish, treenut, wheat
 }
 
 enum UcumUnit {
-  cup_us, cup_m, cup_imp,
-  tbsp_us, tbsp_m, tbsp_imp,
-  tsp_us, tsp_m, tsp_imp
+  cupUs, cupM, cupImp,
+  tbspUs, tbspM, tbspImp,
+  tspUs, tspM, tspImp
 }
 
 enum MetricUnit { ml, g }

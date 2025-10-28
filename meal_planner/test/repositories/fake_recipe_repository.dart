@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:meal_planner/models/recipe.freezed_model.dart';
-import 'package:meal_planner/repositories/recipe_repository.dart';
+import 'package:meal_planner/providers/recipe_providers.dart';
 
 /// In-memory fake repository for recipes used in widget tests.
 class FakeRecipeRepository implements RecipeRepository {
@@ -23,6 +23,7 @@ class FakeRecipeRepository implements RecipeRepository {
   }
 
   /// Watch all recipes (returns a stream)
+  @override
   Stream<List<Recipe>> watchAllRecipes() async* {
     // Emit current recipes immediately
     yield _recipes.values.toList();
@@ -44,6 +45,7 @@ class FakeRecipeRepository implements RecipeRepository {
   }
 
   /// Save a recipe
+  @override
   Future<String> save(Recipe recipe) async {
     _recipes[recipe.id] = recipe;
     _notifyListeners();
@@ -51,6 +53,7 @@ class FakeRecipeRepository implements RecipeRepository {
   }
 
   /// Delete a recipe
+  @override
   Future<void> delete(String recipeId) async {
     _recipes.remove(recipeId);
     _notifyListeners();

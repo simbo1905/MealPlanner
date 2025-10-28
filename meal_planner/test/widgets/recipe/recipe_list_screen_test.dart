@@ -49,7 +49,7 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Pasta',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 2.0,
             metricUnit: MetricUnit.g,
             metricAmount: 200.0,
@@ -70,7 +70,7 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Lettuce',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 2.0,
             metricUnit: MetricUnit.g,
             metricAmount: 100.0,
@@ -235,12 +235,12 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Peanut Butter',
-            ucumUnit: UcumUnit.tbsp_us,
+            ucumUnit: UcumUnit.tbspUs,
             ucumAmount: 2.0,
             metricUnit: MetricUnit.g,
             metricAmount: 30.0,
             notes: '',
-            allergenCode: AllergenCode.PEANUT,
+            allergenCode: AllergenCode.peanut,
           ),
         ],
         steps: [],
@@ -257,7 +257,7 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Apple',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1.0,
             metricUnit: MetricUnit.g,
             metricAmount: 100.0,

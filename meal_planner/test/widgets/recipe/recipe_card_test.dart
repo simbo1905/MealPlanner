@@ -19,7 +19,7 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Salt',
-            ucumUnit: UcumUnit.tsp_us,
+            ucumUnit: UcumUnit.tspUs,
             ucumAmount: 1.0,
             metricUnit: MetricUnit.g,
             metricAmount: 5.0,
@@ -57,21 +57,21 @@ void main() {
         ingredients: [
           const Ingredient(
             name: 'Peanut Butter',
-            ucumUnit: UcumUnit.tbsp_us,
+            ucumUnit: UcumUnit.tbspUs,
             ucumAmount: 2.0,
             metricUnit: MetricUnit.g,
             metricAmount: 30.0,
             notes: '',
-            allergenCode: AllergenCode.PEANUT,
+            allergenCode: AllergenCode.peanut,
           ),
           const Ingredient(
             name: 'Bread',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1.0,
             metricUnit: MetricUnit.g,
             metricAmount: 50.0,
             notes: '',
-            allergenCode: AllergenCode.GLUTEN,
+            allergenCode: AllergenCode.gluten,
           ),
         ],
         steps: ['Toast bread', 'Spread peanut butter'],

@@ -27,7 +27,7 @@ void main() {
         ingredients: [
           Ingredient(
             name: 'Ingredient 1',
-            ucumUnit: UcumUnit.cup_us,
+            ucumUnit: UcumUnit.cupUs,
             ucumAmount: 1.0,
             metricUnit: MetricUnit.g,
             metricAmount: 100.0,

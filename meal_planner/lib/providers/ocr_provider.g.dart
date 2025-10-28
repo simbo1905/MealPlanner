@@ -7,7 +7,7 @@ part of 'ocr_provider.dart';
 // **************************************************************************
 
 String _$processRecipeImageHash() =>
-    r'45fe6b31c4e9038aea1670bf67133947ad4b95f6';
+    r'd0731cd76f4aaf79e964607d2fb1caadc53362d8';
 
 /// Copied from Dart SDK
 class _SystemHash {
