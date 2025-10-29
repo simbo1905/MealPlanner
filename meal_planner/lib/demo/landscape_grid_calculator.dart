@@ -11,6 +11,7 @@
 /// - iOS HIG compliance: 44pt minimum touch targets, safe areas
 ///
 /// Run: dart run lib/demo/landscape_grid_calculator.dart
+library;
 
 import 'dart:math';
 

@@ -69,8 +69,8 @@ class _RecipeReviewScreenState extends ConsumerState<RecipeReviewScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Discard'),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Discard'),
           ),
         ],
       ),

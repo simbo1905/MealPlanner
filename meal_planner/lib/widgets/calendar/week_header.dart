@@ -69,7 +69,7 @@ class WeekHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${_formatPrepTime(totalPrepTime)}',
+                  _formatPrepTime(totalPrepTime),
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[700],

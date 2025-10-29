@@ -4,9 +4,9 @@ class OcrResultScreen extends StatelessWidget {
   final String extractedText;
 
   const OcrResultScreen({
-    Key? key,
+    super.key,
     required this.extractedText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

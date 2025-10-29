@@ -93,7 +93,7 @@ class MealAssignmentWidget extends StatelessWidget {
     final hours = minutes ~/ 60;
     final mins = (minutes % 60).toInt();
     if (hours > 0) {
-      return '$hours hr ${mins} min';
+      return '$hours hr $mins min';
     }
     return '$mins min';
   }

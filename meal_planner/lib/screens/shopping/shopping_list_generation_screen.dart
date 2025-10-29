@@ -12,15 +12,12 @@ import 'package:meal_planner/repositories/shopping_list_repository.dart';
 /// Aggregates ingredients from selected recipes and groups by section.
 class ShoppingListGenerationScreen extends ConsumerStatefulWidget {
   final MealAssignmentRepository assignmentRepository;
-
   final ShoppingListRepository shoppingListRepository;
-  
   final DateTime? initialStartDate;
 
   const ShoppingListGenerationScreen({
     super.key,
     required this.assignmentRepository,
-
     required this.shoppingListRepository,
     this.initialStartDate,
   });
@@ -38,19 +35,28 @@ class _ShoppingListGenerationScreenState
   final Set<String> _selectedAssignmentIds = {};
   ShoppingList? _generatedList;
   bool _isLoading = false;
-  Map<String, Recipe> _recipeCache = {};
+  final Map<String, Recipe> _recipeCache = {};
+  bool _isMounted = false;
 
   @override
   void initState() {
     super.initState();
+    _isMounted = true;
     if (widget.initialStartDate != null) {
       _startDate = widget.initialStartDate!;
       _endDate = _startDate.add(const Duration(days: 7));
     }
-    _loadAssignments();
+    Future.microtask(() => _loadAssignments());
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
   }
 
   Future<void> _loadAssignments() async {
+    if (!_isMounted) return;
     setState(() {
       _isLoading = true;
     });
@@ -64,7 +70,7 @@ class _ShoppingListGenerationScreenState
     }).toList();
 
     // Load recipes for these assignments
-    final recipeRepository = ref.watch(recipeRepositoryProvider);
+    final recipeRepository = ref.read(recipeRepositoryProvider);
     for (var assignment in filteredAssignments) {
       final recipe = await recipeRepository.getRecipe(assignment.recipeId);
       if (recipe != null) {
@@ -72,7 +78,7 @@ class _ShoppingListGenerationScreenState
       }
     }
 
-    if (mounted) {
+    if (_isMounted) {
       setState(() {
         _assignments = filteredAssignments;
         _isLoading = false;
@@ -91,6 +97,7 @@ class _ShoppingListGenerationScreenState
   }
 
   Future<void> _generateList() async {
+    if (!_isMounted) return;
     setState(() {
       _isLoading = true;
     });
@@ -98,11 +105,10 @@ class _ShoppingListGenerationScreenState
     // Aggregate ingredients from selected assignments
     final Map<String, ShoppingItem> itemMap = {};
 
-    final recipeRepository = ref.watch(recipeRepositoryProvider);
     for (var assignmentId in _selectedAssignmentIds) {
       final assignment = _assignments.firstWhere((a) => a.id == assignmentId);
       final recipe = _recipeCache[assignment.recipeId];
-      
+
       if (recipe != null) {
         for (var ingredient in recipe.ingredients) {
           final key = ingredient.name.toLowerCase();
@@ -127,7 +133,8 @@ class _ShoppingListGenerationScreenState
     // Calculate total cost (mock: $2 per item average)
     final totalCost = itemMap.length * 2.0;
 
-    final listId = FirebaseFirestore.instance.collection('shopping_lists').doc().id;
+    final listId =
+        FirebaseFirestore.instance.collection('shopping_lists').doc().id;
     final shoppingList = ShoppingList(
       id: listId,
       items: itemMap.values.toList(),
@@ -135,7 +142,7 @@ class _ShoppingListGenerationScreenState
       createdAt: DateTime.now(),
     );
 
-    if (mounted) {
+    if (_isMounted) {
       setState(() {
         _generatedList = shoppingList;
         _isLoading = false;
@@ -145,6 +152,7 @@ class _ShoppingListGenerationScreenState
 
   Future<void> _saveList() async {
     if (_generatedList == null) return;
+    if (!_isMounted) return;
 
     setState(() {
       _isLoading = true;
@@ -152,7 +160,7 @@ class _ShoppingListGenerationScreenState
 
     await widget.shoppingListRepository.save(_generatedList!);
 
-    if (mounted) {
+    if (_isMounted) {
       setState(() {
         _isLoading = false;
       });
