@@ -6,8 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 import 'screens/calendar/infinite_calendar_screen.dart';
 import 'providers/meal_providers.dart';
+import 'providers/recipe_providers.dart';
 import 'repositories/in_memory_meal_repository.dart';
 import 'repositories/in_memory_meal_template_repository.dart';
+import 'repositories/in_memory_recipe_repository.dart';
 
 
 void main() async {
@@ -63,12 +65,14 @@ void main() async {
     }
     
     final templateRepo = InMemoryMealTemplateRepository();
+    final recipeRepo = InMemoryRecipeRepository();
     
     runApp(
       ProviderScope(
         overrides: [
           mealRepositoryProvider.overrideWithValue(mealRepo),
           mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
+          recipeRepositoryProvider.overrideWithValue(recipeRepo),
           // Production uses real clock (nowProvider default)
         ],
         child: const MyApp(),

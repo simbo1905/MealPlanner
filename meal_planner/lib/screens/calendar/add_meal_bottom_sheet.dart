@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/meal_template.freezed_model.dart';
+import '../../models/recipe.freezed_model.dart';
 import '../../providers/meal_providers.dart';
+import '../../providers/recipe_providers.dart';
 
-class AddMealBottomSheet extends ConsumerWidget {
+class AddMealBottomSheet extends ConsumerStatefulWidget {
   final DateTime date;
 
   const AddMealBottomSheet({
@@ -12,9 +13,22 @@ class AddMealBottomSheet extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final templates = ref.watch(mealTemplatesProvider);
-    
+  ConsumerState<AddMealBottomSheet> createState() => _AddMealBottomSheetState();
+}
+
+class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
+  final _titleController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final recipesAsync = ref.watch(recipesProvider);
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -23,7 +37,6 @@ class AddMealBottomSheet extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
           Container(
             margin: const EdgeInsets.only(top: 12),
             width: 40,
@@ -33,161 +46,241 @@ class AddMealBottomSheet extends ConsumerWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          
-          // Title
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Text(
-              'Select a Meal',
+              'Add a Recipe',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          
-          // Template list
-          Flexible(
-            child: ListView.separated(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 24),
-              itemCount: templates.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final template = templates[index];
-                return _TemplateCard(
-                  template: template,
-                  onAdd: () => _onAddMeal(context, ref, template),
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter recipe title',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
+                  onPressed: () => _onAddRecipe(),
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Add'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 20),
+          const Divider(height: 1),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Your Recipes',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Flexible(
+            child: recipesAsync.when(
+              data: (recipes) {
+                if (recipes.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Center(
+                      child: Text(
+                        'No recipes yet. Add one above!',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  itemCount: recipes.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final recipe = recipes[index];
+                    return _RecipeItem(
+                      title: recipe.title,
+                      onAddToCalendar: () => _onAddToCalendar(recipe.title),
+                    );
+                  },
+                );
+              },
+              loading: () => const Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stack) => Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text('Error: $error'),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  Future<void> _onAddMeal(
-    BuildContext context,
-    WidgetRef ref,
-    MealTemplate template,
-  ) async {
-    final repository = ref.read(mealRepositoryProvider);
-    
+  Future<void> _onAddRecipe() async {
+    final title = _titleController.text.trim();
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a recipe title'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final recipeRepository = ref.read(recipeRepositoryProvider);
+    final templateRepository = ref.read(mealTemplateRepositoryProvider);
+
     try {
-      await repository.addMeal(date, template.templateId);
-      
-      if (context.mounted) {
-        Navigator.pop(context);
+      final recipeId = 'recipe_${DateTime.now().millisecondsSinceEpoch}';
+      await recipeRepository.save(
+        _createRecipe(recipeId, title),
+      );
+
+      templateRepository.addDynamicTemplate(title);
+
+      _titleController.clear();
+
+      if (mounted) {
+        ref.invalidate(recipesProvider);
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${template.title} added'),
+            content: Text('Recipe "$title" added'),
             duration: const Duration(seconds: 2),
           ),
         );
       }
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to add meal: $e'),
+            content: Text('Failed to add recipe: $e'),
             backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
+
+  Future<void> _onAddToCalendar(String recipeTitle) async {
+    final templateRepository = ref.read(mealTemplateRepositoryProvider);
+    final mealRepository = ref.read(mealRepositoryProvider);
+
+    try {
+      final template = templateRepository
+          .getAllTemplates()
+          .firstWhere((t) => t.title == recipeTitle);
+
+      await mealRepository.addMeal(widget.date, template.templateId);
+
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$recipeTitle added to calendar'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add to calendar: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Recipe _createRecipe(String id, String title) {
+    return Recipe(
+      id: id,
+      title: title,
+      imageUrl: '',
+      description: '',
+      notes: '',
+      preReqs: [],
+      totalTime: 30,
+      ingredients: [],
+      steps: [],
+    );
+  }
 }
 
-class _TemplateCard extends StatelessWidget {
-  final MealTemplate template;
-  final VoidCallback onAdd;
+class _RecipeItem extends StatelessWidget {
+  final String title;
+  final VoidCallback onAddToCalendar;
 
-  const _TemplateCard({
-    required this.template,
-    required this.onAdd,
+  const _RecipeItem({
+    required this.title,
+    required this.onAddToCalendar,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = _parseColor(template.colorHex);
-    
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      leading: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: color.withAlpha((0.1 * 255).round()),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(
-          _getIconData(template.iconName),
-          color: color,
-          size: 24,
-        ),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(8),
       ),
-      title: Text(
-        template.title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 15,
-        ),
-      ),
-      subtitle: Text(
-        '${template.prepTimeMinutes} min prep',
-        style: TextStyle(
-          color: Colors.grey[600],
-          fontSize: 13,
-        ),
-      ),
-      trailing: ElevatedButton.icon(
-        onPressed: onAdd,
-        icon: const Icon(Icons.add, size: 16),
-        label: const Text('Add'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
           ),
-        ),
+          ElevatedButton.icon(
+            onPressed: onAddToCalendar,
+            icon: const Icon(Icons.add, size: 16),
+            label: const Text('Add'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  Color _parseColor(String hexString) {
-    final hex = hexString.replaceAll('#', '');
-    if (hex.length == 6) {
-      return Color(int.parse('FF$hex', radix: 16));
-    }
-    return Colors.blue;
-  }
-
-  IconData _getIconData(String iconName) {
-    switch (iconName.toLowerCase()) {
-      case 'bowl':
-        return Icons.soup_kitchen;
-      case 'egg':
-        return Icons.egg;
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'fish':
-        return Icons.set_meal;
-      case 'fast-food':
-        return Icons.fastfood;
-      case 'local-bar':
-        return Icons.local_bar;
-      case 'nutrition':
-        return Icons.apple;
-      case 'ice-cream':
-        return Icons.icecream;
-      case 'local-cafe':
-        return Icons.local_cafe;
-      case 'free-breakfast':
-        return Icons.free_breakfast;
-      default:
-        return Icons.restaurant_menu;
-    }
   }
 }
