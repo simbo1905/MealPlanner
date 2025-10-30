@@ -12,24 +12,25 @@
 ## Build, Test, and Development
 - Install deps: `flutter pub get`
 - Generate code (Freezed/Riverpod):
-  - One‑off: `dart run build_runner build --delete-conflicting-outputs`
+  - One-off: `dart run build_runner build --delete-conflicting-outputs`
   - Watch: `dart run build_runner watch --delete-conflicting-outputs`
 - Analyze: `flutter analyze`
 - Run app: `flutter run -d chrome` (or your target device)
-- Tests:
-  - Unit/Widget: `flutter test`
-  - Integration: `flutter test integration_test`
+- Tests (MVP1 scope):
+  - Unit/Widget: `flutter test` (focus on meal calendar, recipe selector, favorites)
+  - Integration: `flutter test integration_test` (only for MVP1 calendar flows once Firestore-backed)
 
 ## Coding Style & Naming
 - Follow `flutter_lints` (see `analysis_options.yaml`). Run `flutter analyze` before pushing.
-- Dart style: 2‑space indent, single quotes preferred, avoid `dynamic`.
+- Dart style: 2-space indent, single quotes preferred, avoid `dynamic`.
 - Naming: files `lower_snake_case.dart`; classes `UpperCamelCase`; variables/methods `lowerCamelCase`.
 - Riverpod: prefer `ref.read(...)` inside notifiers’ imperative methods; keep providers pure.
 
-## Testing Guidelines
-- Frameworks: `flutter_test`, `integration_test`, `mockito`.
-- Place tests under `test/` mirroring source paths (e.g., `test/widgets/...`, `test/unit/...`).
-- Name tests `*_test.dart`. Run locally with `flutter test` (add `--coverage` if needed).
+## Testing Guidelines (MVP1 Alignment)
+- Testing pyramid stays intact: widget tests cover portrait/landscape calendars and selector flows; integration tests validate Firestore persistence and drag-drop swaps.
+- Place tests under `test/` mirroring source paths (e.g., `test/widgets/calendar/...`).
+- Name tests `*_test.dart`. Run locally with `flutter test` before pushing.
+- Prioritize deterministic fakes for Firestore until true backend is wired.
 
 ## Commit & Pull Request Guidelines
 - Use Conventional Commits: `feat:`, `fix:`, `chore:`, etc. (history shows this pattern).
@@ -57,5 +58,10 @@ See `spec/FIREBASE.md` for complete architecture, use cases (A/B testing, featur
 
 ## Security & Configuration Tips
 - Firebase: in debug, Firestore uses the local emulator (`localhost:8080`). Ensure your emulator is running when developing.
-- Do not commit secrets. Keep configuration in environment‑safe locations; `firebase_options.dart` is generated.
+- Do not commit secrets. Keep configuration in environment-safe locations; `firebase_options.dart` is generated.
 
+## MVP1 Delivery Guardrails
+- Documentation-first: `specs/MVP1.md` and this guide stay accurate before code merges.
+- Architecture discipline: repository pattern + Riverpod overrides to keep UI Firestore-agnostic.
+- TDD discipline: smallest failing test for calendar slot swap, recipe search, and persistence before implementation.
+- Scope enforcement: defer non-MVP features (shopping list, AI onboarding, preferences) even if referenced historically.
