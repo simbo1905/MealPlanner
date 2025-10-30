@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
-import 'screens/calendar/infinite_calendar_screen.dart';
+import 'navigation/app_routes.dart';
 import 'providers/meal_providers.dart';
 import 'providers/recipe_providers.dart';
 import 'repositories/in_memory_meal_repository.dart';
 import 'repositories/in_memory_meal_template_repository.dart';
 import 'repositories/in_memory_recipe_repository.dart';
+import 'screens/calendar/infinite_calendar_screen.dart';
+import 'screens/calendar/week_calendar_screen.dart';
+import 'screens/debug/developer_launcher_screen.dart';
+import 'screens/preferences/user_preferences_screen.dart';
+import 'screens/recipe/recipe_list_screen.dart';
+import 'screens/splash/animated_splash_screen.dart';
 
 
 void main() async {
@@ -97,7 +103,81 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const InfiniteCalendarScreen(),
+      debugShowCheckedModeBanner: false,
+      home: kDebugMode
+          ? const DeveloperLauncherScreen()
+          : const ProductionSplashScreen(),
+      onGenerateRoute: _onGenerateRoute,
+    );
+  }
+
+  Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AppRoutes.home:
+        return _materialRoute(const InfiniteCalendarScreen());
+      case AppRoutes.splashPreview:
+        return _materialRoute(const SplashPreviewScreen());
+      case AppRoutes.weekCalendar:
+        return _materialRoute(const WeekCalendarScreen());
+      case AppRoutes.recipeList:
+        return _materialRoute(const RecipeListScreen());
+      case AppRoutes.userPreferences:
+        final userId = settings.arguments is String
+            ? settings.arguments as String
+            : 'debug-user';
+        return _materialRoute(UserPreferencesScreen(userId: userId));
+      default:
+        return _materialRoute(
+          UnknownRouteScreen(routeName: settings.name ?? 'unknown'),
+        );
+    }
+  }
+
+  Route<dynamic> _materialRoute(Widget child) {
+    return MaterialPageRoute(builder: (_) => child);
+  }
+}
+
+/// Default fallback screen displayed when a route is not yet implemented.
+class UnknownRouteScreen extends StatelessWidget {
+  final String routeName;
+
+  const UnknownRouteScreen({super.key, required this.routeName});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Screen Unavailable'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.warning_amber_rounded,
+                  size: 64, color: Colors.orangeAccent),
+              const SizedBox(height: 16),
+              Text(
+                'No screen is registered for "$routeName".',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Return to the previous screen to continue testing.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
