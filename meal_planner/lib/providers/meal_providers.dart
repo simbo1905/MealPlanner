@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:intl/intl.dart';
 import '../models/meal.freezed_model.dart';
-import '../models/meal_template.freezed_model.dart';
 import '../models/week_section.freezed_model.dart';
 import '../repositories/meal_repository.dart';
-import '../repositories/meal_template_repository.dart';
+import 'auth_providers.dart';
+import 'favorites_providers.dart';
 
 part 'meal_providers.g.dart';
 
@@ -13,11 +13,6 @@ part 'meal_providers.g.dart';
 @riverpod
 MealRepository mealRepository(Ref ref) {
   throw UnimplementedError('MealRepository must be overridden');
-}
-
-@riverpod
-MealTemplateRepository mealTemplateRepository(Ref ref) {
-  throw UnimplementedError('MealTemplateRepository must be overridden');
 }
 
 /// Selected date state
@@ -34,114 +29,120 @@ class SelectedDate extends _$SelectedDate {
   }
 }
 
-/// Get meals for a specific date
+/// Stream of meals for the signed-in user
+/// Stream of meals for current user
 @riverpod
-List<Meal> mealsForDate(Ref ref, DateTime date) {
+Stream<List<Meal>> userMeals(UserMealsRef ref) {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId == null) {
+    return const Stream<List<Meal>>.empty();
+  }
   final repository = ref.watch(mealRepositoryProvider);
-  return repository.getMealsForDate(date);
+  return repository.watchMeals(userId);
 }
 
-/// Get meals for a date range
+/// Meals for a specific date
 @riverpod
-List<Meal> mealsForDateRange(Ref ref, DateTime start, DateTime end) {
-  final repository = ref.watch(mealRepositoryProvider);
-  return repository.getMealsForDateRange(start, end);
+AsyncValue<List<Meal>> mealsForDate(MealsForDateRef ref, DateTime date) {
+  final meals = ref.watch(userMealsProvider);
+  return meals.whenData(
+    (list) => list
+        .where((meal) => _isSameDay(meal.date, date))
+        .toList()
+      ..sort((a, b) => a.slot.index.compareTo(b.slot.index)),
+  );
 }
 
-/// Get all meal templates
+/// Meals for a date range (inclusive)
 @riverpod
-List<MealTemplate> mealTemplates(Ref ref) {
-  final repository = ref.watch(mealTemplateRepositoryProvider);
-  return repository.getAllTemplates();
+AsyncValue<List<Meal>> mealsForDateRange(
+  MealsForDateRangeRef ref,
+  DateTime start,
+  DateTime end,
+) {
+  final meals = ref.watch(userMealsProvider);
+  return meals.whenData((list) {
+    final startDate = DateTime(start.year, start.month, start.day);
+    final endDate = DateTime(end.year, end.month, end.day);
+    return list.where((meal) {
+      final mealDate = DateTime(meal.date.year, meal.date.month, meal.date.day);
+      return !mealDate.isBefore(startDate) && !mealDate.isAfter(endDate);
+    }).toList();
+  });
 }
 
-/// Get template by ID
+/// Planned meals count for next 30 days
 @riverpod
-MealTemplate? mealTemplateById(Ref ref, String templateId) {
-  final repository = ref.watch(mealTemplateRepositoryProvider);
-  return repository.getTemplateById(templateId);
-}
-
-/// Calculate planned meals count (meals from tomorrow onwards)
-@riverpod
-int plannedMealCount(Ref ref) {
-  final repository = ref.watch(mealRepositoryProvider);
+AsyncValue<int> plannedMealCount(PlannedMealCountRef ref) {
+  final meals = ref.watch(userMealsProvider);
   final now = DateTime.now();
   final tomorrow = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
-  
-  // Count meals for next 30 days
   final endDate = tomorrow.add(const Duration(days: 30));
-  final meals = repository.getMealsForDateRange(tomorrow, endDate);
-  
-  return meals.length;
+  return meals.whenData((list) {
+    return list.where((meal) {
+      final mealDate = DateTime(meal.date.year, meal.date.month, meal.date.day);
+      return !mealDate.isBefore(tomorrow) && !mealDate.isAfter(endDate);
+    }).length;
+  });
 }
 
-
-
-/// Generate week sections for infinite scroll
+/// Week sections for infinite scroll
 @riverpod
-List<WeekSection> weekSections(Ref ref, {required int weeksAround}) {
-  final repository = ref.watch(mealRepositoryProvider);
-  final templateRepository = ref.watch(mealTemplateRepositoryProvider);
+AsyncValue<List<WeekSection>> weekSections(
+  WeekSectionsRef ref, {
+  required int weeksAround,
+}) {
+  final meals = ref.watch(userMealsProvider);
   final selectedDate = ref.watch(selectedDateProvider);
-  
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  
-  // Find the start of the week containing selected date (Monday)
   final selectedWeekStart = _getWeekStart(selectedDate);
-  
-  final sections = <WeekSection>[];
-  
-  // Generate weeks from (weeksAround) weeks before to (weeksAround) weeks after
-  for (int i = -weeksAround; i <= weeksAround; i++) {
-    final weekStart = selectedWeekStart.add(Duration(days: i * 7));
-    final weekEnd = weekStart.add(const Duration(days: 6));
-    
-    // Get week number
-    final weekNumber = _getWeekNumber(weekStart);
-    
-    // Build day sections
-    final days = <DaySection>[];
-    int totalMeals = 0;
-    int totalPrepTime = 0;
-    
-    for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
-      final date = weekStart.add(Duration(days: dayOffset));
-      final meals = repository.getMealsForDate(date);
-      
-      // Calculate prep time for this day
-      int dayPrepTime = 0;
-      for (final meal in meals) {
-        final template = templateRepository.getTemplateById(meal.templateId);
-        if (template != null) {
-          dayPrepTime += template.prepTimeMinutes;
-        }
+
+  return meals.whenData((list) {
+    final sections = <WeekSection>[];
+
+    for (int i = -weeksAround; i <= weeksAround; i++) {
+      final weekStart = selectedWeekStart.add(Duration(days: i * 7));
+      final weekEnd = weekStart.add(const Duration(days: 6));
+      final weekNumber = _getWeekNumber(weekStart);
+
+      final days = <DaySection>[];
+      int totalMeals = 0;
+
+      for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
+        final date = weekStart.add(Duration(days: dayOffset));
+        final dayMeals = list
+            .where((meal) => _isSameDay(meal.date, date))
+            .toList()
+          ..sort((a, b) => a.slot.index.compareTo(b.slot.index));
+
+        totalMeals += dayMeals.length;
+
+        days.add(
+          DaySection(
+            date: date,
+            dayLabel: _getDayLabel(date),
+            isToday: _isSameDay(date, today),
+            isSelected: _isSameDay(date, selectedDate),
+            meals: dayMeals,
+          ),
+        );
       }
-      
-      totalMeals += meals.length;
-      totalPrepTime += dayPrepTime;
-      
-      days.add(DaySection(
-        date: date,
-        dayLabel: _getDayLabel(date),
-        isToday: _isSameDay(date, today),
-        isSelected: _isSameDay(date, selectedDate),
-        meals: meals,
-      ));
+
+      sections.add(
+        WeekSection(
+          weekStart: weekStart,
+          weekEnd: weekEnd,
+          weekNumber: weekNumber,
+          days: days,
+          totalMeals: totalMeals,
+          totalPrepTime: 0,
+        ),
+      );
     }
-    
-    sections.add(WeekSection(
-      weekStart: weekStart,
-      weekEnd: weekEnd,
-      weekNumber: weekNumber,
-      days: days,
-      totalMeals: totalMeals,
-      totalPrepTime: totalPrepTime,
-    ));
-  }
-  
-  return sections;
+
+    return sections;
+  });
 }
 
 /// Helper: Get Monday of the week containing the date

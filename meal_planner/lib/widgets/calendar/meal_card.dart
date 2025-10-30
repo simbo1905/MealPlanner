@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../models/meal.freezed_model.dart';
-import '../../models/meal_template.freezed_model.dart';
 import '../../utils/card_dimensions.dart';
 
 /// Responsive meal card that sizes itself using [CardDimensions].
 class MealCard extends StatelessWidget {
   final Meal meal;
-  final MealTemplate template;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final VoidCallback? onDelete;
@@ -15,7 +14,6 @@ class MealCard extends StatelessWidget {
   const MealCard({
     super.key,
     required this.meal,
-    required this.template,
     this.onTap,
     this.onLongPress,
     this.onDelete,
@@ -24,7 +22,7 @@ class MealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _parseColor(template.colorHex);
+    final color = Colors.blue;
     // Sizing derived from CardDimensions (see specs/LANDSCAPE_ORIENTATION.md).
     final rowHeight = CardDimensions.rowHeightFor(context);
     final cardWidth = CardDimensions.cardWidthFor(context: context, rowHeight: rowHeight);
@@ -81,11 +79,7 @@ class MealCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        _getIconData(template.iconName),
-                        size: 20,
-                        color: color,
-                      ),
+                      Icon(Icons.restaurant_menu, size: 20, color: color),
                       const Spacer(),
                       if (onDelete != null)
                         GestureDetector(
@@ -101,7 +95,7 @@ class MealCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    template.title,
+                    meal.recipeTitle,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -111,7 +105,7 @@ class MealCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${template.prepTimeMinutes} min',
+                    DateFormat('EEE').format(meal.date),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[600],
@@ -124,40 +118,5 @@ class MealCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _parseColor(String hexString) {
-    final hex = hexString.replaceAll('#', '');
-    if (hex.length == 6) {
-      return Color(int.parse('FF$hex', radix: 16));
-    }
-    return Colors.blue;
-  }
-
-  IconData _getIconData(String iconName) {
-    switch (iconName.toLowerCase()) {
-      case 'bowl':
-        return Icons.soup_kitchen;
-      case 'egg':
-        return Icons.egg;
-      case 'restaurant':
-        return Icons.restaurant;
-      case 'fish':
-        return Icons.set_meal;
-      case 'fast-food':
-        return Icons.fastfood;
-      case 'local-bar':
-        return Icons.local_bar;
-      case 'nutrition':
-        return Icons.apple;
-      case 'ice-cream':
-        return Icons.icecream;
-      case 'local-cafe':
-        return Icons.local_cafe;
-      case 'free-breakfast':
-        return Icons.free_breakfast;
-      default:
-        return Icons.restaurant_menu;
-    }
   }
 }

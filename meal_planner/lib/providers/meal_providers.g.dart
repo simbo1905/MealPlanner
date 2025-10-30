@@ -25,27 +25,27 @@ final mealRepositoryProvider = AutoDisposeProvider<MealRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MealRepositoryRef = AutoDisposeProviderRef<MealRepository>;
-String _$mealTemplateRepositoryHash() =>
-    r'43d8079055c3534c328ab419bb97b5187ab69075';
+String _$userMealsHash() => r'04268005e00dabfb4f1b695ee8d202c84b5fc9c8';
 
-/// See also [mealTemplateRepository].
-@ProviderFor(mealTemplateRepository)
-final mealTemplateRepositoryProvider =
-    AutoDisposeProvider<MealTemplateRepository>.internal(
-      mealTemplateRepository,
-      name: r'mealTemplateRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$mealTemplateRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+/// Stream of meals for the signed-in user
+/// Stream of meals for current user
+///
+/// Copied from [userMeals].
+@ProviderFor(userMeals)
+final userMealsProvider = AutoDisposeStreamProvider<List<Meal>>.internal(
+  userMeals,
+  name: r'userMealsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userMealsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef MealTemplateRepositoryRef =
-    AutoDisposeProviderRef<MealTemplateRepository>;
-String _$mealsForDateHash() => r'095f5d95f2da10fa1e08a0866fbd7506d0656d25';
+typedef UserMealsRef = AutoDisposeStreamProviderRef<List<Meal>>;
+String _$mealsForDateHash() => r'df30181952e5b8611b77d15ff732dd7a7767eb43';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -68,22 +68,22 @@ class _SystemHash {
   }
 }
 
-/// Get meals for a specific date
+/// Meals for a specific date
 ///
 /// Copied from [mealsForDate].
 @ProviderFor(mealsForDate)
 const mealsForDateProvider = MealsForDateFamily();
 
-/// Get meals for a specific date
+/// Meals for a specific date
 ///
 /// Copied from [mealsForDate].
-class MealsForDateFamily extends Family<List<Meal>> {
-  /// Get meals for a specific date
+class MealsForDateFamily extends Family<AsyncValue<List<Meal>>> {
+  /// Meals for a specific date
   ///
   /// Copied from [mealsForDate].
   const MealsForDateFamily();
 
-  /// Get meals for a specific date
+  /// Meals for a specific date
   ///
   /// Copied from [mealsForDate].
   MealsForDateProvider call(DateTime date) {
@@ -112,11 +112,11 @@ class MealsForDateFamily extends Family<List<Meal>> {
   String? get name => r'mealsForDateProvider';
 }
 
-/// Get meals for a specific date
+/// Meals for a specific date
 ///
 /// Copied from [mealsForDate].
-class MealsForDateProvider extends AutoDisposeProvider<List<Meal>> {
-  /// Get meals for a specific date
+class MealsForDateProvider extends AutoDisposeProvider<AsyncValue<List<Meal>>> {
+  /// Meals for a specific date
   ///
   /// Copied from [mealsForDate].
   MealsForDateProvider(DateTime date)
@@ -146,7 +146,9 @@ class MealsForDateProvider extends AutoDisposeProvider<List<Meal>> {
   final DateTime date;
 
   @override
-  Override overrideWith(List<Meal> Function(MealsForDateRef provider) create) {
+  Override overrideWith(
+    AsyncValue<List<Meal>> Function(MealsForDateRef provider) create,
+  ) {
     return ProviderOverride(
       origin: this,
       override: MealsForDateProvider._internal(
@@ -162,7 +164,7 @@ class MealsForDateProvider extends AutoDisposeProvider<List<Meal>> {
   }
 
   @override
-  AutoDisposeProviderElement<List<Meal>> createElement() {
+  AutoDisposeProviderElement<AsyncValue<List<Meal>>> createElement() {
     return _MealsForDateProviderElement(this);
   }
 
@@ -182,13 +184,13 @@ class MealsForDateProvider extends AutoDisposeProvider<List<Meal>> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin MealsForDateRef on AutoDisposeProviderRef<List<Meal>> {
+mixin MealsForDateRef on AutoDisposeProviderRef<AsyncValue<List<Meal>>> {
   /// The parameter `date` of this provider.
   DateTime get date;
 }
 
 class _MealsForDateProviderElement
-    extends AutoDisposeProviderElement<List<Meal>>
+    extends AutoDisposeProviderElement<AsyncValue<List<Meal>>>
     with MealsForDateRef {
   _MealsForDateProviderElement(super.provider);
 
@@ -196,24 +198,24 @@ class _MealsForDateProviderElement
   DateTime get date => (origin as MealsForDateProvider).date;
 }
 
-String _$mealsForDateRangeHash() => r'cfee31467289bdc26416e03418d7f4b9d48cfda4';
+String _$mealsForDateRangeHash() => r'cf69eadbe0e7b0305b8339520748f557a7349734';
 
-/// Get meals for a date range
+/// Meals for a date range (inclusive)
 ///
 /// Copied from [mealsForDateRange].
 @ProviderFor(mealsForDateRange)
 const mealsForDateRangeProvider = MealsForDateRangeFamily();
 
-/// Get meals for a date range
+/// Meals for a date range (inclusive)
 ///
 /// Copied from [mealsForDateRange].
-class MealsForDateRangeFamily extends Family<List<Meal>> {
-  /// Get meals for a date range
+class MealsForDateRangeFamily extends Family<AsyncValue<List<Meal>>> {
+  /// Meals for a date range (inclusive)
   ///
   /// Copied from [mealsForDateRange].
   const MealsForDateRangeFamily();
 
-  /// Get meals for a date range
+  /// Meals for a date range (inclusive)
   ///
   /// Copied from [mealsForDateRange].
   MealsForDateRangeProvider call(DateTime start, DateTime end) {
@@ -242,11 +244,12 @@ class MealsForDateRangeFamily extends Family<List<Meal>> {
   String? get name => r'mealsForDateRangeProvider';
 }
 
-/// Get meals for a date range
+/// Meals for a date range (inclusive)
 ///
 /// Copied from [mealsForDateRange].
-class MealsForDateRangeProvider extends AutoDisposeProvider<List<Meal>> {
-  /// Get meals for a date range
+class MealsForDateRangeProvider
+    extends AutoDisposeProvider<AsyncValue<List<Meal>>> {
+  /// Meals for a date range (inclusive)
   ///
   /// Copied from [mealsForDateRange].
   MealsForDateRangeProvider(DateTime start, DateTime end)
@@ -280,7 +283,7 @@ class MealsForDateRangeProvider extends AutoDisposeProvider<List<Meal>> {
 
   @override
   Override overrideWith(
-    List<Meal> Function(MealsForDateRangeRef provider) create,
+    AsyncValue<List<Meal>> Function(MealsForDateRangeRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -298,7 +301,7 @@ class MealsForDateRangeProvider extends AutoDisposeProvider<List<Meal>> {
   }
 
   @override
-  AutoDisposeProviderElement<List<Meal>> createElement() {
+  AutoDisposeProviderElement<AsyncValue<List<Meal>>> createElement() {
     return _MealsForDateRangeProviderElement(this);
   }
 
@@ -321,7 +324,7 @@ class MealsForDateRangeProvider extends AutoDisposeProvider<List<Meal>> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin MealsForDateRangeRef on AutoDisposeProviderRef<List<Meal>> {
+mixin MealsForDateRangeRef on AutoDisposeProviderRef<AsyncValue<List<Meal>>> {
   /// The parameter `start` of this provider.
   DateTime get start;
 
@@ -330,7 +333,7 @@ mixin MealsForDateRangeRef on AutoDisposeProviderRef<List<Meal>> {
 }
 
 class _MealsForDateRangeProviderElement
-    extends AutoDisposeProviderElement<List<Meal>>
+    extends AutoDisposeProviderElement<AsyncValue<List<Meal>>>
     with MealsForDateRangeRef {
   _MealsForDateRangeProviderElement(super.provider);
 
@@ -340,164 +343,13 @@ class _MealsForDateRangeProviderElement
   DateTime get end => (origin as MealsForDateRangeProvider).end;
 }
 
-String _$mealTemplatesHash() => r'5cf619b9a043c5f2d02d31796ea8ef3b50fe1eb7';
+String _$plannedMealCountHash() => r'3c5c9bfeee405e05b5e08a33a80e6923af437c33';
 
-/// Get all meal templates
-///
-/// Copied from [mealTemplates].
-@ProviderFor(mealTemplates)
-final mealTemplatesProvider = AutoDisposeProvider<List<MealTemplate>>.internal(
-  mealTemplates,
-  name: r'mealTemplatesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$mealTemplatesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef MealTemplatesRef = AutoDisposeProviderRef<List<MealTemplate>>;
-String _$mealTemplateByIdHash() => r'844db2346b35de83c32876bdf8568319b9c63a45';
-
-/// Get template by ID
-///
-/// Copied from [mealTemplateById].
-@ProviderFor(mealTemplateById)
-const mealTemplateByIdProvider = MealTemplateByIdFamily();
-
-/// Get template by ID
-///
-/// Copied from [mealTemplateById].
-class MealTemplateByIdFamily extends Family<MealTemplate?> {
-  /// Get template by ID
-  ///
-  /// Copied from [mealTemplateById].
-  const MealTemplateByIdFamily();
-
-  /// Get template by ID
-  ///
-  /// Copied from [mealTemplateById].
-  MealTemplateByIdProvider call(String templateId) {
-    return MealTemplateByIdProvider(templateId);
-  }
-
-  @override
-  MealTemplateByIdProvider getProviderOverride(
-    covariant MealTemplateByIdProvider provider,
-  ) {
-    return call(provider.templateId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'mealTemplateByIdProvider';
-}
-
-/// Get template by ID
-///
-/// Copied from [mealTemplateById].
-class MealTemplateByIdProvider extends AutoDisposeProvider<MealTemplate?> {
-  /// Get template by ID
-  ///
-  /// Copied from [mealTemplateById].
-  MealTemplateByIdProvider(String templateId)
-    : this._internal(
-        (ref) => mealTemplateById(ref as MealTemplateByIdRef, templateId),
-        from: mealTemplateByIdProvider,
-        name: r'mealTemplateByIdProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$mealTemplateByIdHash,
-        dependencies: MealTemplateByIdFamily._dependencies,
-        allTransitiveDependencies:
-            MealTemplateByIdFamily._allTransitiveDependencies,
-        templateId: templateId,
-      );
-
-  MealTemplateByIdProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.templateId,
-  }) : super.internal();
-
-  final String templateId;
-
-  @override
-  Override overrideWith(
-    MealTemplate? Function(MealTemplateByIdRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: MealTemplateByIdProvider._internal(
-        (ref) => create(ref as MealTemplateByIdRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        templateId: templateId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeProviderElement<MealTemplate?> createElement() {
-    return _MealTemplateByIdProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is MealTemplateByIdProvider && other.templateId == templateId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, templateId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin MealTemplateByIdRef on AutoDisposeProviderRef<MealTemplate?> {
-  /// The parameter `templateId` of this provider.
-  String get templateId;
-}
-
-class _MealTemplateByIdProviderElement
-    extends AutoDisposeProviderElement<MealTemplate?>
-    with MealTemplateByIdRef {
-  _MealTemplateByIdProviderElement(super.provider);
-
-  @override
-  String get templateId => (origin as MealTemplateByIdProvider).templateId;
-}
-
-String _$plannedMealCountHash() => r'ec2dbb07849bb50c77ff233ef606f655f8f5d478';
-
-/// Calculate planned meals count (meals from tomorrow onwards)
+/// Planned meals count for next 30 days
 ///
 /// Copied from [plannedMealCount].
 @ProviderFor(plannedMealCount)
-final plannedMealCountProvider = AutoDisposeProvider<int>.internal(
+final plannedMealCountProvider = AutoDisposeProvider<AsyncValue<int>>.internal(
   plannedMealCount,
   name: r'plannedMealCountProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -509,25 +361,25 @@ final plannedMealCountProvider = AutoDisposeProvider<int>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef PlannedMealCountRef = AutoDisposeProviderRef<int>;
-String _$weekSectionsHash() => r'0d7e0476cd6a52fc306a6d2c6f4f0611bc28287b';
+typedef PlannedMealCountRef = AutoDisposeProviderRef<AsyncValue<int>>;
+String _$weekSectionsHash() => r'6fca112fb41f2c7ed7529c592724a1c356189cf5';
 
-/// Generate week sections for infinite scroll
+/// Week sections for infinite scroll
 ///
 /// Copied from [weekSections].
 @ProviderFor(weekSections)
 const weekSectionsProvider = WeekSectionsFamily();
 
-/// Generate week sections for infinite scroll
+/// Week sections for infinite scroll
 ///
 /// Copied from [weekSections].
-class WeekSectionsFamily extends Family<List<WeekSection>> {
-  /// Generate week sections for infinite scroll
+class WeekSectionsFamily extends Family<AsyncValue<List<WeekSection>>> {
+  /// Week sections for infinite scroll
   ///
   /// Copied from [weekSections].
   const WeekSectionsFamily();
 
-  /// Generate week sections for infinite scroll
+  /// Week sections for infinite scroll
   ///
   /// Copied from [weekSections].
   WeekSectionsProvider call({required int weeksAround}) {
@@ -556,11 +408,12 @@ class WeekSectionsFamily extends Family<List<WeekSection>> {
   String? get name => r'weekSectionsProvider';
 }
 
-/// Generate week sections for infinite scroll
+/// Week sections for infinite scroll
 ///
 /// Copied from [weekSections].
-class WeekSectionsProvider extends AutoDisposeProvider<List<WeekSection>> {
-  /// Generate week sections for infinite scroll
+class WeekSectionsProvider
+    extends AutoDisposeProvider<AsyncValue<List<WeekSection>>> {
+  /// Week sections for infinite scroll
   ///
   /// Copied from [weekSections].
   WeekSectionsProvider({required int weeksAround})
@@ -591,7 +444,7 @@ class WeekSectionsProvider extends AutoDisposeProvider<List<WeekSection>> {
 
   @override
   Override overrideWith(
-    List<WeekSection> Function(WeekSectionsRef provider) create,
+    AsyncValue<List<WeekSection>> Function(WeekSectionsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -608,7 +461,7 @@ class WeekSectionsProvider extends AutoDisposeProvider<List<WeekSection>> {
   }
 
   @override
-  AutoDisposeProviderElement<List<WeekSection>> createElement() {
+  AutoDisposeProviderElement<AsyncValue<List<WeekSection>>> createElement() {
     return _WeekSectionsProviderElement(this);
   }
 
@@ -628,13 +481,13 @@ class WeekSectionsProvider extends AutoDisposeProvider<List<WeekSection>> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin WeekSectionsRef on AutoDisposeProviderRef<List<WeekSection>> {
+mixin WeekSectionsRef on AutoDisposeProviderRef<AsyncValue<List<WeekSection>>> {
   /// The parameter `weeksAround` of this provider.
   int get weeksAround;
 }
 
 class _WeekSectionsProviderElement
-    extends AutoDisposeProviderElement<List<WeekSection>>
+    extends AutoDisposeProviderElement<AsyncValue<List<WeekSection>>>
     with WeekSectionsRef {
   _WeekSectionsProviderElement(super.provider);
 

@@ -7,8 +7,10 @@ import '../../providers/text_recognition_provider.dart';
 import '../../screens/ocr/ocr_result_screen.dart';
 import '../../widgets/calendar/week_header.dart';
 import '../../widgets/calendar/day_row.dart';
+import '../../widgets/calendar/landscape_week_grid.dart';
 import '../../widgets/calendar/planned_meals_counter.dart';
 import 'add_meal_bottom_sheet.dart';
+import '../../providers/auth_providers.dart';
 
 class InfiniteCalendarScreen extends ConsumerStatefulWidget {
   const InfiniteCalendarScreen({super.key});
@@ -51,8 +53,9 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
 
   @override
   Widget build(BuildContext context) {
-    final weekSections = ref.watch(weekSectionsProvider(weeksAround: _weeksAround));
+    final weekSectionsAsync = ref.watch(weekSectionsProvider(weeksAround: _weeksAround));
     final selectedDate = ref.watch(selectedDateProvider);
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     
     // Calculate current week number for badge
     final weekNumber = _getWeekNumber(selectedDate);
@@ -115,53 +118,70 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
           const SizedBox(width: 8),
         ],
       ),
-      body: CustomScrollView(
-        key: const Key('infinite_calendar_scroll'),
-        controller: _scrollController,
-        slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index >= weekSections.length) return null;
-                
-                final weekSection = weekSections[index];
-                
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Week header
-                    WeekHeader(
-                      weekStart: weekSection.weekStart,
-                      weekEnd: weekSection.weekEnd,
-                      weekNumber: weekSection.weekNumber,
-                      totalMeals: weekSection.totalMeals,
-                      totalPrepTime: weekSection.totalPrepTime,
-                    ),
-                    
-                    // Day rows
-                    ...weekSection.days.map((day) => DayRow(
-                      date: day.date,
-                      isToday: day.isToday,
-                      isSelected: day.isSelected,
-                      meals: day.meals,
-                      onTap: () => _onSelectDay(day.date),
-                      onAddMeal: () => _onAddMeal(day.date),
-                    )),
-                    
-                    // Divider between weeks
-                    if (index < weekSections.length - 1)
-                      Divider(
-                        height: 8,
-                        thickness: 4,
-                        color: Colors.grey[200],
+      body: weekSectionsAsync.when(
+        data: (weekSections) => CustomScrollView(
+          key: const Key('infinite_calendar_scroll'),
+          controller: _scrollController,
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  if (index >= weekSections.length) return null;
+
+                  final weekSection = weekSections[index];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      WeekHeader(
+                        weekStart: weekSection.weekStart,
+                        weekEnd: weekSection.weekEnd,
+                        weekNumber: weekSection.weekNumber,
+                        totalMeals: weekSection.totalMeals,
+                        totalPrepTime: weekSection.totalPrepTime,
                       ),
-                  ],
-                );
-              },
-              childCount: weekSections.length,
+                      if (isLandscape)
+                        LandscapeWeekGrid(
+                          weekSection: weekSection,
+                          onSelectDay: _onSelectDay,
+                          onAddMeal: _onAddMeal,
+                          onSwapMeals: _onSwapMeals,
+                        )
+                      else
+                        ...weekSection.days.map(
+                          (day) => DayRow(
+                            date: day.date,
+                            isToday: day.isToday,
+                            isSelected: day.isSelected,
+                            meals: day.meals,
+                            onTap: () => _onSelectDay(day.date),
+                            onAddMeal: () => _onAddMeal(day.date),
+                          ),
+                        ),
+                      if (index < weekSections.length - 1)
+                        Divider(
+                          height: 8,
+                          thickness: 4,
+                          color: Colors.grey[200],
+                        ),
+                    ],
+                  );
+                },
+                childCount: weekSections.length,
+              ),
+            ),
+          ],
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Unable to load calendar: $error',
+              textAlign: TextAlign.center,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -183,6 +203,16 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
         child: AddMealBottomSheet(date: date),
       ),
     );
+  }
+
+  Future<void> _onSwapMeals(String firstMealId, String secondMealId) async {
+    final userId = ref.read(currentUserIdProvider);
+    if (userId == null) return;
+    await ref.read(mealRepositoryProvider).swapMeals(
+          userId: userId,
+          firstMealId: firstMealId,
+          secondMealId: secondMealId,
+        );
   }
 
   Future<void> _onSave() async {

@@ -8,17 +8,26 @@ part of 'meal.freezed_model.dart';
 
 _$MealImpl _$$MealImplFromJson(Map<String, dynamic> json) => _$MealImpl(
   id: json['id'] as String,
-  templateId: json['templateId'] as String,
+  recipeTitle: json['recipeTitle'] as String,
   date: DateTime.parse(json['date'] as String),
-  order: (json['order'] as num).toInt(),
+  slot: $enumDecode(_$MealSlotEnumMap, json['slot']),
+  userId: json['userId'] as String,
   createdAt: DateTime.parse(json['createdAt'] as String),
 );
 
 Map<String, dynamic> _$$MealImplToJson(_$MealImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'templateId': instance.templateId,
+      'recipeTitle': instance.recipeTitle,
       'date': instance.date.toIso8601String(),
-      'order': instance.order,
+      'slot': _$MealSlotEnumMap[instance.slot]!,
+      'userId': instance.userId,
       'createdAt': instance.createdAt.toIso8601String(),
     };
+
+const _$MealSlotEnumMap = {
+  MealSlot.breakfast: 'breakfast',
+  MealSlot.lunch: 'lunch',
+  MealSlot.dinner: 'dinner',
+  MealSlot.other: 'other',
+};

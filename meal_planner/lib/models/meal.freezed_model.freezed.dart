@@ -22,9 +22,10 @@ Meal _$MealFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Meal {
   String get id => throw _privateConstructorUsedError;
-  String get templateId => throw _privateConstructorUsedError;
+  String get recipeTitle => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
-  int get order => throw _privateConstructorUsedError;
+  MealSlot get slot => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Meal to a JSON map.
@@ -43,9 +44,10 @@ abstract class $MealCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String templateId,
+    String recipeTitle,
     DateTime date,
-    int order,
+    MealSlot slot,
+    String userId,
     DateTime createdAt,
   });
 }
@@ -66,9 +68,10 @@ class _$MealCopyWithImpl<$Res, $Val extends Meal>
   @override
   $Res call({
     Object? id = null,
-    Object? templateId = null,
+    Object? recipeTitle = null,
     Object? date = null,
-    Object? order = null,
+    Object? slot = null,
+    Object? userId = null,
     Object? createdAt = null,
   }) {
     return _then(
@@ -77,18 +80,22 @@ class _$MealCopyWithImpl<$Res, $Val extends Meal>
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
                       as String,
-            templateId: null == templateId
-                ? _value.templateId
-                : templateId // ignore: cast_nullable_to_non_nullable
+            recipeTitle: null == recipeTitle
+                ? _value.recipeTitle
+                : recipeTitle // ignore: cast_nullable_to_non_nullable
                       as String,
             date: null == date
                 ? _value.date
                 : date // ignore: cast_nullable_to_non_nullable
                       as DateTime,
-            order: null == order
-                ? _value.order
-                : order // ignore: cast_nullable_to_non_nullable
-                      as int,
+            slot: null == slot
+                ? _value.slot
+                : slot // ignore: cast_nullable_to_non_nullable
+                      as MealSlot,
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -109,9 +116,10 @@ abstract class _$$MealImplCopyWith<$Res> implements $MealCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
-    String templateId,
+    String recipeTitle,
     DateTime date,
-    int order,
+    MealSlot slot,
+    String userId,
     DateTime createdAt,
   });
 }
@@ -129,9 +137,10 @@ class __$$MealImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? templateId = null,
+    Object? recipeTitle = null,
     Object? date = null,
-    Object? order = null,
+    Object? slot = null,
+    Object? userId = null,
     Object? createdAt = null,
   }) {
     return _then(
@@ -140,18 +149,22 @@ class __$$MealImplCopyWithImpl<$Res>
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
                   as String,
-        templateId: null == templateId
-            ? _value.templateId
-            : templateId // ignore: cast_nullable_to_non_nullable
+        recipeTitle: null == recipeTitle
+            ? _value.recipeTitle
+            : recipeTitle // ignore: cast_nullable_to_non_nullable
                   as String,
         date: null == date
             ? _value.date
             : date // ignore: cast_nullable_to_non_nullable
                   as DateTime,
-        order: null == order
-            ? _value.order
-            : order // ignore: cast_nullable_to_non_nullable
-                  as int,
+        slot: null == slot
+            ? _value.slot
+            : slot // ignore: cast_nullable_to_non_nullable
+                  as MealSlot,
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -166,9 +179,10 @@ class __$$MealImplCopyWithImpl<$Res>
 class _$MealImpl implements _Meal {
   const _$MealImpl({
     required this.id,
-    required this.templateId,
+    required this.recipeTitle,
     required this.date,
-    required this.order,
+    required this.slot,
+    required this.userId,
     required this.createdAt,
   });
 
@@ -178,17 +192,19 @@ class _$MealImpl implements _Meal {
   @override
   final String id;
   @override
-  final String templateId;
+  final String recipeTitle;
   @override
   final DateTime date;
   @override
-  final int order;
+  final MealSlot slot;
+  @override
+  final String userId;
   @override
   final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Meal(id: $id, templateId: $templateId, date: $date, order: $order, createdAt: $createdAt)';
+    return 'Meal(id: $id, recipeTitle: $recipeTitle, date: $date, slot: $slot, userId: $userId, createdAt: $createdAt)';
   }
 
   @override
@@ -197,10 +213,11 @@ class _$MealImpl implements _Meal {
         (other.runtimeType == runtimeType &&
             other is _$MealImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.templateId, templateId) ||
-                other.templateId == templateId) &&
+            (identical(other.recipeTitle, recipeTitle) ||
+                other.recipeTitle == recipeTitle) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.order, order) || other.order == order) &&
+            (identical(other.slot, slot) || other.slot == slot) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -208,7 +225,7 @@ class _$MealImpl implements _Meal {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, templateId, date, order, createdAt);
+      Object.hash(runtimeType, id, recipeTitle, date, slot, userId, createdAt);
 
   /// Create a copy of Meal
   /// with the given fields replaced by the non-null parameter values.
@@ -227,9 +244,10 @@ class _$MealImpl implements _Meal {
 abstract class _Meal implements Meal {
   const factory _Meal({
     required final String id,
-    required final String templateId,
+    required final String recipeTitle,
     required final DateTime date,
-    required final int order,
+    required final MealSlot slot,
+    required final String userId,
     required final DateTime createdAt,
   }) = _$MealImpl;
 
@@ -238,11 +256,13 @@ abstract class _Meal implements Meal {
   @override
   String get id;
   @override
-  String get templateId;
+  String get recipeTitle;
   @override
   DateTime get date;
   @override
-  int get order;
+  MealSlot get slot;
+  @override
+  String get userId;
   @override
   DateTime get createdAt;
 

@@ -1,261 +1,175 @@
 import 'dart:async';
-import 'package:meal_planner/models/meal.freezed_model.dart';
-import 'package:flutter/foundation.dart';
-import 'package:meal_planner/repositories/meal_repository.dart';
 
-/// In-memory repository for meals used in demo/development.
+import 'package:meal_planner/models/meal.freezed_model.dart';
+import 'meal_repository.dart';
+
 class InMemoryMealRepository implements MealRepository {
-  InMemoryMealRepository({DateTime Function()? clock})
-      : _clock = clock ?? (() => DateTime.now());
+  InMemoryMealRepository({DateTime Function()? clock}) : _clock = clock ?? DateTime.now {
+    _persistedMeals = List.from(_meals);
+  }
 
   final DateTime Function() _clock;
-  final Map<String, List<Meal>> _workingState = {};
-  final Map<String, List<Meal>> _persistentState = {};
-  final StreamController<Map<String, List<Meal>>> _stateController =
-      StreamController<Map<String, List<Meal>>>.broadcast();
+  final _mealsStream = StreamController<List<Meal>>.broadcast();
 
-  /// Pre-seed exactly 10 deterministic meals across 14 days starting Monday of current week
-  /// This ensures predictable test data matching spec requirements
+  final List<Meal> _meals = [];
+  List<Meal> _persistedMeals = [];
+
+  void _emit(String userId) {
+    _mealsStream.add(_meals.where((m) => m.userId == userId).toList()
+      ..sort((a, b) {
+        final cmp = a.date.compareTo(b.date);
+        if (cmp != 0) return cmp;
+        return a.slot.index.compareTo(b.slot.index);
+      }));
+  }
+
+  // Demo seeding used by UI/tests
   void seedDemoMeals() {
     final now = _clock();
-    final today = DateTime(now.year, now.month, now.day);
-
-    // Get the start of the current week (Monday - UK week model)
-    final monday = today.subtract(Duration(days: today.weekday - 1));
-
-    // Deterministic offsets: 10 meals spread across 14 days (2 weeks)
-    // Offsets: Mon(0), Tue(1), Wed(2), Thu(3), Sat(5), Sun(6), Tue(8), Thu(10), Sat(12), Sun(13)
+    final monday = DateTime(now.year, now.month, now.day).subtract(Duration(days: now.weekday - 1));
     const offsets = [0, 1, 2, 3, 5, 6, 8, 10, 12, 13];
-
-    int mealIdCounter = 1;
-
-    for (final offset in offsets) {
-      final date = monday.add(Duration(days: offset));
-      final dateKey = _dateToKey(date);
-
-      // Create meal with default template (will use "New Meal" title per spec)
-      final meal = Meal(
-        id: 'meal_$mealIdCounter',
-        templateId: 'breakfast_1', // Use breakfast_1 which has "New Meal" characteristics
-        date: date,
-        order: 0,
+    const titles = [
+      'Pancakes', 'Salad', 'Pasta', 'Curry', 'Soup',
+      'Tacos', 'Burger', 'Stir Fry', 'Fish', 'Pizza'
+    ];
+    for (var i = 0; i < offsets.length; i++) {
+      final date = monday.add(Duration(days: offsets[i]));
+      final id = 'demo-${date.toIso8601String()}-$i';
+      _meals.add(Meal(
+        id: id,
+        recipeTitle: titles[i % titles.length],
+        date: DateTime(date.year, date.month, date.day),
+        slot: MealSlot.values[i % MealSlot.values.length],
+        userId: 'demo-user',
         createdAt: _clock(),
-      );
-
-      _workingState.putIfAbsent(dateKey, () => []).add(meal);
-      
-      // Deep copy to persistent state
-      _persistentState.putIfAbsent(dateKey, () => []).add(Meal(
-        id: meal.id,
-        templateId: meal.templateId,
-        date: meal.date,
-        order: meal.order,
-        createdAt: meal.createdAt,
       ));
-
-      mealIdCounter++;
     }
-
-    _notifyListeners();
-    debugPrint('[DEBUG] Seeded ${_getAllMeals().length} deterministic meals');
+    _persistedMeals = List.from(_meals);
+    _emit('demo-user');
   }
 
-  /// Seed a single meal for testing
-  void seedMeal(Meal meal) {
-    final dateKey = _dateToKey(meal.date);
-    _workingState.putIfAbsent(dateKey, () => []);
-    _workingState[dateKey]!.add(meal);
-    _notifyListeners();
-  }
-
-  /// Clear all meals
-  void clear() {
-    _workingState.clear();
-    _persistentState.clear();
-    _notifyListeners();
-  }
-
-  /// Watch state changes
-  Stream<Map<String, List<Meal>>> watchState() {
-    Future.microtask(() {
-      if (!_stateController.isClosed) {
-        _stateController.add(Map.from(_workingState));
-      }
-    });
-    return _stateController.stream;
-  }
-
+  // Legacy UI API
   @override
   List<Meal> getMealsForDate(DateTime date) {
-    final dateKey = _dateToKey(date);
-    return List.from(_workingState[dateKey] ?? []);
+    final d = DateTime(date.year, date.month, date.day);
+    return _meals.where((m) => m.date == d).toList();
   }
 
   @override
   List<Meal> getMealsForDateRange(DateTime start, DateTime end) {
-    final meals = <Meal>[];
-    for (var date = start;
-        date.isBefore(end) || date.isAtSameMomentAs(end);
-        date = date.add(const Duration(days: 1))) {
-      meals.addAll(getMealsForDate(date));
-    }
-    return meals;
-  }
-
-  @override
-  Future<Meal> addMeal(DateTime date, String templateId) async {
-    final dateKey = _dateToKey(date);
-    _workingState.putIfAbsent(dateKey, () => []);
-
-    final order = _workingState[dateKey]!.length;
-    final now = _clock();
-    final meal = Meal(
-      id: 'meal_${now.millisecondsSinceEpoch}',
-      templateId: templateId,
-      date: date,
-      order: order,
-      createdAt: now,
-    );
-
-    _workingState[dateKey]!.add(meal);
-    _notifyListeners();
-
-    debugPrint('[INFO] ADD_MEAL - ${meal.toJson()}');
-    return meal;
-  }
-
-  @override
-  Future<void> removeMeal(String mealId) async {
-    for (var dateKey in _workingState.keys) {
-      final meals = _workingState[dateKey]!;
-      final index = meals.indexWhere((m) => m.id == mealId);
-      if (index != -1) {
-        final removedMeal = meals.removeAt(index);
-        // Reorder remaining meals
-        for (var i = index; i < meals.length; i++) {
-          meals[i] = meals[i].copyWith(order: i);
-        }
-        if (meals.isEmpty) {
-          _workingState.remove(dateKey);
-        }
-        _notifyListeners();
-        debugPrint('[INFO] DELETE_MEAL - ${removedMeal.toJson()}');
-        return;
-      }
-    }
-  }
-
-  @override
-  Future<void> moveMeal(String mealId, DateTime fromDate, DateTime toDate) async {
-    final fromKey = _dateToKey(fromDate);
-    final toKey = _dateToKey(toDate);
-
-    if (_workingState[fromKey] == null) {
-      throw Exception('No meals found on source date: $fromDate');
-    }
-
-    final meals = _workingState[fromKey]!;
-    final index = meals.indexWhere((m) => m.id == mealId);
-    if (index == -1) {
-      throw Exception('Meal ID $mealId not found on date $fromDate');
-    }
-
-    final meal = meals.removeAt(index);
-
-    // Reorder remaining meals in source day
-    for (var i = index; i < meals.length; i++) {
-      meals[i] = meals[i].copyWith(order: i);
-    }
-    if (meals.isEmpty) {
-      _workingState.remove(fromKey);
-    }
-
-    // Add to target day
-    _workingState.putIfAbsent(toKey, () => []);
-    final newOrder = _workingState[toKey]!.length;
-    final movedMeal = meal.copyWith(date: toDate, order: newOrder);
-    _workingState[toKey]!.add(movedMeal);
-
-    _notifyListeners();
-    debugPrint('[INFO] MOVE_MEAL - from: ${fromDate.toIso8601String()}, to: ${toDate.toIso8601String()}, mealId: $mealId');
-  }
-
-  @override
-  Future<void> reorderMeals(DateTime date, List<String> mealIds) async {
-    final dateKey = _dateToKey(date);
-    if (_workingState[dateKey] == null) {
-      throw Exception('No meals found for date: $date');
-    }
-
-    final meals = _workingState[dateKey]!;
-    
-    // Validate all IDs exist and are from this day
-    for (final id in mealIds) {
-      if (!meals.any((m) => m.id == id)) {
-        throw Exception('Meal ID not found or not on this date: $id');
-      }
-    }
-    
-    // Validate list completeness (all meals accounted for)
-    if (mealIds.length != meals.length) {
-      throw Exception('Reorder list size mismatch: expected ${meals.length}, got ${mealIds.length}');
-    }
-
-    final reordered = <Meal>[];
-    for (var i = 0; i < mealIds.length; i++) {
-      final meal = meals.firstWhere((m) => m.id == mealIds[i]);
-      reordered.add(meal.copyWith(order: i));
-    }
-
-    _workingState[dateKey] = reordered;
-    _notifyListeners();
-    debugPrint('[INFO] REORDER_MEAL - date: ${date.toIso8601String()}, order: $mealIds');
+    final s = DateTime(start.year, start.month, start.day);
+    final e = DateTime(end.year, end.month, end.day);
+    return _meals.where((m) => m.date.isAtSameMomentAs(s) || m.date.isAfter(s))
+        .where((m) => m.date.isAtSameMomentAs(e) || m.date.isBefore(e))
+        .toList();
   }
 
   @override
   Future<void> saveState(Map<String, List<Meal>> state) async {
-    _persistentState.clear();
-    for (var entry in state.entries) {
-      _persistentState[entry.key] = List.from(entry.value);
-    }
-    debugPrint('[INFO] SAVE_STATE - ${_getAllMeals().length} meals persisted');
-  }
-
-  @override
-  Map<String, List<Meal>> getPersistedState() {
-    return Map.from(_persistentState);
+    _meals
+      ..clear()
+      ..addAll(state.entries.expand((e) => e.value));
+    _persistedMeals = List.from(_meals);
+    _emit('demo-user');
   }
 
   @override
   void resetToPersistedState() {
-    _workingState.clear();
-    for (var entry in _persistentState.entries) {
-      _workingState[entry.key] = List.from(entry.value);
+    _meals
+      ..clear()
+      ..addAll(_persistedMeals);
+    _emit('demo-user');
+  }
+
+  // New API
+  @override
+  Stream<List<Meal>> watchMeals(String userId) => _mealsStream.stream;
+
+  @override
+  Future<Meal> addMeal({
+    required String userId,
+    required DateTime date,
+    required MealSlot slot,
+    required String recipeTitle,
+    MealConflictStrategy conflictStrategy = MealConflictStrategy.keepBoth,
+  }) async {
+    if (conflictStrategy == MealConflictStrategy.replace) {
+      _meals.removeWhere((m) => m.userId == userId && _sameDay(m.date, date) && m.slot == slot);
     }
-    _notifyListeners();
-    debugPrint('[INFO] RESET_STATE - ${_getAllMeals().length} meals restored');
+    final id = 'mem-${_meals.length + 1}';
+    final meal = Meal(
+      id: id,
+      recipeTitle: recipeTitle,
+      date: DateTime(date.year, date.month, date.day),
+      slot: slot,
+      userId: userId,
+      createdAt: _clock(),
+    );
+    _meals.add(meal);
+    _emit(userId);
+    return meal;
   }
 
-  /// Get all meals (for testing)
-  List<Meal> _getAllMeals() {
-    final meals = <Meal>[];
-    for (var dayMeals in _workingState.values) {
-      meals.addAll(dayMeals);
+  @override
+  Future<void> deleteMeal({required String userId, required String mealId}) async {
+    _meals.removeWhere((m) => m.userId == userId && m.id == mealId);
+    _emit(userId);
+  }
+
+  @override
+  Future<void> updateMeal({
+    required String userId,
+    required String mealId,
+    DateTime? newDate,
+    MealSlot? newSlot,
+    String? newRecipeTitle,
+  }) async {
+    final idx = _meals.indexWhere((m) => m.userId == userId && m.id == mealId);
+    if (idx == -1) return;
+    var meal = _meals[idx];
+    if (newDate != null) {
+      meal = meal.copyWith(date: DateTime(newDate.year, newDate.month, newDate.day));
     }
-    return meals;
-  }
-
-  String _dateToKey(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
-
-  void _notifyListeners() {
-    if (!_stateController.isClosed) {
-      _stateController.add(Map.from(_workingState));
+    if (newSlot != null) {
+      meal = meal.copyWith(slot: newSlot);
     }
+    if (newRecipeTitle != null) {
+      meal = meal.copyWith(recipeTitle: newRecipeTitle);
+    }
+    _meals[idx] = meal;
+    _emit(userId);
   }
 
-  void dispose() {
-    _stateController.close();
+  @override
+  Future<void> swapMeals({
+    required String userId,
+    required String firstMealId,
+    required String secondMealId,
+  }) async {
+    final aIdx = _meals.indexWhere((m) => m.userId == userId && m.id == firstMealId);
+    final bIdx = _meals.indexWhere((m) => m.userId == userId && m.id == secondMealId);
+    if (aIdx == -1 || bIdx == -1) return;
+    final a = _meals[aIdx];
+    final b = _meals[bIdx];
+    _meals[aIdx] = a.copyWith(date: b.date, slot: b.slot);
+    _meals[bIdx] = b.copyWith(date: a.date, slot: a.slot);
+    _emit(userId);
   }
+
+  @override
+  Future<Meal?> findMealByDateSlot({
+    required String userId,
+    required DateTime date,
+    required MealSlot slot,
+  }) async {
+    for (final m in _meals) {
+      if (m.userId == userId && _sameDay(m.date, date) && m.slot == slot) {
+        return m;
+      }
+    }
+    return null;
+  }
+
+  bool _sameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 }
