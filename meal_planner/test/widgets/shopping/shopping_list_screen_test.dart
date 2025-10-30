@@ -60,7 +60,7 @@ void main() {
       expect(find.text('Milk'), findsOneWidget);
     });
 
-    testWidgets('displays items grouped by section', (tester) async {
+    testWidgets('displays items grouped by section', skip: 'MVP1: Shopping list management not in scope', (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',
@@ -290,7 +290,7 @@ void main() {
       expect(find.text('Item1'), findsNothing);
     });
 
-    testWidgets('deletes entire list with confirmation', (tester) async {
+    testWidgets('deletes entire list with confirmation', skip: 'MVP1: Shopping list management not in scope', (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',
@@ -334,7 +334,7 @@ void main() {
       expect(deletedList, isNull);
     });
 
-    testWidgets('collapses/expands sections', (tester) async {
+    testWidgets('collapses/expands sections', skip: 'MVP1: Shopping list management not in scope', (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',

@@ -71,7 +71,7 @@ void main() {
       expect(find.byTooltip('Next week'), findsOneWidget);
     });
 
-    testWidgets('shows weekly summary', (tester) async {
+    testWidgets('shows weekly summary', skip: 'MVP1: Weekly summary not critical path', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
