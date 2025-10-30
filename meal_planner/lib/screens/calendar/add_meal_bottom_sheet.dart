@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/meal.freezed_model.dart';
 import '../../providers/auth_providers.dart';
 import '../../providers/meal_providers.dart';
-import '../../providers/recipe_providers.dart';
+import '../../repositories/meal_repository.dart';
+// Removed unused import of recipe_providers.dart
 import '../../providers/favorites_providers.dart';
 
 class AddMealBottomSheet extends ConsumerStatefulWidget {
@@ -245,6 +246,7 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
       return MealConflictStrategy.keepBoth;
     }
 
+    if (!mounted) return null;
     return showDialog<MealConflictStrategy>(
       context: context,
       builder: (context) {

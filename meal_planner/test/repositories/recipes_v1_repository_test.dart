@@ -13,7 +13,7 @@ void main() {
       final results = await repository.searchByTitlePrefix('chick').first;
       
       expect(results, isNotEmpty);
-      expect(results.any((r) => r.title?.contains('Chicken') ?? false), isTrue);
+      expect(results.any((r) => r.title.contains('Chicken')), isTrue);
     });
 
     test('searchByTitlePrefix is case-insensitive', () async {

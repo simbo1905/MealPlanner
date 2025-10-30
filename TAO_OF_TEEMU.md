@@ -42,3 +42,6 @@ Teemu’s philosophy keeps development calm, deliberate, and test-first—even u
 - Share learnings from failures; analyze root causes, not symptoms.
 
 Practice these habits and MealPlanner lands polished, predictable, and ready for real families.
+
+CRITICLE: Never use flutter drive/Chrome Driver – it’s removed from the SDK.
+Adopt the integration_test package, place tests under integration_test/, initialise the binding, write widget‑style interactions, and run them with flutter test. This is the officially supported, future‑proof approach for Flutter end‑to‑end testing as of late 2025.

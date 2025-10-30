@@ -1,11 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:intl/intl.dart';
 import '../models/meal.freezed_model.dart';
 import '../models/week_section.freezed_model.dart';
 import '../repositories/meal_repository.dart';
 import 'auth_providers.dart';
-import 'favorites_providers.dart';
 
 part 'meal_providers.g.dart';
 
@@ -32,7 +31,7 @@ class SelectedDate extends _$SelectedDate {
 /// Stream of meals for the signed-in user
 /// Stream of meals for current user
 @riverpod
-Stream<List<Meal>> userMeals(UserMealsRef ref) {
+Stream<List<Meal>> userMeals(Ref ref) {
   final userId = ref.watch(currentUserIdProvider);
   if (userId == null) {
     return const Stream<List<Meal>>.empty();
@@ -43,7 +42,7 @@ Stream<List<Meal>> userMeals(UserMealsRef ref) {
 
 /// Meals for a specific date
 @riverpod
-AsyncValue<List<Meal>> mealsForDate(MealsForDateRef ref, DateTime date) {
+AsyncValue<List<Meal>> mealsForDate(Ref ref, DateTime date) {
   final meals = ref.watch(userMealsProvider);
   return meals.whenData(
     (list) => list
@@ -56,7 +55,7 @@ AsyncValue<List<Meal>> mealsForDate(MealsForDateRef ref, DateTime date) {
 /// Meals for a date range (inclusive)
 @riverpod
 AsyncValue<List<Meal>> mealsForDateRange(
-  MealsForDateRangeRef ref,
+  Ref ref,
   DateTime start,
   DateTime end,
 ) {
@@ -73,7 +72,7 @@ AsyncValue<List<Meal>> mealsForDateRange(
 
 /// Planned meals count for next 30 days
 @riverpod
-AsyncValue<int> plannedMealCount(PlannedMealCountRef ref) {
+AsyncValue<int> plannedMealCount(Ref ref) {
   final meals = ref.watch(userMealsProvider);
   final now = DateTime.now();
   final tomorrow = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
@@ -89,7 +88,7 @@ AsyncValue<int> plannedMealCount(PlannedMealCountRef ref) {
 /// Week sections for infinite scroll
 @riverpod
 AsyncValue<List<WeekSection>> weekSections(
-  WeekSectionsRef ref, {
+  Ref ref, {
   required int weeksAround,
 }) {
   final meals = ref.watch(userMealsProvider);

@@ -1,5 +1,5 @@
-import '../../lib/models/recipe.freezed_model.dart';
-import '../../lib/repositories/recipes_v1_repository.dart';
+import 'package:meal_planner/models/recipe.freezed_model.dart';
+import 'package:meal_planner/repositories/recipes_v1_repository.dart';
 
 /// Fake implementation of RecipesV1Repository for testing
 class FakeRecipesV1Repository implements RecipesV1Repository {

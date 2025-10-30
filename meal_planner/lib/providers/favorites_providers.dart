@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../repositories/favorites_repository.dart';
 import 'auth_providers.dart';
@@ -8,12 +8,12 @@ import 'recipe_providers.dart';
 part 'favorites_providers.g.dart';
 
 @riverpod
-FavoritesRepository favoritesRepository(FavoritesRepositoryRef ref) {
+FavoritesRepository favoritesRepository(Ref ref) {
   return FavoritesRepository();
 }
 
 @riverpod
-Stream<List<String>> favoriteRecipes(FavoriteRecipesRef ref) {
+Stream<List<String>> favoriteRecipes(Ref ref) {
   final userId = ref.watch(currentUserIdProvider);
   if (userId == null) {
     return const Stream.empty();

@@ -48,7 +48,7 @@ class ShoppingListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              item.section,
+              'Section: ${item.section}',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.blue.shade900,

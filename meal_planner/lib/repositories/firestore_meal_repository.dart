@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meal_planner/models/meal.freezed_model.dart';
 import 'meal_repository.dart';
 
-class FirestoreMealRepository implements MealRepository {
+class FirestoreMealRepository extends MealRepository {
   FirestoreMealRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 

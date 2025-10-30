@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../lib/firebase_options.dart';
+import 'package:meal_planner/firebase_options.dart';
 
 Future<void> main(List<String> args) async {
   const String batchDir = '.tmp/recipesv1_batches';
@@ -55,12 +55,10 @@ Future<void> main(List<String> args) async {
 
           // Upload in Firestore batches (max 500 operations)
           final batch = firestore.batch();
-          int batchOps = 0;
 
           for (var recipe in recipes) {
             final docRef = firestore.collection('recipes_v1').doc(recipe['id']);
             batch.set(docRef, recipe);
-            batchOps++;
           }
 
           await batch.commit();
@@ -80,7 +78,7 @@ Future<void> main(List<String> args) async {
       }
     }
 
-    print('\n' + '=' * 60);
+    print('\n${'=' * 60}');
     print('Upload Complete!');
     print('Total recipes uploaded: $totalUploaded');
     print('Failed batches: $totalErrors');
@@ -109,3 +107,4 @@ Future<void> main(List<String> args) async {
     exit(1);
   }
 }
+// ignore_for_file: avoid_print

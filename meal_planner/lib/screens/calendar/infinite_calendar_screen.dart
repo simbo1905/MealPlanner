@@ -43,12 +43,6 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
         _weeksAround += 2;
       });
     }
-    
-    if (_scrollController.position.pixels <= 500) {
-      setState(() {
-        _weeksAround += 2;
-      });
-    }
   }
 
   @override

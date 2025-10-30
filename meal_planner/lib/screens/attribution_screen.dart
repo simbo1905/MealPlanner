@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+// Link launching disabled to avoid extra dependency; display as plain text.
 
 class AttributionScreen extends StatelessWidget {
-  const AttributionScreen({Key? key}) : super(key: key);
+  const AttributionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +29,11 @@ class AttributionScreen extends StatelessWidget {
             const Text('• Dataset: Joseph Martinez (recipe-dataset)'),
             const Text('• License: CC BY-SA 3.0'),
             const SizedBox(height: 16),
-            InkWell(
-              onTap: () async {
-                final uri = Uri.parse('https://creativecommons.org/licenses/by-sa/3.0/');
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri);
-                }
-              },
-              child: const Text(
-                'View License Details',
+            const Text('View License Details: https://creativecommons.org/licenses/by-sa/3.0/',
                 style: TextStyle(
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
+                )),
             const SizedBox(height: 24),
             const Text(
               'This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.',

@@ -10,10 +10,10 @@ class RecipeSearchAutocomplete extends ConsumerStatefulWidget {
   final TextEditingController? controller;
 
   const RecipeSearchAutocomplete({
-    Key? key,
+    super.key,
     this.onRecipeSelected,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<RecipeSearchAutocomplete> createState() =>
@@ -24,6 +24,7 @@ class _RecipeSearchAutocompleteState
     extends ConsumerState<RecipeSearchAutocomplete> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
+  late FocusNode _keyboardFocusNode;
   int _selectedIndex = -1;
   List<Recipe> _suggestions = [];
   bool _showSuggestions = false;
@@ -33,6 +34,7 @@ class _RecipeSearchAutocompleteState
     super.initState();
     _controller = widget.controller ?? TextEditingController();
     _focusNode = FocusNode();
+    _keyboardFocusNode = FocusNode();
     _controller.addListener(_onSearchChanged);
   }
 
@@ -40,6 +42,7 @@ class _RecipeSearchAutocompleteState
   void dispose() {
     _controller.removeListener(_onSearchChanged);
     _focusNode.dispose();
+    _keyboardFocusNode.dispose();
     if (widget.controller == null) {
       _controller.dispose();
     }
@@ -61,28 +64,30 @@ class _RecipeSearchAutocompleteState
     });
   }
 
-  void _handleKeyEvent(RawKeyEvent event) {
-    if (!_showSuggestions || _suggestions.isEmpty) {
-      return;
-    }
+  void _handleKeyEvent(KeyEvent event) {
+    if (!_showSuggestions || _suggestions.isEmpty) return;
 
-    if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-      setState(() {
-        _selectedIndex = (_selectedIndex + 1) % _suggestions.length;
-      });
-    } else if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-      setState(() {
-        _selectedIndex =
-            (_selectedIndex - 1) < 0 ? _suggestions.length - 1 : _selectedIndex - 1;
-      });
-    } else if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
-      if (_selectedIndex >= 0 && _selectedIndex < _suggestions.length) {
-        _selectRecipe(_suggestions[_selectedIndex]);
+    if (event is KeyDownEvent) {
+      final key = event.logicalKey;
+      if (key == LogicalKeyboardKey.arrowDown) {
+        setState(() {
+          _selectedIndex = (_selectedIndex + 1) % _suggestions.length;
+        });
+      } else if (key == LogicalKeyboardKey.arrowUp) {
+        setState(() {
+          _selectedIndex = (_selectedIndex - 1) < 0
+              ? _suggestions.length - 1
+              : _selectedIndex - 1;
+        });
+      } else if (key == LogicalKeyboardKey.enter) {
+        if (_selectedIndex >= 0 && _selectedIndex < _suggestions.length) {
+          _selectRecipe(_suggestions[_selectedIndex]);
+        }
+      } else if (key == LogicalKeyboardKey.escape) {
+        setState(() {
+          _showSuggestions = false;
+        });
       }
-    } else if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
-      setState(() {
-        _showSuggestions = false;
-      });
     }
   }
 
@@ -90,13 +95,14 @@ class _RecipeSearchAutocompleteState
   Widget build(BuildContext context) {
     final query = _controller.text;
 
-    return RawKeyboardListener(
-      focusNode: _focusNode,
-      onKey: _handleKeyEvent,
+    return KeyboardListener(
+      focusNode: _keyboardFocusNode,
+      onKeyEvent: _handleKeyEvent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
+            key: const Key('recipe-search-field'),
             controller: _controller,
             focusNode: _focusNode,
             decoration: InputDecoration(
@@ -174,6 +180,7 @@ class _RecipeSearchAutocompleteState
                                 ? Colors.blue[100]
                                 : Colors.transparent,
                             child: InkWell(
+                              key: Key('recipe-suggestion-$index'),
                               onTap: () => _selectRecipe(recipe),
                               onHover: (hovering) {
                                 if (hovering) {
@@ -191,7 +198,7 @@ class _RecipeSearchAutocompleteState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      recipe.title ?? 'Untitled Recipe',
+                                      recipe.title,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

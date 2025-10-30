@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/firebase_options.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:meal_planner/firebase_options.dart';
 
 void main() {
+  // Ensure integration_test binding is initialized for widget-style e2e runs.
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   group('Recipe Count Validation Tests', () {
     const expectedRecipeCount = 13496;
 
@@ -22,9 +25,6 @@ void main() {
           .get();
 
       final actualCount = snapshot.count ?? 0;
-
-      print('Expected recipes: $expectedRecipeCount');
-      print('Actual recipes in Firestore: $actualCount');
 
       expect(
         actualCount,
@@ -68,9 +68,7 @@ void main() {
           .get();
 
       final duration = DateTime.now().difference(startTime);
-
-      print('Title search returned ${snapshot.docs.length} results');
-      print('Query time: ${duration.inMilliseconds}ms');
+      expect(snapshot.docs, isNotNull);
 
       expect(
         duration.inMilliseconds,
@@ -90,9 +88,7 @@ void main() {
           .get();
 
       final duration = DateTime.now().difference(startTime);
-
-      print('Ingredient search returned ${snapshot.docs.length} results');
-      print('Query time: ${duration.inMilliseconds}ms');
+      expect(snapshot.docs, isNotNull);
 
       expect(
         duration.inMilliseconds,
@@ -122,15 +118,13 @@ void main() {
 
       // Test composite index 2: ingredientNamesNormalized + createdAt
       try {
-        final snapshot2 = await firestore
+        await firestore
             .collection('recipes_v1')
             .where('ingredientNamesNormalized', arrayContains: 'chicken')
             .orderBy('createdAt', descending: true)
             .limit(1)
             .get();
-
         // arrayContains doesn't require ordering in the index, but having it doesn't hurt
-        print('Ingredient index is properly configured');
       } catch (e) {
         fail('Ingredient index query failed: $e. Composite index may not be deployed.');
       }
@@ -149,8 +143,6 @@ void main() {
         final title = doc['title'] as String?;
         expect(title, isNotNull);
         expect(title?.isNotEmpty, isTrue);
-        
-        print('Sample recipe: $title');
       }
     });
   });

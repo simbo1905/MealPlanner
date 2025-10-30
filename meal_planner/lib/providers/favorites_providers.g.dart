@@ -7,7 +7,7 @@ part of 'favorites_providers.dart';
 // **************************************************************************
 
 String _$favoritesRepositoryHash() =>
-    r'1cddad067922eafe25b0850b0bb6a4c4f8e0a237';
+    r'a272a36dc265953c6901b12057bc539d8cc98495';
 
 /// See also [favoritesRepository].
 @ProviderFor(favoritesRepository)
@@ -25,7 +25,7 @@ final favoritesRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoritesRepositoryRef = AutoDisposeProviderRef<FavoritesRepository>;
-String _$favoriteRecipesHash() => r'a60afc85092ba28427340fed10fa94aa487032c0';
+String _$favoriteRecipesHash() => r'56f46e3594039007f5bd65a23c7ef33234ebfa4f';
 
 /// See also [favoriteRecipes].
 @ProviderFor(favoriteRecipes)

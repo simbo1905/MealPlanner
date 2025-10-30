@@ -59,9 +59,9 @@ class _DayColumn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DragTarget<Meal>(
-      onWillAccept: (incoming) => incoming != null,
-      onAccept: (incoming) async {
-        if (incoming == null) return;
+      onWillAcceptWithDetails: (details) => true,
+      onAcceptWithDetails: (details) async {
+        final incoming = details.data;
         if (day.meals.isEmpty) {
           await _moveMeal(ref, incoming, day.date);
         } else {
@@ -76,7 +76,7 @@ class _DayColumn extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: BoxDecoration(
-            color: isActive ? Colors.blue.withOpacity(0.08) : Colors.transparent,
+            color: isActive ? Colors.blue.withValues(alpha: 0.08) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: day.isSelected ? Colors.blue : Colors.transparent,
@@ -165,10 +165,9 @@ class _DraggableMealCard extends ConsumerWidget {
         child: _MealChip(meal: meal),
       ),
       child: DragTarget<Meal>(
-        onWillAccept: (incoming) => incoming != null && incoming.id != meal.id,
-        onAccept: (incoming) async {
-          if (incoming == null) return;
-          await onSwap(incoming.id);
+        onWillAcceptWithDetails: (details) => details.data.id != meal.id,
+        onAcceptWithDetails: (details) async {
+          await onSwap(details.data.id);
         },
         builder: (context, candidateData, rejectedData) {
           final isActive = candidateData.isNotEmpty;
@@ -176,7 +175,7 @@ class _DraggableMealCard extends ConsumerWidget {
             duration: const Duration(milliseconds: 150),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isActive ? Colors.blue : Colors.transparent,
+            color: isActive ? Colors.blue : Colors.transparent,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -204,7 +203,7 @@ class _MealChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

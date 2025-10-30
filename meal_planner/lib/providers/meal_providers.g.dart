@@ -25,7 +25,7 @@ final mealRepositoryProvider = AutoDisposeProvider<MealRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MealRepositoryRef = AutoDisposeProviderRef<MealRepository>;
-String _$userMealsHash() => r'04268005e00dabfb4f1b695ee8d202c84b5fc9c8';
+String _$userMealsHash() => r'2f755b69b591068201b6ec8417d7380623e3d673';
 
 /// Stream of meals for the signed-in user
 /// Stream of meals for current user
@@ -45,7 +45,7 @@ final userMealsProvider = AutoDisposeStreamProvider<List<Meal>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserMealsRef = AutoDisposeStreamProviderRef<List<Meal>>;
-String _$mealsForDateHash() => r'df30181952e5b8611b77d15ff732dd7a7767eb43';
+String _$mealsForDateHash() => r'c3be0f5ca3fa409d22d9ea86ecd8cbf52a30c28b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -198,7 +198,7 @@ class _MealsForDateProviderElement
   DateTime get date => (origin as MealsForDateProvider).date;
 }
 
-String _$mealsForDateRangeHash() => r'cf69eadbe0e7b0305b8339520748f557a7349734';
+String _$mealsForDateRangeHash() => r'd27a81eff4eb5e3a5cd070a77fe24c6280c71dd0';
 
 /// Meals for a date range (inclusive)
 ///
@@ -343,7 +343,7 @@ class _MealsForDateRangeProviderElement
   DateTime get end => (origin as MealsForDateRangeProvider).end;
 }
 
-String _$plannedMealCountHash() => r'3c5c9bfeee405e05b5e08a33a80e6923af437c33';
+String _$plannedMealCountHash() => r'7afc0bf260d6454d5b783146eee6c2efc204449b';
 
 /// Planned meals count for next 30 days
 ///
@@ -362,7 +362,7 @@ final plannedMealCountProvider = AutoDisposeProvider<AsyncValue<int>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef PlannedMealCountRef = AutoDisposeProviderRef<AsyncValue<int>>;
-String _$weekSectionsHash() => r'6fca112fb41f2c7ed7529c592724a1c356189cf5';
+String _$weekSectionsHash() => r'ec232afdc209a23a1c74867582f1cc87b39d70df';
 
 /// Week sections for infinite scroll
 ///

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 /// Interface for accessing user's favorite recipes
 abstract class UserFavouritesV1Repository {
@@ -35,7 +36,7 @@ class FirebaseUserFavouritesV1Repository implements UserFavouritesV1Repository {
                 try {
                   return doc['recipeId'] as String;
                 } catch (e) {
-                  print('Error extracting recipeId: $e');
+                  debugPrint('Error extracting recipeId: $e');
                   return null;
                 }
               })
@@ -43,7 +44,7 @@ class FirebaseUserFavouritesV1Repository implements UserFavouritesV1Repository {
               .toList();
         })
         .handleError((e) {
-          print('Error watching favorite IDs: $e');
+          debugPrint('Error watching favorite IDs: $e');
           return <String>[];
         });
   }
@@ -60,7 +61,7 @@ class FirebaseUserFavouritesV1Repository implements UserFavouritesV1Repository {
             'addedAt': FieldValue.serverTimestamp(),
           });
     } catch (e) {
-      print('Error adding favorite: $e');
+      debugPrint('Error adding favorite: $e');
       rethrow;
     }
   }
@@ -73,7 +74,7 @@ class FirebaseUserFavouritesV1Repository implements UserFavouritesV1Repository {
           .doc(recipeId)
           .delete();
     } catch (e) {
-      print('Error removing favorite: $e');
+      debugPrint('Error removing favorite: $e');
       rethrow;
     }
   }
@@ -87,7 +88,7 @@ class FirebaseUserFavouritesV1Repository implements UserFavouritesV1Repository {
           .get();
       return doc.exists;
     } catch (e) {
-      print('Error checking favorite: $e');
+      debugPrint('Error checking favorite: $e');
       return false;
     }
   }
