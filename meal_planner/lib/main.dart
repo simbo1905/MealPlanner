@@ -15,9 +15,6 @@ import 'screens/calendar/week_calendar_screen.dart';
 import 'screens/debug/developer_launcher_screen.dart';
 import 'screens/preferences/user_preferences_screen.dart';
 import 'screens/recipe/recipe_list_screen.dart';
-import 'screens/splash/animated_splash_screen.dart';
-
-
 void main() async {
   // Set up error handling
   FlutterError.onError = (details) {
