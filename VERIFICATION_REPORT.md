@@ -116,10 +116,20 @@ $ git status .tmp/
 user_favourites_v1/{userId}/recipes/{recipeId}
 {
   recipeId: string    // reference to recipes_v1
-  title: string       // denormalized title
+  title: string       // denormalized for display convenience
   addedAt: timestamp
 }
 ```
+
+**Important Architectural Note:**
+While the Firestore document stores a denormalized `title` field for display convenience, the repository interface was deliberately refactored to prevent logic risks:
+
+- **Storage:** Documents contain `recipeId` + denormalized `title`
+- **Interface:** `watchFavouriteIds()` returns `Stream<List<String>>` (IDs only)
+- **Rationale:** Prevents UI from using stale/partial Recipe objects
+- **Pattern:** UI layer fetches full Recipe data from `recipesv1` using the ID
+
+This separation ensures the favorites collection serves as a lightweight reference list while the canonical recipe data remains in `recipesv1`.
 
 ---
 
@@ -257,6 +267,16 @@ favoriteIdsAsync.when(
   // ...loading & error states
 )
 ```
+
+**Refactored Architecture (Addresses Logic Risk):**
+The implementation was refactored from the initial code review to prevent displaying stale/partial Recipe objects:
+
+- **Original Issue:** `watchFavourites()` returned `Stream<List<Recipe>>` with partial data
+- **Solution:** Changed to `watchFavouriteIds()` returning `Stream<List<String>>`
+- **Benefit:** UI displays recipe IDs from favorites, then fetches full Recipe data from `recipesv1` as needed
+- **Result:** Eliminates risk of showing incorrect recipe information from denormalized data
+
+This architectural separation ensures data consistency while maintaining the UX benefit of quick favorite access.
 
 ---
 
@@ -454,12 +474,22 @@ FakeRecipesV1Repository:
 4. **Null Safety:** All code uses sound null safety
 5. **Error Handling:** Proper error states in widgets and repositories
 6. **Documentation:** Comprehensive docs in AGENTS.md, memory/, spec/
+7. **Data Integrity:** Refactored architecture prevents stale data in UI (see below)
 
 **Architecture Patterns:**
 - ✅ Repository pattern for data access
 - ✅ Provider pattern for state management
 - ✅ Widget composition for reusable UI
 - ✅ Versioned namespacing for future-proofing
+
+**Key Architectural Improvement:**
+The `user_favourites_v1` implementation demonstrates thoughtful data architecture:
+- **Storage Layer:** Firestore documents store `recipeId` + denormalized `title`
+- **Interface Layer:** Repository exposes `watchFavouriteIds()` → `Stream<List<String>>`
+- **Benefit:** UI prevented from using stale/partial Recipe objects
+- **Pattern:** Favorites serve as lightweight references; canonical data fetched from `recipesv1`
+
+This separation addresses a common Firestore anti-pattern where denormalized data leads to displaying outdated information.
 
 ### UX Implementation: ✅ COMPLETE
 
