@@ -45,7 +45,7 @@ void main() {
       expect(find.text('1 ingredients'), findsOneWidget);
     });
 
-    testWidgets('shows allergen badges when present', skip: 'MVP1: Allergen display not implemented', (tester) async {
+    testWidgets('shows allergen badges when present', (tester) async {
       final recipe = Recipe(
         id: 'recipe-2',
         title: 'Peanut Butter Toast',
@@ -90,7 +90,7 @@ void main() {
 
       expect(find.text('PEANUT'), findsOneWidget);
       expect(find.text('GLUTEN'), findsOneWidget);
-    });
+    }, skip: true);
 
     testWidgets('calls onTap callback when tapped', (tester) async {
       var tapped = false;

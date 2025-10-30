@@ -1,0 +1,18 @@
+envPath: ../.env
+
+prompts:
+  - id: test-prompt
+    content: "You are a helpful assistant."
+
+providers:
+  - id: mistral
+    config:
+      apiKey: ${MISTRAL_API_KEY}
+      model: mistral-large
+
+tests:
+  - vars:
+      query: "What is 2 + 2?"
+    assert:
+      - type: contains
+        value: "4"

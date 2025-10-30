@@ -1,7 +1,18 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow all reads/writes in development (replace with auth rules in production)
+    // Recipes collection - read-only for all, write-only by admin
+    match /recipes_v1/{recipeId} {
+      allow read: if true;
+      allow write: if false; // Admin writes via CLI/Admin SDK only
+    }
+
+    // User favorites - read/write only by owning user
+    match /user_favourites_v1/{userId}/recipes/{recipeId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Development: allow all other reads/writes (remove in production)
     match /{document=**} {
       allow read, write: if true;
     }

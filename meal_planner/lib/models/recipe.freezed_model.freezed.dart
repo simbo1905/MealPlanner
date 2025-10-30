@@ -29,7 +29,15 @@ mixin _$Recipe {
   List<String> get preReqs => throw _privateConstructorUsedError;
   double get totalTime => throw _privateConstructorUsedError;
   List<Ingredient> get ingredients => throw _privateConstructorUsedError;
-  List<String> get steps => throw _privateConstructorUsedError;
+  List<String> get steps =>
+      throw _privateConstructorUsedError; // New optional fields for v1 recipe search
+  String? get titleLower => throw _privateConstructorUsedError;
+  List<String>? get titleTokens => throw _privateConstructorUsedError;
+  List<String>? get ingredientNamesNormalized =>
+      throw _privateConstructorUsedError;
+  String? get version => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+  DateTime? get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Recipe to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,6 +63,12 @@ abstract class $RecipeCopyWith<$Res> {
     double totalTime,
     List<Ingredient> ingredients,
     List<String> steps,
+    String? titleLower,
+    List<String>? titleTokens,
+    List<String>? ingredientNamesNormalized,
+    String? version,
+    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+    DateTime? createdAt,
   });
 }
 
@@ -82,6 +96,11 @@ class _$RecipeCopyWithImpl<$Res, $Val extends Recipe>
     Object? totalTime = null,
     Object? ingredients = null,
     Object? steps = null,
+    Object? titleLower = freezed,
+    Object? titleTokens = freezed,
+    Object? ingredientNamesNormalized = freezed,
+    Object? version = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -121,6 +140,26 @@ class _$RecipeCopyWithImpl<$Res, $Val extends Recipe>
                 ? _value.steps
                 : steps // ignore: cast_nullable_to_non_nullable
                       as List<String>,
+            titleLower: freezed == titleLower
+                ? _value.titleLower
+                : titleLower // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            titleTokens: freezed == titleTokens
+                ? _value.titleTokens
+                : titleTokens // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            ingredientNamesNormalized: freezed == ingredientNamesNormalized
+                ? _value.ingredientNamesNormalized
+                : ingredientNamesNormalized // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            version: freezed == version
+                ? _value.version
+                : version // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
           )
           as $Val,
     );
@@ -145,6 +184,12 @@ abstract class _$$RecipeImplCopyWith<$Res> implements $RecipeCopyWith<$Res> {
     double totalTime,
     List<Ingredient> ingredients,
     List<String> steps,
+    String? titleLower,
+    List<String>? titleTokens,
+    List<String>? ingredientNamesNormalized,
+    String? version,
+    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+    DateTime? createdAt,
   });
 }
 
@@ -171,6 +216,11 @@ class __$$RecipeImplCopyWithImpl<$Res>
     Object? totalTime = null,
     Object? ingredients = null,
     Object? steps = null,
+    Object? titleLower = freezed,
+    Object? titleTokens = freezed,
+    Object? ingredientNamesNormalized = freezed,
+    Object? version = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(
       _$RecipeImpl(
@@ -210,6 +260,26 @@ class __$$RecipeImplCopyWithImpl<$Res>
             ? _value._steps
             : steps // ignore: cast_nullable_to_non_nullable
                   as List<String>,
+        titleLower: freezed == titleLower
+            ? _value.titleLower
+            : titleLower // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        titleTokens: freezed == titleTokens
+            ? _value._titleTokens
+            : titleTokens // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        ingredientNamesNormalized: freezed == ingredientNamesNormalized
+            ? _value._ingredientNamesNormalized
+            : ingredientNamesNormalized // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        version: freezed == version
+            ? _value.version
+            : version // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
       ),
     );
   }
@@ -228,9 +298,17 @@ class _$RecipeImpl implements _Recipe {
     required this.totalTime,
     required final List<Ingredient> ingredients,
     required final List<String> steps,
+    this.titleLower,
+    final List<String>? titleTokens,
+    final List<String>? ingredientNamesNormalized,
+    this.version,
+    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+    this.createdAt,
   }) : _preReqs = preReqs,
        _ingredients = ingredients,
-       _steps = steps;
+       _steps = steps,
+       _titleTokens = titleTokens,
+       _ingredientNamesNormalized = ingredientNamesNormalized;
 
   factory _$RecipeImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecipeImplFromJson(json);
@@ -271,9 +349,39 @@ class _$RecipeImpl implements _Recipe {
     return EqualUnmodifiableListView(_steps);
   }
 
+  // New optional fields for v1 recipe search
+  @override
+  final String? titleLower;
+  final List<String>? _titleTokens;
+  @override
+  List<String>? get titleTokens {
+    final value = _titleTokens;
+    if (value == null) return null;
+    if (_titleTokens is EqualUnmodifiableListView) return _titleTokens;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _ingredientNamesNormalized;
+  @override
+  List<String>? get ingredientNamesNormalized {
+    final value = _ingredientNamesNormalized;
+    if (value == null) return null;
+    if (_ingredientNamesNormalized is EqualUnmodifiableListView)
+      return _ingredientNamesNormalized;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? version;
+  @override
+  @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+  final DateTime? createdAt;
+
   @override
   String toString() {
-    return 'Recipe(id: $id, title: $title, imageUrl: $imageUrl, description: $description, notes: $notes, preReqs: $preReqs, totalTime: $totalTime, ingredients: $ingredients, steps: $steps)';
+    return 'Recipe(id: $id, title: $title, imageUrl: $imageUrl, description: $description, notes: $notes, preReqs: $preReqs, totalTime: $totalTime, ingredients: $ingredients, steps: $steps, titleLower: $titleLower, titleTokens: $titleTokens, ingredientNamesNormalized: $ingredientNamesNormalized, version: $version, createdAt: $createdAt)';
   }
 
   @override
@@ -295,7 +403,20 @@ class _$RecipeImpl implements _Recipe {
               other._ingredients,
               _ingredients,
             ) &&
-            const DeepCollectionEquality().equals(other._steps, _steps));
+            const DeepCollectionEquality().equals(other._steps, _steps) &&
+            (identical(other.titleLower, titleLower) ||
+                other.titleLower == titleLower) &&
+            const DeepCollectionEquality().equals(
+              other._titleTokens,
+              _titleTokens,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._ingredientNamesNormalized,
+              _ingredientNamesNormalized,
+            ) &&
+            (identical(other.version, version) || other.version == version) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -311,6 +432,11 @@ class _$RecipeImpl implements _Recipe {
     totalTime,
     const DeepCollectionEquality().hash(_ingredients),
     const DeepCollectionEquality().hash(_steps),
+    titleLower,
+    const DeepCollectionEquality().hash(_titleTokens),
+    const DeepCollectionEquality().hash(_ingredientNamesNormalized),
+    version,
+    createdAt,
   );
 
   /// Create a copy of Recipe
@@ -338,6 +464,12 @@ abstract class _Recipe implements Recipe {
     required final double totalTime,
     required final List<Ingredient> ingredients,
     required final List<String> steps,
+    final String? titleLower,
+    final List<String>? titleTokens,
+    final List<String>? ingredientNamesNormalized,
+    final String? version,
+    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+    final DateTime? createdAt,
   }) = _$RecipeImpl;
 
   factory _Recipe.fromJson(Map<String, dynamic> json) = _$RecipeImpl.fromJson;
@@ -359,7 +491,18 @@ abstract class _Recipe implements Recipe {
   @override
   List<Ingredient> get ingredients;
   @override
-  List<String> get steps;
+  List<String> get steps; // New optional fields for v1 recipe search
+  @override
+  String? get titleLower;
+  @override
+  List<String>? get titleTokens;
+  @override
+  List<String>? get ingredientNamesNormalized;
+  @override
+  String? get version;
+  @override
+  @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+  DateTime? get createdAt;
 
   /// Create a copy of Recipe
   /// with the given fields replaced by the non-null parameter values.

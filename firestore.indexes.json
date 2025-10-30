@@ -1,0 +1,32 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "recipes_v1",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "titleLower",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "recipes_v1",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ingredientNamesNormalized",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}

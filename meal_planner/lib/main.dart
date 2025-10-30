@@ -7,6 +7,7 @@ import 'firebase_options.dart';
 import 'screens/calendar/infinite_calendar_screen.dart';
 import 'providers/meal_providers.dart';
 import 'providers/recipe_providers.dart';
+import 'providers/auth_provider.dart';
 import 'repositories/in_memory_meal_repository.dart';
 import 'repositories/in_memory_meal_template_repository.dart';
 import 'repositories/in_memory_recipe_repository.dart';
@@ -54,6 +55,17 @@ void main() async {
       }
     }
 
+    // Initialize anonymous auth
+    debugPrint('🔐 Initializing anonymous authentication...');
+    final container = ProviderContainer();
+    try {
+      await container.read(authInitializerNotifierProvider.future);
+      debugPrint('✅ Anonymous auth initialized');
+    } catch (e) {
+      debugPrint('⚠️  Auth initialization failed: $e');
+      debugPrint('   App will continue without auth');
+    }
+
     debugPrint('🎨 Launching app UI...');
     
     // Initialize repositories for demo (with production clock by default)
@@ -67,15 +79,20 @@ void main() async {
     final templateRepo = InMemoryMealTemplateRepository();
     final recipeRepo = InMemoryRecipeRepository();
     
+    // Use UncontrolledProviderScope to pass the pre-initialized container
+    // (which has completed anonymous auth) to the app. The nested ProviderScope
+    // allows overriding other providers while maintaining the auth state.
     runApp(
-      ProviderScope(
-        overrides: [
-          mealRepositoryProvider.overrideWithValue(mealRepo),
-          mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
-          recipeRepositoryProvider.overrideWithValue(recipeRepo),
-          // Production uses real clock (nowProvider default)
-        ],
-        child: const MyApp(),
+      UncontrolledProviderScope(
+        container: container,
+        child: ProviderScope(
+          overrides: [
+            mealRepositoryProvider.overrideWithValue(mealRepo),
+            mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
+            recipeRepositoryProvider.overrideWithValue(recipeRepo),
+          ],
+          child: const MyApp(),
+        ),
       ),
     );
     debugPrint('✅ App launched successfully');

@@ -60,7 +60,7 @@ void main() {
       expect(find.text('Milk'), findsOneWidget);
     });
 
-    testWidgets('displays items grouped by section', skip: 'MVP1: Shopping list management not in scope', (tester) async {
+    testWidgets('displays items grouped by section', (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',

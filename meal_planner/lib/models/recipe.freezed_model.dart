@@ -16,8 +16,26 @@ class Recipe with _$Recipe {
     required double totalTime,
     required List<Ingredient> ingredients,
     required List<String> steps,
+    // New optional fields for v1 recipe search
+    String? titleLower,
+    List<String>? titleTokens,
+    List<String>? ingredientNamesNormalized,
+    String? version,
+    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
+    DateTime? createdAt,
   }) = _Recipe;
 
   factory Recipe.fromJson(Map<String, dynamic> json) =>
       _$RecipeFromJson(json);
+}
+
+DateTime? _timestampFromJson(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+  if (value is String) return DateTime.parse(value);
+  return null;
+}
+
+dynamic _timestampToJson(DateTime? dateTime) {
+  return dateTime?.toIso8601String();
 }

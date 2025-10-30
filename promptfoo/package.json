@@ -1,0 +1,15 @@
+{
+  "name": "mealplanner-promptfoo",
+  "version": "1.0.0",
+  "description": "Prompt testing and evaluation for MealPlanner",
+  "packageManager": "bun@1.1.0",
+  "scripts": {
+    "test": "promptfoo eval",
+    "eval": "promptfoo eval",
+    "dev": "promptfoo view",
+    "setup": "bun install"
+  },
+  "dependencies": {
+    "promptfoo": "^0.75.0"
+  }
+}

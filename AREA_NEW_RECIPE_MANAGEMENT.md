@@ -1,338 +1,532 @@
-# AREA_NEW_RECIPE_MANAGEMENT.md
+# MVP1.0: Recipe Database - IMPLEMENTATION SPEC
 
-## Functional Area: Recipe Management (Spec 003)
+## What This Feature Does
 
-**Status**: Models & providers exist. Screens, widgets, and tests need to be built.
-
-**Models** (reuse from `./meal_planner/lib/models`):
-- `recipe.freezed_model.dart` - Core recipe entity
-- `ingredient.freezed_model.dart` - Recipe ingredients
-- `search_models.freezed_model.dart` - Search/filter types
-
-**Providers** (reuse from `./meal_planner/lib/providers`):
-- `recipe_providers.dart` - `recipesProvider`, `recipeProvider(id)`, `RecipeSaveNotifier`, `RecipeSearchNotifier`
-
-**Services**:
-- `uuid_generator.dart` - Generate recipe IDs
+Users can search a database of 13,496 recipes from Epicurious by typing in a search box. As they type, they see autocomplete suggestions. They can navigate with keyboard arrows and select with Enter. When they select a recipe, it gets added to their personal favorites and passed to the meal planner. Next time they open the recipe picker, their favorites show up first.
 
 ---
 
-## Screens to Build
+## Data Source
 
-### 1. RecipeListScreen
-**Path**: `lib/screens/recipe/recipe_list_screen.dart`
+- **Location**: `/Users/Shared/MealPlanner/.tmp/recipes.csv` (13,496 recipes)
+- **Source**: https://github.com/josephrmartinez/recipe-dataset by Joseph Martinez
+- **Original**: Epicurious.com (Condé Nast)
+- **License**: CC BY-SA 3.0
 
-**Purpose**: Display searchable, filterable list of recipes
-
-**Widgets Used**:
-- RecipeSearchBar
-- RecipeFilterChips
-- RecipeCard (in ListView)
-- FloatingActionButton (create new recipe)
-
-**Provider Watches**:
-- `recipesProvider` - All recipes
-- `RecipeSearchNotifier` - Search results
-- User interactions trigger search/filter updates
-
-**UI States**:
-- Loading: Show CircularProgressIndicator
-- Empty: Show "No recipes found" message
-- Loaded: Show RecipeCard list
-- Error: Show error message with retry button
-
-**User Interactions**:
-- Tap RecipeCard → Navigate to RecipeDetailScreen
-- Tap FloatingActionButton → Navigate to RecipeFormScreen
-- Search box typing → Filter recipes in real-time
-- Filter chips → Apply allergen/time/ingredient filters
+Must display attribution in the app.
 
 ---
 
-### 2. RecipeDetailScreen
-**Path**: `lib/screens/recipe/recipe_detail_screen.dart`
+## Firestore Database Structure
 
-**Purpose**: Display full recipe details with edit/delete options
+### Collection: `recipes_v1`
 
-**Widgets Used**:
-- Recipe header (image, title, time)
-- Ingredient list with quantities
-- Cooking steps
-- Edit button → RecipeFormScreen
-- Delete button → Confirmation dialog
+Single flat collection with 13,496 recipe documents.
 
-**Provider Watches**:
-- `recipeProvider(recipeId)` - Single recipe data
-- `userPreferencesProvider` - Portion scaling
+```javascript
+{
+  id: "uuid-here",
+  title: "Chicken Parmesan",
+  titleLower: "chicken parmesan",                    // for search
+  titleTokens: ["chicken", "parmesan"],              // for prefix matching
+  ingredients: "raw CSV string...",
+  instructions: "raw CSV string...",
+  ingredientNamesNormalized: ["chicken", "cheese"],  // for filtering
+  createdAt: timestamp,
+  version: "v1"
+}
+```
 
-**UI States**:
-- Loading: Show skeleton/shimmer
-- Loaded: Show all details
-- Error: Show error message
+**Security**: Read-only for everyone. Write-only via admin CLI.
 
-**User Interactions**:
-- Tap Edit → Navigate to RecipeFormScreen with pre-populated recipe
-- Tap Delete → Show confirmation, call `RecipeSaveNotifier.delete()`
-- Scale portions (from UserPreferences) → Recalculate ingredient quantities
-- Tap ingredient → Show substitution options (future)
+**Indexes Needed**:
+1. `titleLower ASC + createdAt DESC` - for title search
+2. `ingredientNamesNormalized ARRAY_CONTAINS + createdAt DESC` - for ingredient filter
 
----
+### Collection: `user_favourites_v1/{userId}/recipes/{recipeId}`
 
-### 3. RecipeFormScreen
-**Path**: `lib/screens/recipe/recipe_form_screen.dart`
+User-specific favorites, nested under their user ID.
 
-**Purpose**: Create new or edit existing recipe
+```javascript
+{
+  recipeId: "uuid-from-recipes_v1",
+  title: "Chicken Parmesan",  // denormalized for display
+  addedAt: timestamp
+}
+```
 
-**Widgets Used**:
-- Text fields: Title, description, notes, pre-requisites, total time
-- Image upload button (future: camera)
-- Ingredient list builder
-- Steps list builder
-- Save button (calls `RecipeSaveNotifier.save()`)
-- Cancel button
-
-**Provider Watches**:
-- `recipeProvider(recipeId)` - Pre-populate form if editing
-- `RecipeSaveNotifier` - Handle save state (loading/error/success)
-
-**UI States**:
-- New recipe: Empty form with placeholder text
-- Edit recipe: Form pre-filled with existing data
-- Saving: Show loading indicator on button
-- Success: Pop screen, show snackbar "Recipe saved"
-- Error: Show error message, allow retry
-
-**User Interactions**:
-- Add/remove ingredients (dynamic list)
-- Add/remove steps (dynamic list)
-- Validate title is not empty
-- Call `RecipeSaveNotifier.save(Recipe)` with form data
-- Call `UuidGenerator.next()` for new recipe ID
-
-**Validation**:
-- Title required, min 3 chars
-- At least one ingredient required
-- At least one step required
+**Security**: User can only read/write their own favorites (enforced by `userId == auth.uid` rule).
 
 ---
 
-## Widgets to Build
+## User Experience
 
-### 1. RecipeCard
-**Path**: `lib/widgets/recipe/recipe_card.dart`
+### First Time User
+1. Opens meal planner, clicks "Add Recipe"
+2. See search box: "Type to search for recipes..."
+3. Types "chick"
+4. Sees dropdown with matching recipes
+5. Arrows down, presses Enter on "Chicken Parmesan"
+6. Recipe added to favorites (background)
+7. Recipe passed to meal planner
+8. Meal added to calendar
 
-**Props**:
-- `recipe: Recipe`
-- `onTap: VoidCallback`
+### Returning User
+1. Opens meal planner, clicks "Add Recipe"
+2. Sees their favorite recipes listed
+3. Search box at top to find more
+4. Can pick from favorites OR search new
+5. Selection goes to meal planner
 
-**Displays**:
-- Recipe image (or placeholder icon)
-- Title
-- Total cook time
-- Ingredient count
-- Allergen badges (if applicable)
-
-**UI**:
-- Material Card with shadow
-- Clickable with Material ripple effect
-
----
-
-### 2. RecipeSearchBar
-**Path**: `lib/widgets/recipe/recipe_search_bar.dart`
-
-**Props**:
-- `onChanged: Function(String query)` - Called on text change
-- `onSearchTriggered: Function(String query)?` - Optional: called on search button
-- `hintText: String?`
-
-**Displays**:
-- TextField with search icon
-- Clear button (appears when text entered)
-
-**UI**:
-- Rounded corners, subtle shadow
-- Keyboard type: text
-- Auto-focus optional
-
-**Behavior**:
-- Call `onChanged` on every keystroke (debounced in parent if needed)
+### Autocomplete Behavior
+- Type → wait 300ms → search fires
+- Show top 10 results
+- Arrow Up/Down to navigate
+- Enter to select
+- Escape to close
+- Hover with mouse highlights
+- Shows ingredient preview under each title
+- "No recipes found" if nothing matches
 
 ---
 
-### 3. RecipeFilterChips
-**Path**: `lib/widgets/recipe/recipe_filter_chips.dart`
+## What Has Been Implemented
 
-**Props**:
-- `onAllergenChanged: Function(List<String> allergens)` - Selected allergens to exclude
-- `onMaxTimeChanged: Function(int? maxMinutes)` - Max cook time
-- `onIngredientsChanged: Function(List<String> ingredients)` - Must-have ingredients
-- `selectedAllergens: List<String>` - Current selection
-- `selectedMaxTime: int?` - Current selection
-- `selectedIngredients: List<String>` - Current selection
+### ✅ Data Pipeline (recipes/v1/)
+- `transform_recipes_csv.dart` - Parses CSV, creates batch JSON files with search fields
+- `deploy_recipesv1.sh` - One command to: transform data, deploy indexes, upload recipes, deploy rules
 
-**Displays**:
-- FilterChip widgets for common allergens (peanuts, dairy, gluten, etc.)
-- Slider or dropdown for max cook time (0-120 min)
-- Input field for ingredient inclusion
+### ✅ Data Upload (meal_planner/lib/scripts/)
+- `load_recipes_v1.dart` - Reads batch JSON files, uploads to Firestore with retry logic
 
-**UI**:
-- Horizontally scrollable list of allergen chips
-- Filter reset button (clears all)
+### ✅ Repositories (meal_planner/lib/repositories/)
+- `recipes_v1_repository.dart`
+  - Interface + Firebase implementation
+  - `searchByTitlePrefix(prefix)` - for autocomplete
+  - `searchByIngredient(ingredient)` - for filtering
+  - `getById(id)` - single recipe
+  - `getTotalCount()` - collection size
 
-**Behavior**:
-- Tapping allergen chip toggles selection
-- Moving time slider updates max time
-- Calls callbacks to update parent state
+- `user_favourites_v1_repository.dart`
+  - Interface + Firebase implementation
+  - `watchFavourites(userId)` - real-time stream
+  - `addFavourite(userId, recipeId, title)` - add
+  - `removeFavourite(userId, recipeId)` - remove
+  - `isFavourite(userId, recipeId)` - check
 
----
+### ✅ Riverpod Providers (meal_planner/lib/providers/)
+- `recipes_v1_provider.dart`
+  - `recipesV1RepositoryProvider` - repository instance
+  - `recipeSearchV1Notifier(query)` - search stream with debounce
+  - `recipesV1Count` - total recipe count
 
-## Unit Tests to Build
+- `user_favourites_v1_provider.dart`
+  - `userFavouritesV1RepositoryProvider` - repository instance
+  - `userFavouritesV1(userId)` - favorites stream
+  - `addUserFavouriteV1Notifier` - add/remove notifier
 
-### Test Repositories
+- `auth_provider.dart`
+  - `currentUserIdProvider` - current user UID
+  - `authInitializerNotifier` - initialize anonymous auth
 
-**FakeRecipeRepository**  
-`test/repositories/fake_recipe_repository.dart`
-- Implements same interface as Firebase repository
-- In-memory storage with StreamController for watches
-- Methods: `watchAllRecipes()`, `getRecipe(id)`, `save(recipe)`, `delete(id)`
-- Seed/clear methods for test setup
+### ✅ UI Widget (meal_planner/lib/widgets/recipe/)
+- `recipe_search_autocomplete.dart`
+  - Autocomplete search box
+  - Dropdown with results
+  - Keyboard navigation (arrows, enter, escape)
+  - **BUG**: Missing import for LogicalKeyboardKey
 
----
+### ✅ Testing (meal_planner/test/ and integration_test/)
+- `fake_recipes_v1_repository.dart` - 10 hardcoded test recipes
+- `fake_user_favourites_v1_repository.dart` - in-memory fake
+- `recipes_v1_repository_test.dart` - 10+ unit tests
+- `user_favourites_v1_repository_test.dart` - 8+ unit tests
+- `recipe_search_integration_test.dart` - integration tests
+- `recipe_count_validation_test.dart` - production validation
 
-### Widget Tests
+### ✅ Firebase Config
+- `firestore.indexes.json` - composite indexes
+- `firestore.rules` - security rules for recipes_v1 and user_favourites_v1
 
-**RecipeListScreen Tests**  
-`test/widgets/recipe/recipe_list_screen_test.dart`
-- Test: Display empty state when no recipes
-- Test: Display list of recipes when loaded
-- Test: Navigate to detail on recipe tap
-- Test: Navigate to form on FAB tap
-- Test: Filter recipes by search query
-- Test: Filter recipes by allergens
-- Test: Filter recipes by max cook time
-
-**RecipeDetailScreen Tests**  
-`test/widgets/recipe/recipe_detail_screen_test.dart`
-- Test: Display recipe data (title, time, ingredients, steps)
-- Test: Show scaled ingredients based on portion preference
-- Test: Navigate to form on Edit tap
-- Test: Delete recipe on confirmation
-- Test: Show error state if recipe not found
-
-**RecipeFormScreen Tests**  
-`test/widgets/recipe/recipe_form_screen_test.dart`
-- Test: Create new recipe with valid data
-- Test: Edit existing recipe
-- Test: Validate required fields (title, ingredients, steps)
-- Test: Add/remove ingredients in dynamic list
-- Test: Add/remove steps in dynamic list
-- Test: Show loading state while saving
-- Test: Show error state on save failure
-- Test: Generate UUID for new recipe
-
-**RecipeCard Tests**  
-`test/widgets/recipe/recipe_card_test.dart`
-- Test: Display recipe title and time
-- Test: Show allergen badges
-- Test: Call onTap callback when tapped
-- Test: Show placeholder image if imageUrl is empty
-
-**RecipeSearchBar Tests**  
-`test/widgets/recipe/recipe_search_bar_test.dart`
-- Test: Call onChanged on text input
-- Test: Show clear button when text entered
-- Test: Clear text on clear button tap
-- Test: Update hint text if provided
-
-**RecipeFilterChips Tests**  
-`test/widgets/recipe/recipe_filter_chips_test.dart`
-- Test: Display allergen chips
-- Test: Toggle allergen selection
-- Test: Update max cook time slider
-- Test: Call callbacks on selection changes
-- Test: Reset all filters
+### ✅ Model Updates
+- `lib/models/recipe.freezed_model.dart`
+  - Added: `titleLower`, `titleTokens`, `ingredientNamesNormalized`, `version`
 
 ---
 
-## Architecture Notes
+## What Still Needs To Be Done
 
-### State Management Flow
+### 1. Fix RecipeSearchAutocomplete Import
 
-1. **RecipeListScreen watches `recipesProvider`**
-   - Displays all recipes from Firestore
-   - User searches → Updates local state in `RecipeSearchNotifier`
-   - SearchNotifier filters locally and returns `SearchResult`
+**File**: `meal_planner/lib/widgets/recipe/recipe_search_autocomplete.dart`
 
-2. **RecipeDetailScreen watches `recipeProvider(id)`**
-   - Displays single recipe by ID
-   - Edit button → Pass recipe to RecipeFormScreen
-   - Delete button → Call `RecipeSaveNotifier.delete()`
+**Problem**: Missing `import 'package:flutter/services.dart';`
 
-3. **RecipeFormScreen watches `recipeProvider(id)` for editing**
-   - New recipe: Create with empty form
-   - Edit recipe: Pre-populate form from provider
-   - Save → Call `RecipeSaveNotifier.save(Recipe)`
-   - Generate ID with `UuidGenerator.next()`
+**Fix**: Add this line at the top with other imports:
+```dart
+import 'package:flutter/services.dart';
+```
 
-### Provider Override in Tests
+### 2. Update main.dart to Initialize Auth
+
+**File**: `meal_planner/lib/main.dart`
+
+**What to add**:
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'providers/auth_provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Initialize anonymous auth
+  final container = ProviderContainer();
+  await container.read(authInitializerNotifierProvider.future);
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const MealPlannerApp(),
+    ),
+  );
+}
+```
+
+### 3. Create RecipePickerScreen
+
+**File**: `meal_planner/lib/screens/recipe/recipe_picker_screen.dart` (NEW)
+
+**What it does**:
+- Takes a callback: `onRecipeSelected(Recipe recipe)`
+- Gets userId from `currentUserIdProvider`
+- Shows user's favorites from `userFavouritesV1Provider(userId)`
+- Shows `RecipeSearchAutocomplete` widget
+- When user selects a recipe:
+  - Adds to favorites via `addUserFavouriteV1Notifier`
+  - Calls the callback
+
+**Implementation**:
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../models/recipe.freezed_model.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/user_favourites_v1_provider.dart';
+import '../../widgets/recipe/recipe_search_autocomplete.dart';
+
+class RecipePickerScreen extends ConsumerWidget {
+  final void Function(Recipe)? onRecipeSelected;
+
+  const RecipePickerScreen({
+    Key? key,
+    this.onRecipeSelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(currentUserIdProvider);
+
+    if (userId == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final favoritesAsync = ref.watch(userFavouritesV1Provider(userId));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Select Recipe'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: RecipeSearchAutocomplete(
+              onRecipeSelected: (recipe) => _handleSelection(
+                context,
+                ref,
+                userId,
+                recipe,
+              ),
+            ),
+          ),
+          Expanded(
+            child: favoritesAsync.when(
+              data: (favorites) {
+                if (favorites.isEmpty) {
+                  return const Center(
+                    child: Text('Search above to find recipes'),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: favorites.length,
+                  itemBuilder: (context, index) {
+                    final recipe = favorites[index];
+                    return ListTile(
+                      title: Text(recipe.title ?? 'Untitled'),
+                      onTap: () => _handleSelection(
+                        context,
+                        ref,
+                        userId,
+                        recipe,
+                      ),
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Text('Error: $error'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleSelection(
+    BuildContext context,
+    WidgetRef ref,
+    String userId,
+    Recipe recipe,
+  ) {
+    // Add to favorites (background operation)
+    ref.read(addUserFavouriteV1NotifierProvider.notifier).addFavourite(
+          userId,
+          recipe.id!,
+          recipe.title!,
+        );
+
+    // Notify caller
+    onRecipeSelected?.call(recipe);
+  }
+}
+```
+
+### 4. Create AttributionScreen
+
+**File**: `meal_planner/lib/screens/attribution_screen.dart` (NEW)
+
+**What it does**:
+- Shows Epicurious attribution
+- Shows Joseph Martinez credit
+- Shows CC BY-SA 3.0 license
+- Has clickable link to license
+
+**Implementation**:
+```dart
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class AttributionScreen extends StatelessWidget {
+  const AttributionScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Attribution'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Recipe Dataset',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This application uses recipe data from:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text('• Original Source: Epicurious.com (Condé Nast)'),
+            const Text('• Dataset: Joseph Martinez (recipe-dataset)'),
+            const Text('• License: CC BY-SA 3.0'),
+            const SizedBox(height: 16),
+            InkWell(
+              onTap: () async {
+                final uri = Uri.parse('https://creativecommons.org/licenses/by-sa/3.0/');
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
+                }
+              },
+              child: const Text(
+                'View License Details',
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### 5. Generate Provider Code
+
+**Run**:
+```bash
+cd meal_planner
+dart run build_runner build --delete-conflicting-outputs
+```
+
+**This generates**:
+- `recipes_v1_provider.g.dart`
+- `user_favourites_v1_provider.g.dart`
+- `auth_provider.g.dart`
+
+### 6. Run Tests
+
+**Run**:
+```bash
+cd meal_planner
+flutter test test/repositories/recipes_v1_repository_test.dart
+flutter test test/repositories/user_favourites_v1_repository_test.dart
+```
+
+**Expected**: All tests pass
+
+### 7. Enable Firebase Anonymous Auth (Manual)
+
+**Steps**:
+1. Go to https://console.firebase.google.com/project/planmise/authentication
+2. Click "Sign-in method" tab
+3. Click "Anonymous"
+4. Toggle "Enable"
+5. Save
+
+---
+
+## Deployment (After Code Complete)
+
+### Deploy Data to Firestore
+
+**Run**:
+```bash
+cd /Users/Shared/MealPlanner/recipes/v1
+chmod +x deploy_recipesv1.sh
+./deploy_recipesv1.sh
+```
+
+**This will**:
+1. Transform CSV → batch JSON files (.tmp/recipesv1_batches/)
+2. Deploy Firestore indexes
+3. Upload 13,496 recipes to recipes_v1 collection
+4. Deploy security rules
+
+**Time**: 5-10 minutes
+
+### Verify Deployment
+
+**Run**:
+```bash
+cd meal_planner
+flutter test integration_test/recipe_count_validation_test.dart
+```
+
+**Expected**: Confirms 13,496 recipes in Firestore, indexes deployed, queries performant
+
+---
+
+## Integration with Meal Planner
+
+Wherever you currently let users add recipes to meals, replace with:
 
 ```dart
-// In test setup
-final fakeRecipeRepo = FakeRecipeRepository();
-fakeRecipeRepo.seed('recipe-1', Recipe(...));
-
-// In ProviderScope
-ProviderScope(
-  overrides: [
-    recipeRepositoryProvider.overrideWithValue(fakeRecipeRepo),
-  ],
-  child: RecipeListScreen(),
-)
+void _addRecipeToMeal() {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => RecipePickerScreen(
+        onRecipeSelected: (recipe) {
+          // Your existing meal creation logic here
+          // Use recipe.id and recipe.title
+          _createMeal(recipe);
+          Navigator.pop(context);
+        },
+      ),
+    ),
+  );
+}
 ```
 
 ---
 
-## Implementation Checklist
+## Checklist
 
-### Screens
-- [ ] RecipeListScreen
-- [ ] RecipeDetailScreen
-- [ ] RecipeFormScreen
-
-### Widgets
-- [ ] RecipeCard
-- [ ] RecipeSearchBar
-- [ ] RecipeFilterChips
-
-### Fake Repository
-- [ ] FakeRecipeRepository
-
-### Tests
-- [ ] recipe_list_screen_test.dart (8+ test cases)
-- [ ] recipe_detail_screen_test.dart (5+ test cases)
-- [ ] recipe_form_screen_test.dart (8+ test cases)
-- [ ] recipe_card_test.dart (4+ test cases)
-- [ ] recipe_search_bar_test.dart (3+ test cases)
-- [ ] recipe_filter_chips_test.dart (5+ test cases)
-
-### Code Generation
-- [ ] Run `flutter pub run build_runner build --delete-conflicting-outputs`
-- [ ] Verify all .g.dart files generated
-
-### Quality Checks
-- [ ] `flutter analyze` passes
-- [ ] `flutter test test/widgets/recipe/` passes
-- [ ] All test files run <5s total
-- [ ] No Firebase imports in tests
+- [ ] Fix RecipeSearchAutocomplete import
+- [ ] Update main.dart with auth init
+- [ ] Create RecipePickerScreen
+- [ ] Create AttributionScreen
+- [ ] Run build_runner
+- [ ] All tests pass
+- [ ] Enable Firebase Anonymous Auth
+- [ ] Deploy data to Firestore
+- [ ] Verify with validation test
+- [ ] Test app end-to-end
 
 ---
 
-## References
+## Files Created
 
-- **Models**: `./meal_planner/lib/models/recipe.freezed_model.dart`, `ingredient.freezed_model.dart`, `search_models.freezed_model.dart`
-- **Providers**: `./meal_planner/lib/providers/recipe_providers.dart`
-- **Testing**: `TESTING_TAO.md` (fake repositories, provider overrides)
-- **Development**: `FLUTTER_DEV.md` (workflow, quality gates)
-- **Architecture**: `TAO_OF_TEEMU.md` (decoupling principles)
-- **ID Generation**: `./meal_planner/lib/services/uuid_generator.dart`
+**Data/Scripts**:
+- `recipes/v1/transform_recipes_csv.dart`
+- `recipes/v1/deploy_recipesv1.sh`
+- `meal_planner/lib/scripts/load_recipes_v1.dart`
+
+**Repositories**:
+- `meal_planner/lib/repositories/recipes_v1_repository.dart`
+- `meal_planner/lib/repositories/user_favourites_v1_repository.dart`
+
+**Providers**:
+- `meal_planner/lib/providers/recipes_v1_provider.dart`
+- `meal_planner/lib/providers/user_favourites_v1_provider.dart`
+- `meal_planner/lib/providers/auth_provider.dart`
+
+**UI**:
+- `meal_planner/lib/widgets/recipe/recipe_search_autocomplete.dart`
+
+**Testing**:
+- `meal_planner/test/repositories/fake_recipes_v1_repository.dart`
+- `meal_planner/test/repositories/fake_user_favourites_v1_repository.dart`
+- `meal_planner/test/repositories/recipes_v1_repository_test.dart`
+- `meal_planner/test/repositories/user_favourites_v1_repository_test.dart`
+- `meal_planner/integration_test/recipe_search_integration_test.dart`
+- `meal_planner/integration_test/recipe_count_validation_test.dart`
+
+**Config**:
+- `firestore.indexes.json`
+- `firestore.rules` (updated)
+
+**Models**:
+- `meal_planner/lib/models/recipe.freezed_model.dart` (updated)
+
+---
+
+## Tasks for FlutterDevCodex Agent
+
+1. Fix import in `recipe_search_autocomplete.dart`
+2. Update `main.dart` 
+3. Create `recipe_picker_screen.dart`
+4. Create `attribution_screen.dart`
+5. Run build_runner
+6. Run tests
+7. Report completion
+
+DO NOT deploy data - that's manual after code works.
