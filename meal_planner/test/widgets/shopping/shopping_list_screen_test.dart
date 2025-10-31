@@ -290,7 +290,7 @@ void main() {
       expect(find.text('Item1'), findsNothing);
     });
 
-    testWidgets('deletes entire list with confirmation', skip: 'MVP1: Shopping list management not in scope', (tester) async {
+    testWidgets('deletes entire list with confirmation', skip: true, (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',
@@ -334,7 +334,7 @@ void main() {
       expect(deletedList, isNull);
     });
 
-    testWidgets('collapses/expands sections', skip: 'MVP1: Shopping list management not in scope', (tester) async {
+    testWidgets('collapses/expands sections', skip: true, (tester) async {
       // Arrange
       final shoppingList = ShoppingList(
         id: 'list-1',

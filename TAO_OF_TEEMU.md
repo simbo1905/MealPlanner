@@ -493,3 +493,6 @@ This approach is perfect for AI-driven development:
 6. **Real Firebase only for integration**: Save the expensive tests for critical paths
 
 This gives you the best of both worlds: blazingly fast unit/widget tests for development velocity, and high-fidelity integration tests for confidence before release.
+
+CRITICLE: Never use flutter drive/Chrome Driver – it’s removed from the SDK.
+Adopt the integration_test package, place tests under integration_test/, initialise the binding, write widget‑style interactions, and run them with flutter test. This is the officially supported, future‑proof approach for Flutter end‑to‑end testing as of late 2025.

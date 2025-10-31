@@ -184,7 +184,7 @@ void main() {
       expect(find.text('1 selected'), findsOneWidget);
     });
 
-    testWidgets('generates shopping list on button tap', skip: 'MVP1: Shopping list generation requires Firebase Firestore', (tester) async {
+    testWidgets('generates shopping list on button tap', skip: true, (tester) async {
       // Arrange
       final recipe = Recipe(
         id: 'recipe-1',
@@ -242,7 +242,7 @@ void main() {
       expect(find.text('Preview'), findsOneWidget);
     });
 
-    testWidgets('aggregates items from multiple recipes', skip: 'MVP1: Shopping list generation requires Firebase Firestore', (tester) async {
+    testWidgets('aggregates items from multiple recipes', skip: true, (tester) async {
       // Arrange
       final recipe1 = Recipe(
         id: 'recipe-1',
@@ -335,7 +335,7 @@ void main() {
       expect(find.text('750.0 g'), findsOneWidget);
     });
 
-    testWidgets('groups items by section in preview', skip: 'MVP1: Shopping list generation requires Firebase Firestore', (tester) async {
+    testWidgets('groups items by section in preview', skip: true, (tester) async {
       // Arrange
       final recipe = Recipe(
         id: 'recipe-1',
@@ -393,7 +393,7 @@ void main() {
       expect(find.text('General'), findsOneWidget);
     });
 
-    testWidgets('shows success message after save', skip: 'MVP1: Shopping list generation requires Firebase Firestore', (tester) async {
+    testWidgets('shows success message after save', skip: true, (tester) async {
       // Arrange
       final recipe = Recipe(
         id: 'recipe-1',

@@ -7,7 +7,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-REPO_ROOT="$(dirname "$(dirname "$PROJECT_DIR")")"
+REPO_ROOT="$(dirname "$PROJECT_DIR")"
 
 # Configuration
 FIREBASE_PROJECT="planmise"

@@ -5,7 +5,7 @@ import 'package:meal_planner/widgets/shopping/shopping_list_section.dart';
 
 void main() {
   group('ShoppingListSection Widget Tests', () {
-    testWidgets('displays section header with item count', skip: 'MVP1: Shopping list not in scope', (tester) async {
+    testWidgets('displays section header with item count', skip: true, (tester) async {
       // Arrange
       final items = [
         const ShoppingItem(
