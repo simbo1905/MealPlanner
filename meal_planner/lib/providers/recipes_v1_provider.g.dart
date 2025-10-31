@@ -7,7 +7,7 @@ part of 'recipes_v1_provider.dart';
 // **************************************************************************
 
 String _$recipesV1RepositoryHash() =>
-    r'fd293a9556723353301896ccf5709e0b94475e15';
+    r'bce463d93b771a5b44f59ceee6ab15251fd016e9';
 
 /// See also [recipesV1Repository].
 @ProviderFor(recipesV1Repository)
@@ -25,7 +25,7 @@ final recipesV1RepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef RecipesV1RepositoryRef = AutoDisposeProviderRef<RecipesV1Repository>;
-String _$recipesV1CountHash() => r'a7eec191e8e2168c238fc5d9d774e5806f2e86b5';
+String _$recipesV1CountHash() => r'95034ebbc8f27155103c177b49eb460043b5c254';
 
 /// See also [recipesV1Count].
 @ProviderFor(recipesV1Count)

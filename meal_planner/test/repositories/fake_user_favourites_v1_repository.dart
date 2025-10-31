@@ -1,4 +1,4 @@
-import '../../lib/repositories/user_favourites_v1_repository.dart';
+import 'package:meal_planner/repositories/user_favourites_v1_repository.dart';
 
 /// Fake implementation of UserFavouritesV1Repository for testing
 class FakeUserFavouritesV1Repository implements UserFavouritesV1Repository {

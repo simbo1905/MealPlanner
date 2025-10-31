@@ -7,7 +7,7 @@ part of 'user_favourites_v1_provider.dart';
 // **************************************************************************
 
 String _$userFavouritesV1RepositoryHash() =>
-    r'4b00c89be5d6c4e71dbec9e12533ae4a0a6f5721';
+    r'd02aef55f981a6a23e412fe6daf946bab409c11b';
 
 /// See also [userFavouritesV1Repository].
 @ProviderFor(userFavouritesV1Repository)
@@ -26,7 +26,7 @@ final userFavouritesV1RepositoryProvider =
 // ignore: unused_element
 typedef UserFavouritesV1RepositoryRef =
     AutoDisposeProviderRef<UserFavouritesV1Repository>;
-String _$userFavouriteIdsHash() => r'c01596e7aba9cf59cdba30e862a062708334c3c3';
+String _$userFavouriteIdsHash() => r'3589230f8befffb993ee12bb9513cfa4876b3b36';
 
 /// Copied from Dart SDK
 class _SystemHash {

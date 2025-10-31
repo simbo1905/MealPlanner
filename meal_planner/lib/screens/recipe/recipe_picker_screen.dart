@@ -9,9 +9,9 @@ class RecipePickerScreen extends ConsumerWidget {
   final void Function(Recipe)? onRecipeSelected;
 
   const RecipePickerScreen({
-    Key? key,
+    super.key,
     this.onRecipeSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

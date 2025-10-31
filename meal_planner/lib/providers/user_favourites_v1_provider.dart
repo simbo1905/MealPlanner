@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../repositories/user_favourites_v1_repository.dart';
@@ -5,13 +6,13 @@ import '../repositories/user_favourites_v1_repository.dart';
 part 'user_favourites_v1_provider.g.dart';
 
 @riverpod
-UserFavouritesV1Repository userFavouritesV1Repository(UserFavouritesV1RepositoryRef ref) {
+UserFavouritesV1Repository userFavouritesV1Repository(Ref ref) {
   final firestore = FirebaseFirestore.instance;
   return FirebaseUserFavouritesV1Repository(firestore);
 }
 
 @riverpod
-Stream<List<String>> userFavouriteIds(UserFavouriteIdsRef ref, String userId) {
+Stream<List<String>> userFavouriteIds(Ref ref, String userId) {
   final repo = ref.watch(userFavouritesV1RepositoryProvider);
   return repo.watchFavouriteIds(userId);
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../models/recipe.freezed_model.dart';
 
 /// Interface for accessing recipes from recipes_v1 collection
@@ -32,13 +33,13 @@ class FirebaseRecipesV1Repository implements RecipesV1Repository {
     return _firestore
         .collection('recipes_v1')
         .where('titleLower', isGreaterThanOrEqualTo: lower)
-        .where('titleLower', isLessThan: lower + '~')
+        .where('titleLower', isLessThan: '$lower~')
         .orderBy('titleLower')
         .limit(limit)
         .snapshots()
         .map(_docsToRecipes)
         .handleError((e) {
-          print('Error searching recipes by title prefix: $e');
+          debugPrint('Error searching recipes by title prefix: $e');
           return <Recipe>[];
         });
   }
@@ -55,7 +56,7 @@ class FirebaseRecipesV1Repository implements RecipesV1Repository {
         .snapshots()
         .map(_docsToRecipes)
         .handleError((e) {
-          print('Error searching recipes by ingredient: $e');
+          debugPrint('Error searching recipes by ingredient: $e');
           return <Recipe>[];
         });
   }
@@ -66,7 +67,7 @@ class FirebaseRecipesV1Repository implements RecipesV1Repository {
       final doc = await _firestore.collection('recipes_v1').doc(recipeId).get();
       return doc.exists ? Recipe.fromJson(doc.data()!) : null;
     } catch (e) {
-      print('Error fetching recipe: $e');
+      debugPrint('Error fetching recipe: $e');
       return null;
     }
   }
@@ -80,7 +81,7 @@ class FirebaseRecipesV1Repository implements RecipesV1Repository {
           .get();
       return snapshot.count ?? 0;
     } catch (e) {
-      print('Error getting recipe count: $e');
+      debugPrint('Error getting recipe count: $e');
       return 0;
     }
   }
@@ -91,7 +92,7 @@ class FirebaseRecipesV1Repository implements RecipesV1Repository {
           try {
             return Recipe.fromJson(doc.data() as Map<String, dynamic>);
           } catch (e) {
-            print('Error converting document to Recipe: $e');
+            debugPrint('Error converting document to Recipe: $e');
             return null;
           }
         })

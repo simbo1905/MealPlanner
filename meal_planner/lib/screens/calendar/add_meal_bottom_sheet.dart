@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/recipe.freezed_model.dart';
+import '../../models/meal.freezed_model.dart';
+import '../../providers/auth_providers.dart';
 import '../../providers/meal_providers.dart';
-import '../../providers/recipe_providers.dart';
+import '../../repositories/meal_repository.dart';
+// Removed unused import of recipe_providers.dart
+import '../../providers/favorites_providers.dart';
 
 class AddMealBottomSheet extends ConsumerStatefulWidget {
   final DateTime date;
@@ -22,12 +25,14 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
   @override
   void dispose() {
     _titleController.dispose();
+    ref.read(favoriteSuggestionsProvider.notifier).clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipesAsync = ref.watch(recipesProvider);
+    final suggestionsAsync = ref.watch(favoriteSuggestionsProvider);
+    final userId = ref.watch(currentUserIdProvider);
 
     return Container(
       decoration: const BoxDecoration(
@@ -49,7 +54,7 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Text(
-              'Add a Recipe',
+              'Add A Meal',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -57,36 +62,26 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter recipe title',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                    ),
-                  ),
+            child: TextField(
+              controller: _titleController,
+              decoration: InputDecoration(
+                hintText: 'Type to search for recipes... (enter to add custom)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 8),
-                ElevatedButton.icon(
-                  onPressed: () => _onAddRecipe(),
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Add'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
                 ),
-              ],
+              ),
+              textInputAction: TextInputAction.search,
+              onChanged: (value) {
+                ref.read(favoriteSuggestionsProvider.notifier).search(value);
+              },
+              onSubmitted: (value) {
+                if (value.trim().isEmpty) return;
+                _onConfirmMeal(value.trim(), userId);
+              },
             ),
           ),
           const SizedBox(height: 20),
@@ -95,19 +90,19 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'Your Recipes',
+              'Suggestions',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           Flexible(
-            child: recipesAsync.when(
-              data: (recipes) {
-                if (recipes.isEmpty) {
+            child: suggestionsAsync.when(
+              data: (suggestions) {
+                if (suggestions.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(24),
                     child: Center(
                       child: Text(
-                        'No recipes yet. Add one above!',
+                        'Start typing above to add a custom recipe.',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -119,13 +114,13 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
                 return ListView.separated(
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  itemCount: recipes.length,
+                  itemCount: suggestions.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
-                    final recipe = recipes[index];
+                    final suggestion = suggestions[index];
                     return _RecipeItem(
-                      title: recipe.title,
-                      onAddToCalendar: () => _onAddToCalendar(recipe.title),
+                      title: suggestion,
+                      onAddToCalendar: () => _onConfirmMeal(suggestion, userId),
                     );
                   },
                 );
@@ -146,9 +141,9 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
     );
   }
 
-  Future<void> _onAddRecipe() async {
-    final title = _titleController.text.trim();
-    if (title.isEmpty) {
+  Future<void> _onConfirmMeal(String recipeTitle, String? userId) async {
+    final trimmed = recipeTitle.trim();
+    if (trimmed.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a recipe title'),
@@ -158,84 +153,120 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
       return;
     }
 
-    final recipeRepository = ref.read(recipeRepositoryProvider);
-    final templateRepository = ref.read(mealTemplateRepositoryProvider);
-
-    try {
-      final recipeId = 'recipe_${DateTime.now().millisecondsSinceEpoch}';
-      await recipeRepository.save(
-        _createRecipe(recipeId, title),
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You must be signed in to add meals'),
+          duration: Duration(seconds: 2),
+        ),
       );
-
-      templateRepository.addDynamicTemplate(title);
-
-      _titleController.clear();
-
-      if (mounted) {
-        ref.invalidate(recipesProvider);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Recipe "$title" added'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add recipe: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      return;
     }
-  }
 
-  Future<void> _onAddToCalendar(String recipeTitle) async {
-    final templateRepository = ref.read(mealTemplateRepositoryProvider);
-    final mealRepository = ref.read(mealRepositoryProvider);
+    final slot = await _selectSlot();
+    if (slot == null) return;
+
+    final conflictStrategy = await _resolveConflict(userId, slot);
+    if (conflictStrategy == null) return;
 
     try {
-      final template = templateRepository
-          .getAllTemplates()
-          .firstWhere((t) => t.title == recipeTitle);
-
-      await mealRepository.addMeal(widget.date, template.templateId);
+      final mealRepository = ref.read(mealRepositoryProvider);
+      await ref.read(favoritesRepositoryProvider).addFavorite(
+            userId: userId,
+            recipeTitle: trimmed,
+          );
+      await mealRepository.addMeal(
+        userId: userId,
+        date: widget.date,
+        slot: slot,
+        recipeTitle: trimmed,
+        conflictStrategy: conflictStrategy,
+      );
 
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('$recipeTitle added to calendar'),
+            content: Text('$trimmed added to calendar'),
             duration: const Duration(seconds: 2),
           ),
         );
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add to calendar: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add meal: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
-  Recipe _createRecipe(String id, String title) {
-    return Recipe(
-      id: id,
-      title: title,
-      imageUrl: '',
-      description: '',
-      notes: '',
-      preReqs: [],
-      totalTime: 30,
-      ingredients: [],
-      steps: [],
+  Future<MealSlot?> _selectSlot() async {
+    return showModalBottomSheet<MealSlot>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                'Select meal slot',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 16),
+              ...MealSlot.values.map((slot) {
+                return ListTile(
+                  title: Text(slot.name[0].toUpperCase() + slot.name.substring(1)),
+                  onTap: () => Navigator.pop(context, slot),
+                );
+              }),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<MealConflictStrategy?> _resolveConflict(String userId, MealSlot slot) async {
+    final existing = await ref.read(mealRepositoryProvider).findMealByDateSlot(
+          userId: userId,
+          date: widget.date,
+          slot: slot,
+        );
+
+    if (existing == null) {
+      return MealConflictStrategy.keepBoth;
+    }
+
+    if (!mounted) return null;
+    return showDialog<MealConflictStrategy>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Conflicting meal'),
+          content: Text(
+            'There is already a meal planned for this slot: "${existing.recipeTitle}". What would you like to do?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, MealConflictStrategy.keepBoth),
+              child: const Text('Keep both'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, MealConflictStrategy.replace),
+              child: const Text('Replace'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -9,6 +9,20 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    # Exclude non-MVP/demo areas from analyzer to reduce noise during MVP1
+    - lib/demo/**
+    - lib/screens/onboarding/**
+    - lib/widgets/onboarding/**
+    - lib/screens/preferences/**
+    - lib/widgets/preferences/**
+    - lib/screens/shopping/**
+    - lib/widgets/shopping/**
+    # Generated code
+    - lib/**.g.dart
+    - lib/**.freezed.dart
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`

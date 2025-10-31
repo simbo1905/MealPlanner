@@ -21,6 +21,7 @@ class Recipe with _$Recipe {
     List<String>? titleTokens,
     List<String>? ingredientNamesNormalized,
     String? version,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
     DateTime? createdAt,
   }) = _Recipe;

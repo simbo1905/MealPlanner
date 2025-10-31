@@ -427,14 +427,14 @@ class LandscapeGridCalculator {
     // Also check compact layout for smallest devices
     double minCardWidthCompact = double.infinity;
     double minCardHeightCompact = double.infinity;
-    String? compactConstrainingDevice;
+    String? _compactConstrainingDevice;
 
     for (final device in devices) {
       final layout = _createCompactLayout(device);
       if (layout.isValid && layout.cardWidth < minCardWidthCompact) {
         minCardWidthCompact = layout.cardWidth;
         minCardHeightCompact = min(minCardHeightCompact, layout.cardHeight);
-        compactConstrainingDevice = device.name;
+        _compactConstrainingDevice = device.name;
       }
     }
 

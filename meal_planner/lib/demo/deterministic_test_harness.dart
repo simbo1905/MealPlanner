@@ -1,9 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'providers.dart';
 import '../repositories/in_memory_meal_repository.dart';
-import '../repositories/in_memory_meal_template_repository.dart';
 import '../providers/meal_providers.dart';
 
 /// Deterministic test harness for the infinite calendar.
@@ -73,14 +72,10 @@ class DeterministicCalendarTestHarness {
     if (enableDemoSeeding) {
       mealRepo.seedDemoMeals();
     }
-    final templateRepo = InMemoryMealTemplateRepository();
-    
     return [
       nowProvider.overrideWithValue(() => fixedNow),
       demoSeedingEnabledProvider.overrideWithValue(enableDemoSeeding),
       mealRepositoryProvider.overrideWithValue(mealRepo),
-      mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
     ];
   }
 }
-

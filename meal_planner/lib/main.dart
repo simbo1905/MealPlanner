@@ -1,106 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'repositories/in_memory_meal_repository.dart';
+import 'repositories/firestore_meal_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'firebase_options.dart';
-import 'screens/calendar/infinite_calendar_screen.dart';
 import 'providers/meal_providers.dart';
-import 'providers/recipe_providers.dart';
-import 'providers/auth_provider.dart';
-import 'repositories/in_memory_meal_repository.dart';
-import 'repositories/in_memory_meal_template_repository.dart';
-import 'repositories/in_memory_recipe_repository.dart';
+import 'screens/calendar/infinite_calendar_screen.dart';
 
 
 void main() async {
-  // Set up error handling
-  FlutterError.onError = (details) {
-    debugPrint('🔴 FLUTTER ERROR: ${details.exception}');
-    debugPrint('Stack trace:\n${details.stack}');
-    FlutterError.presentError(details);
-  };
+  WidgetsFlutterBinding.ensureInitialized();
+  // Decide backend
+  const useFirebase = bool.fromEnvironment('USE_FIREBASE');
+  final isProd = useFirebase || kReleaseMode;
 
-  debugPrint('🚀 MealPlanner starting up...');
-  debugPrint('   Flutter version: ${const String.fromEnvironment('FLUTTER_VERSION', defaultValue: 'unknown')}');
-  debugPrint('   Debug mode: $kDebugMode');
-  
-  try {
-    debugPrint('📱 Initializing Flutter bindings...');
-    WidgetsFlutterBinding.ensureInitialized();
-    debugPrint('✅ Flutter bindings initialized');
-
-    // Initialize Firebase
-    debugPrint('🔥 Initializing Firebase...');
-    try {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      debugPrint('✅ Firebase initialized successfully');
-      debugPrint('   Project ID: ${DefaultFirebaseOptions.currentPlatform.projectId}');
-    } catch (e) {
-      debugPrint('⚠️  Firebase initialization failed: $e');
-      debugPrint('   App will continue without Firebase');
-    }
-
-    // Use Firestore emulator for development
-    if (kDebugMode) {
-      debugPrint('🔧 Debug mode: Attempting to connect to Firestore emulator...');
-      try {
-        FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-        debugPrint('✅ Connected to Firestore emulator at localhost:8080');
-      } catch (e) {
-        debugPrint('⚠️  Could not connect to Firestore emulator: $e');
-        debugPrint('   Using production Firestore (or Firebase not initialized)');
-      }
-    }
-
-    // Initialize anonymous auth
-    debugPrint('🔐 Initializing anonymous authentication...');
-    final container = ProviderContainer();
-    try {
-      await container.read(authInitializerNotifierProvider.future);
-      debugPrint('✅ Anonymous auth initialized');
-    } catch (e) {
-      debugPrint('⚠️  Auth initialization failed: $e');
-      debugPrint('   App will continue without auth');
-    }
-
-    debugPrint('🎨 Launching app UI...');
-    
-    // Initialize repositories for demo (with production clock by default)
-    final mealRepo = InMemoryMealRepository();
-    
-    // Seed demo meals only in debug mode
-    if (kDebugMode) {
-      mealRepo.seedDemoMeals();
-    }
-    
-    final templateRepo = InMemoryMealTemplateRepository();
-    final recipeRepo = InMemoryRecipeRepository();
-    
-    // Use UncontrolledProviderScope to pass the pre-initialized container
-    // (which has completed anonymous auth) to the app. The nested ProviderScope
-    // allows overriding other providers while maintaining the auth state.
-    runApp(
-      UncontrolledProviderScope(
-        container: container,
-        child: ProviderScope(
-          overrides: [
-            mealRepositoryProvider.overrideWithValue(mealRepo),
-            mealTemplateRepositoryProvider.overrideWithValue(templateRepo),
-            recipeRepositoryProvider.overrideWithValue(recipeRepo),
-          ],
-          child: const MyApp(),
-        ),
-      ),
-    );
-    debugPrint('✅ App launched successfully');
-  } catch (e, stackTrace) {
-    debugPrint('🔴 FATAL ERROR during startup: $e');
-    debugPrint('Stack trace:\n$stackTrace');
-    runApp(ErrorApp(error: e.toString(), stackTrace: stackTrace.toString()));
+  if (isProd) {
+    await Firebase.initializeApp();
   }
+
+  final overrides = <Override>[];
+  if (isProd) {
+    overrides.add(
+      mealRepositoryProvider.overrideWithValue(FirestoreMealRepository()),
+    );
+  } else {
+    final mealRepo = InMemoryMealRepository()..seedDemoMeals();
+    overrides.add(
+      mealRepositoryProvider.overrideWithValue(mealRepo),
+    );
+  }
+
+  runApp(ProviderScope(overrides: overrides, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

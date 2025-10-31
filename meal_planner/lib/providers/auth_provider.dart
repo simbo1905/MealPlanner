@@ -1,30 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-part 'auth_provider.g.dart';
+const _defaultUserId = 'integration-test-user';
 
-@riverpod
-String? currentUserId(CurrentUserIdRef ref) {
-  final user = FirebaseAuth.instance.currentUser;
-  return user?.uid;
-}
-
-@riverpod
-class AuthInitializerNotifier extends _$AuthInitializerNotifier {
-  @override
-  FutureOr<void> build() async {
-    await _initializeAuth();
+/// Provides the currently signed-in user's ID (nullable for unauthenticated).
+/// For now, returns a fixed test user id to keep the app functional.
+final currentUserIdProvider = Provider<String?>((ref) {
+  const isIntegration = bool.fromEnvironment('INTEGRATION_TEST');
+  if (isIntegration) {
+    return _defaultUserId;
   }
-
-  Future<void> _initializeAuth() async {
-    final auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
-      try {
-        await auth.signInAnonymously();
-      } catch (e) {
-        print('Error signing in anonymously: $e');
-        rethrow;
-      }
-    }
-  }
-}
+  // TODO: Wire up FirebaseAuth and return null when signed-out.
+  return _defaultUserId;
+});

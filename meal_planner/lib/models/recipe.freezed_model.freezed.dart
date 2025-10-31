@@ -35,7 +35,8 @@ mixin _$Recipe {
   List<String>? get titleTokens => throw _privateConstructorUsedError;
   List<String>? get ingredientNamesNormalized =>
       throw _privateConstructorUsedError;
-  String? get version => throw _privateConstructorUsedError;
+  String? get version =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -375,6 +376,7 @@ class _$RecipeImpl implements _Recipe {
 
   @override
   final String? version;
+  // ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
   final DateTime? createdAt;
@@ -499,7 +501,7 @@ abstract class _Recipe implements Recipe {
   @override
   List<String>? get ingredientNamesNormalized;
   @override
-  String? get version;
+  String? get version; // ignore: invalid_annotation_target
   @override
   @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
   DateTime? get createdAt;
