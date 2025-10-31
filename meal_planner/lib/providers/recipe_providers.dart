@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/recipe.freezed_model.dart';
 import '../models/search_models.freezed_model.dart';
+import '../repositories/fakes/fake_recipe_repository.dart';
 
 part 'recipe_providers.g.dart';
 
@@ -69,7 +71,12 @@ class FirebaseRecipeRepository implements RecipeRepository {
 // Riverpod provider for repository
 @riverpod
 RecipeRepository recipeRepository(Ref ref) {
-  return FirebaseRecipeRepository();
+  // Default to fake repository for debug; opt-in to Firebase via --dart-define=USE_FIREBASE=true
+  const useFirebase = bool.fromEnvironment('USE_FIREBASE');
+  if (useFirebase || kReleaseMode) {
+    return FirebaseRecipeRepository();
+  }
+  return FakeRecipeRepository();
 }
 
 // Stream of all recipes from repository

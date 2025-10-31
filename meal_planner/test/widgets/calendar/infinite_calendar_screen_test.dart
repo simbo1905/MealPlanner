@@ -138,6 +138,31 @@ void main() {
         expect(find.text(label), findsAtLeastNWidgets(1));
       }
     });
+
+    testWidgets('uses icon actions on compact width without overflow', (tester) async {
+      // Build with a narrow MediaQuery width to trigger compact actions
+      final app = ProviderScope(
+        overrides: harness.providerOverrides(),
+        child: MediaQuery(
+          data: const MediaQueryData(
+            size: Size(360, 800),
+            devicePixelRatio: 2.0,
+          ),
+          child: const MaterialApp(
+            home: InfiniteCalendarScreen(),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // On compact width, Save/Reset are IconButtons (Save has tooltip; Reset keeps key)
+      expect(find.byTooltip('Save'), findsOneWidget);
+      expect(find.byKey(const Key('reset-button')), findsOneWidget);
+
+      // Text labels should not be shown in compact mode
+      expect(find.text('Save'), findsNothing);
+    });
   });
 }
-

@@ -49,7 +49,9 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
   Widget build(BuildContext context) {
     final weekSectionsAsync = ref.watch(weekSectionsProvider(weeksAround: _weeksAround));
     final selectedDate = ref.watch(selectedDateProvider);
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final media = MediaQuery.of(context);
+    final isLandscape = media.orientation == Orientation.landscape;
+    final isCompact = media.size.width < 420;
     
     // Calculate current week number for badge
     final weekNumber = _getWeekNumber(selectedDate);
@@ -85,26 +87,42 @@ class _InfiniteCalendarScreenState extends ConsumerState<InfiniteCalendarScreen>
             ),
           ),
           
-          // Save button
-          TextButton.icon(
-            onPressed: _onSave,
-            icon: const Icon(Icons.save_outlined, size: 18),
-            label: const Text('Save'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
+          // Save button – text on wide screens, icon on compact screens
+          if (isCompact)
+            IconButton(
+              tooltip: 'Save',
+              icon: const Icon(Icons.save_outlined),
+              onPressed: _onSave,
+            )
+          else
+            TextButton.icon(
+              onPressed: _onSave,
+              icon: const Icon(Icons.save_outlined, size: 18),
+              label: const Text('Save'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue,
+              ),
             ),
-          ),
           
           // Reset button (required key: reset-button)
-          TextButton.icon(
-            key: const Key('reset-button'),
-            onPressed: _onReset,
-            icon: const Icon(Icons.refresh, size: 18),
-            label: const Text('Reset'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.orange,
+          if (isCompact)
+            IconButton(
+              key: const Key('reset-button'),
+              tooltip: 'Reset',
+              icon: const Icon(Icons.refresh),
+              color: Colors.orange,
+              onPressed: _onReset,
+            )
+          else
+            TextButton.icon(
+              key: const Key('reset-button'),
+              onPressed: _onReset,
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('Reset'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.orange,
+              ),
             ),
-          ),
           
           // Planned meals counter
           const PlannedMealsCounter(),

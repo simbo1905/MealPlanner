@@ -1,15 +1,22 @@
 import 'dart:async';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart';
 import '../repositories/favorites_repository.dart';
+import '../repositories/fakes/fake_favorites_repository.dart';
 import 'auth_providers.dart';
 import 'recipe_providers.dart';
 
 part 'favorites_providers.g.dart';
 
 @riverpod
-FavoritesRepository favoritesRepository(Ref ref) {
-  return FavoritesRepository();
+IFavoritesRepository favoritesRepository(Ref ref) {
+  // Prefer fake repo in debug unless explicitly opting into Firebase.
+  const useFirebase = bool.fromEnvironment('USE_FIREBASE');
+  if (useFirebase || kReleaseMode) {
+    return FavoritesRepository();
+  }
+  return FakeFavoritesRepository();
 }
 
 @riverpod
@@ -18,7 +25,8 @@ Stream<List<String>> favoriteRecipes(Ref ref) {
   if (userId == null) {
     return const Stream.empty();
   }
-  return ref.watch(favoritesRepositoryProvider).watchFavorites(userId);
+  final repo = ref.watch(favoritesRepositoryProvider);
+  return repo.watchFavorites(userId);
 }
 
 @riverpod

@@ -54,7 +54,7 @@ class _AddMealBottomSheetState extends ConsumerState<AddMealBottomSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Text(
-              'Add a Meal',
+              'Add A Meal',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),

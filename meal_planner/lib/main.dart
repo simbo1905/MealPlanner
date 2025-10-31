@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'repositories/in_memory_meal_repository.dart';
+import 'repositories/firestore_meal_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'providers/meal_providers.dart';
 import 'screens/calendar/infinite_calendar_screen.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  // Decide backend
+  const useFirebase = bool.fromEnvironment('USE_FIREBASE');
+  final isProd = useFirebase || kReleaseMode;
+
+  if (isProd) {
+    await Firebase.initializeApp();
+  }
+
+  final overrides = <Override>[];
+  if (isProd) {
+    overrides.add(
+      mealRepositoryProvider.overrideWithValue(FirestoreMealRepository()),
+    );
+  } else {
+    final mealRepo = InMemoryMealRepository()..seedDemoMeals();
+    overrides.add(
+      mealRepositoryProvider.overrideWithValue(mealRepo),
+    );
+  }
+
+  runApp(ProviderScope(overrides: overrides, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

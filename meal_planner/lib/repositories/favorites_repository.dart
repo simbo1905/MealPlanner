@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FavoritesRepository {
+abstract class IFavoritesRepository {
+  Stream<List<String>> watchFavorites(String userId);
+  Future<void> addFavorite({required String userId, required String recipeTitle});
+}
+
+class FavoritesRepository implements IFavoritesRepository {
   FavoritesRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
@@ -10,6 +15,7 @@ class FavoritesRepository {
     return _firestore.collection('users').doc(userId).collection('favorites');
   }
 
+  @override
   Stream<List<String>> watchFavorites(String userId) {
     return _collection(userId)
         .orderBy('addedAt', descending: true)
@@ -21,6 +27,7 @@ class FavoritesRepository {
             .toList());
   }
 
+  @override
   Future<void> addFavorite({required String userId, required String recipeTitle}) async {
     final trimmed = recipeTitle.trim();
     if (trimmed.isEmpty) return;
