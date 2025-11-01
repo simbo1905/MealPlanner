@@ -1,6 +1,0 @@
-javafx-libs/
-build/
-demo/helloworld/node_modules/
-demo/helloworld/build/
-demo/helloworld/.svelte-kit/
-*.class
