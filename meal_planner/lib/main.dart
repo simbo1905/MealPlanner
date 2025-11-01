@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'repositories/in_memory_meal_repository.dart';
-import 'repositories/firestore_meal_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
+import 'repositories/in_memory_meal_repository.dart';
+import 'repositories/firestore_meal_repository.dart';
 import 'providers/meal_providers.dart';
 import 'screens/calendar/infinite_calendar_screen.dart';
+import 'screens/entry/entry_screens.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Preserve native splash screen during initialization
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  
   // Decide backend
   const useFirebase = bool.fromEnvironment('USE_FIREBASE');
   final isProd = useFirebase || kReleaseMode;
@@ -30,11 +37,34 @@ void main() async {
     );
   }
 
-  runApp(ProviderScope(overrides: overrides, child: const MyApp()));
+  final entryMode = _resolveEntryMode();
+  debugPrint('APP_ENTRY_MODE=$entryMode');
+
+  // Remove native splash before showing Flutter UI
+  FlutterNativeSplash.remove();
+
+  runApp(
+    ProviderScope(
+      overrides: overrides,
+      child: MyApp(entryMode: entryMode),
+    ),
+  );
+}
+
+EntryMode _resolveEntryMode() {
+  if (kReleaseMode) {
+    return EntryMode.productionSplash;
+  }
+  return EntryMode.debugLauncher;
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.entryMode,
+  });
+
+  final EntryMode entryMode;
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +74,24 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const InfiniteCalendarScreen(),
+      initialRoute: _initialRoute(),
+      routes: {
+        AppRoutes.splash: (_) => ProductionSplashScreen(nextRoute: AppRoutes.rotateHint),
+        AppRoutes.home: (_) => const InfiniteCalendarScreen(),
+        AppRoutes.developerLauncher: (_) => const DeveloperLauncherScreen(),
+        AppRoutes.splashPreview: (_) => const SplashPreviewScreen(),
+        AppRoutes.rotateHint: (_) => const RotateHintScreen(),
+      },
     );
   }
-}
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    debugPrint('🏠 Building HomeScreen...');
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MealPlanner'),
-      ),
-      body: const Center(
-        child: Text('Firebase + Riverpod Ready'),
-      ),
-    );
+  String _initialRoute() {
+    switch (entryMode) {
+      case EntryMode.productionSplash:
+        return AppRoutes.splash;
+      case EntryMode.debugLauncher:
+        return AppRoutes.developerLauncher;
+    }
   }
 }
 
