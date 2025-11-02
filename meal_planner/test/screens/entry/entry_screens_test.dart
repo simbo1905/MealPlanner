@@ -20,7 +20,13 @@ void main() {
       );
 
       expect(find.byType(ProductionSplashScreen), findsOneWidget);
-      expect(find.byIcon(Icons.restaurant_menu), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is Image && widget.image is AssetImage &&
+              (widget.image as AssetImage).assetName == 'assets/splash_logo.png',
+        ),
+        findsOneWidget,
+      );
 
       await tester.pumpAndSettle();
 

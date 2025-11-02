@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+const _splashLogoAsset = 'assets/splash_logo.png';
+
 enum EntryMode {
   productionSplash,
   debugLauncher,
@@ -356,10 +358,9 @@ class _RotatingEmblem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     Widget emblem = Container(
-      width: 200,
-      height: 200,
+      width: 220,
+      height: 220,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: const RadialGradient(
@@ -373,24 +374,14 @@ class _RotatingEmblem extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.restaurant_menu,
-            size: 72,
-            color: Colors.white,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'MealPlanner',
-            style: theme.textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.4,
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.all(12),
+      child: ClipOval(
+        clipBehavior: Clip.antiAlias,
+        child: Image.asset(
+          _splashLogoAsset,
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.high,
+        ),
       ),
     );
 

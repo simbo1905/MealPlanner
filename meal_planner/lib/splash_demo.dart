@@ -3,6 +3,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'screens/entry/entry_screens.dart';
 
+const _splashLogoAsset = 'assets/splash_logo.png';
+
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
@@ -52,6 +54,16 @@ class _SplashDemoFinishedScreen extends StatelessWidget {
                 Icons.check_circle_outline,
                 size: 96,
                 color: Colors.white,
+              ),
+              const SizedBox(height: 24),
+              ClipOval(
+                child: Image.asset(
+                  _splashLogoAsset,
+                  width: 160,
+                  height: 160,
+                  fit: BoxFit.cover,
+                  filterQuality: FilterQuality.high,
+                ),
               ),
               const SizedBox(height: 24),
               Text(
