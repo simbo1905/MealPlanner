@@ -57,7 +57,7 @@ Future<ShoppingList> generateShoppingList(
       totalEstimatedCost: 0,
       createdAt: DateTime.now(),
     ),
-    error: (_, __) => ShoppingList(
+    error: (_, _) => ShoppingList(
       id: '',
       items: [],
       totalEstimatedCost: 0,

@@ -32,11 +32,11 @@ Future<List<Recipe>> recipesForDay(
           return result;
         },
         loading: () => [],
-        error: (_, __) => [],
+        error: (_, _) => [],
       );
     },
     loading: () => [],
-    error: (_, __) => [],
+    error: (_, _) => [],
   );
 }
 
@@ -57,7 +57,7 @@ Future<Map<String, int>> weekMealCounts(
       return result;
     },
     loading: () => {},
-    error: (_, __) => {},
+    error: (_, _) => {},
   );
 }
 
@@ -89,10 +89,10 @@ Future<double> weekTotalTime(
           return total;
         },
         loading: () => 0.0,
-        error: (_, __) => 0.0,
+        error: (_, _) => 0.0,
       );
     },
     loading: () => 0.0,
-    error: (_, __) => 0.0,
+    error: (_, _) => 0.0,
   );
 }

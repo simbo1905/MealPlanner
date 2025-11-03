@@ -158,11 +158,11 @@ class _WeekCalendarScreenState extends ConsumerState<WeekCalendarScreen> {
           // Weekly summary
           weekTotalTimeAsync.when(
             loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
             data: (totalTime) {
               return weekMealCountsAsync.when(
                 loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
                 data: (mealCounts) {
                   final totalMeals =
                       mealCounts.values.fold<int>(0, (sum, count) => sum + count);

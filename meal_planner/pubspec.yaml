@@ -27,6 +27,7 @@ dependencies:
   image_picker: ^1.0.7
   permission_handler: ^12.0.1
   url_launcher: ^6.3.0
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -41,8 +42,19 @@ dev_dependencies:
   freezed: ^2.5.8
   json_serializable: ^6.9.5
   riverpod_generator: ^2.6.4
+  test: ^1.26.2
 
 flutter:
   uses-material-design: true
   assets:
     - assets/lottie/
+    - assets/splash_logo.png
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/splash_logo.png
+  android: true
+  ios: true
+  web: false
+  android_12:
+    icon_background_color: "#FFFFFF"
