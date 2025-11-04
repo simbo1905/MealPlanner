@@ -1,0 +1,20 @@
+prompts:
+  - id: recipe-title-extraction
+    label: Recipe title extraction
+    prompt:
+      - role: system
+        content: "Extract recipe or meal titles from OCR text. Return JSON array of candidates.\n\nRules:\n1. Output valid JSON array (empty array if no titles found)\n2. Each object: {\"title\": \"string\", \"score\": 0.0-1.0}\n3. Strip subjective adjectives (Quick, Easy, Family Favorite, Delicious, Best)\n4. Score = confidence (1.0 = certain, 0.5 = ambiguous, 0.1 = guess)\n5. Order by score descending\n6. For corrupted/meaningless text: return []"
+      - role: user
+        content: |
+          {{ocr_text}}
+
+providers:
+  - id: mistral:mistral-tiny-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+
+tests:
+  - description: "Tier 1.1 - Clean recipe header"
+    vars:
+      ocr_text: "Slow Cooked Lamb Shanks in Red Wine Sauce\nIngredients: lamb shanks, red wine, carrots, onions\nServes 4"

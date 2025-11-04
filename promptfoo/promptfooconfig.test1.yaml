@@ -1,0 +1,20 @@
+prompts:
+  - id: recipe-title-extraction
+    label: Recipe title extraction
+    prompt:
+      - role: system
+        content: file://system_prompt.txt
+      - role: user
+        content: |
+          {{ocr_text}}
+
+providers:
+  - id: mistral:mistral-tiny-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+
+tests:
+  - description: "Tier 1.1 - Clean recipe header"
+    vars:
+      ocr_text: "Slow Cooked Lamb Shanks in Red Wine Sauce\nIngredients: lamb shanks, red wine, carrots, onions\nServes 4"

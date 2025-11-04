@@ -1,0 +1,153 @@
+prompts:
+  - id: recipe-title-extraction
+    label: Recipe title extraction
+    prompt:
+      - role: system
+        content: file://system_prompt.txt
+      - role: user
+        content: |
+          {{ocr_text}}
+
+providers:
+  - id: mistral:mistral-tiny-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+      
+  - id: mistral:mistral-small-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+      
+  - id: mistral:mistral-medium-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+      
+  - id: mistral:devstral-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+
+defaultTest:
+  assert:
+    # Hard-fail: Valid JSON array with required schema
+    - type: is-json
+      value:
+        type: array
+        items:
+          type: object
+          required: [title, score]
+          properties:
+            title:
+              type: string
+              minLength: 1
+            score:
+              type: number
+              minimum: 0
+              maximum: 1
+    
+    # Hard-fail: No empty strings
+    - type: javascript
+      value: |
+        const arr = JSON.parse(output);
+        if (arr.length === 0) return true;
+        return arr.every(item => item.title && item.title.trim().length > 0);
+    
+    # Hard-fail: Scores in valid range
+    - type: javascript
+      value: |
+        const arr = JSON.parse(output);
+        if (arr.length === 0) return true;
+        return arr.every(item => 
+          typeof item.score === 'number' && 
+          item.score >= 0 && 
+          item.score <= 1
+        );
+    
+    # Model-graded quality check
+    - type: llm-rubric
+      value: |
+        Grade this title extraction on a 0-1 scale.
+        
+        Criteria:
+        1. Extracted actual recipe/meal names (not metadata/navigation/adjectives)
+        2. Stripped subjective words (Quick, Easy, Delicious, Best, Amazing, Family Favorite)
+        3. Confidence scores match recognizability
+        4. Empty array if no valid titles found
+        
+        Deduct points for:
+        - Including fluff adjectives ("Quick and Easy", "Delicious", "Best")
+        - Extracting website navigation ("Home", "About", "Subscribe")
+        - Hallucinating titles from noise
+        - Overconfident scores on ambiguous/corrupted text
+        - Missing obvious recipe titles
+      provider:
+        id: groq:openai/gpt-oss-120b
+        config:
+          apiKey: $GROQ_API_KEY
+          temperature: 0
+          useCustomBaseUrl: false
+
+tests:
+  # ===== TIER 1: Clean Text (3 tests) =====
+  
+  - description: "Tier 1.1 - Clean recipe header"
+    vars:
+      ocr_text: "Slow Cooked Lamb Shanks in Red Wine Sauce\nIngredients: lamb shanks, red wine, carrots, onions\nServes 4"
+  
+  - description: "Tier 1.2 - Handwritten meal"
+    vars:
+      ocr_text: "Spaghetti Bolognese\n(Mom's secret recipe)"
+  
+  - description: "Tier 1.3 - Formatted recipe"
+    vars:
+      ocr_text: "CHICKEN TIKKA MASALA\nServes 4 | Prep time: 30min | Cook time: 45min"
+  
+  # ===== TIER 2: Moderate Noise (4 tests) =====
+  
+  - description: "Tier 2.1 - Website OCR noise"
+    vars:
+      ocr_text: "Home | About Us | Recipes | Quick & Easy Spaghetti Carbonara | Newsletter | Contact"
+  
+  - description: "Tier 2.2 - Multiple meals"
+    vars:
+      ocr_text: "Weekly Meal Plan:\nMonday: Lasagna\nTuesday: Beef Stir Fry\nWednesday: Fish Tacos\nThursday: Chicken Curry"
+  
+  - description: "Tier 2.3 - Subjective descriptors"
+    vars:
+      ocr_text: "Absolutely Delicious Chocolate Lava Cake - The Best Dessert Ever! A Family Favorite!"
+  
+  - description: "Tier 2.4 - Mixed orientation artifacts"
+    vars:
+      ocr_text: "Beef Stew ||| S|i|d|e|b|a|r | T|e|x|t with Vegetables and Potatoes"
+  
+  # ===== TIER 3: Heavy Noise (3 tests) =====
+  
+  - description: "Tier 3.1 - Dense metadata"
+    vars:
+      ocr_text: "RecipeID:847 | Category:italian,pasta,dinner | Views:1203 | Rating:4.5/5 | Updated:2024-01-15\nCarbonara\nAuthor:Chef Mario | PrepTime:15min"
+  
+  - description: "Tier 3.2 - Corrupted spacing"
+    vars:
+      ocr_text: "chi  cken   t  eriy  aki   w ith   br  occoli   and    r ice"
+  
+  - description: "Tier 3.3 - Partial/fragmented text"
+    vars:
+      ocr_text: "...agn...olo...ese...sauc...with...meatb...and...toma..."
+  
+  # ===== TIER 4: Edge Cases (2 tests) =====
+  
+  - description: "Tier 4.1 - No recognizable title"
+    vars:
+      ocr_text: "xJ#8q2$%^&*()_+z9kL m3@t10@f pRqS7!?"
+    assert:
+      - type: javascript
+        value: JSON.parse(output).length === 0
+  
+  - description: "Tier 4.2 - Empty input"
+    vars:
+      ocr_text: ""
+    assert:
+      - type: javascript
+        value: JSON.parse(output).length === 0

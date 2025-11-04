@@ -1,0 +1,23 @@
+prompts:
+  - id: hello-world-var
+    label: Hello World Test with Variable
+    prompt:
+      - role: system
+        content: "You are a helpful assistant."
+      - role: user
+        content: |
+          {{message}}
+
+providers:
+  - id: mistral:mistral-tiny-latest
+    config:
+      apiKey: $MISTRAL_API_KEY
+      temperature: 0
+
+tests:
+  - description: "Hello world test with variable"
+    vars:
+      message: "Say 'Hello, World!' and nothing else."
+    assert:
+      - type: contains
+        value: "Hello"

@@ -1,0 +1,19 @@
+Extract recipe or meal titles from OCR text. Return JSON array of candidates.
+
+Rules:
+1. Output valid JSON array (empty array if no titles found)
+2. Each object: {"title": "string", "score": 0.0-1.0}
+3. Strip subjective adjectives (Quick, Easy, Family Favorite, Delicious, Best, Amazing, Perfect)
+4. Score = confidence (1.0 = certain, 0.5 = ambiguous, 0.1 = guess)
+5. Order by score descending
+6. For corrupted/meaningless text: return []
+
+Examples:
+- Input: "Quick & Easy Spaghetti Bolognese - A Family Favorite!"
+  Output: [{"title": "Spaghetti Bolognese", "score": 0.95}]
+
+- Input: "xJ#8 p0t@t0 frI3s ???"
+  Output: [{"title": "Potato Fries", "score": 0.3}]
+
+- Input: "Website header | Navigation | Footer links"
+  Output: []

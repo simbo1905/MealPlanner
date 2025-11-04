@@ -3,6 +3,8 @@ java = "17"
 gradle = "8.9"
 just = "latest"
 flutter = "latest"
+bun = "1.1.0"
+node = "20"
 
 [env]
 # Ensure mise tools are in PATH

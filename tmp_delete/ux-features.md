@@ -1,4 +1,4 @@
-# UX Features from Old apps/web (to rebuild incrementally)
+# UX Features from Old legacy web (to rebuild incrementally)
 
 ## Navigation
 - **Feature**: Tab navigation allows user to switch between Calendar View and Recipe Explorer

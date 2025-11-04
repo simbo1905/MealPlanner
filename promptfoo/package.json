@@ -1,0 +1,13 @@
+{
+  "name": "mistral-ocr-evaluation",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "eval": "promptfoo eval",
+    "view": "promptfoo view"
+  },
+  "dependencies": {
+    "promptfoo": "^0.119.0"
+  },
+  "packageManager": "bun@1.1.0"
+}

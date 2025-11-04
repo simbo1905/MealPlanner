@@ -1,0 +1,19 @@
+prompts:
+  - id: hello-world
+    label: Hello World Test
+    prompt:
+      - role: user
+        content: "Say 'Hello, World!' and nothing else."
+
+providers:
+  - id: mistral:mistral-tiny-latest
+    config:
+      apiKey: "1kNXsJ9a4SU9lfYjZvUledXO3N9wpnX5"
+      temperature: 0
+
+tests:
+  - description: "Simple hello world test"
+    vars: {}
+    assert:
+      - type: contains
+        value: "Hello"

@@ -55,6 +55,11 @@ test-all-unit:
 repomix platform='flutter':
     sh ./scripts/repomix.sh {{platform}}
 
+# Run promptfoo evaluation for Mistral OCR models
+# Usage: just promptfoo eval, just promptfoo view
+promptfoo +args:
+    sh ./scripts/promptfoo.sh {{args}}
+
 # Manage Android SDK / launch Android Studio
 # Usage: just android-sdk [studio|ensure|avd|emulator|doctor]
 android-sdk action='studio':
