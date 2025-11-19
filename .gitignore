@@ -141,3 +141,6 @@ tmp/
 
 # PocketBase instance config (may contain sensitive data in production)
 pb_config.local.json
+data/planmise-996694525c76.json
+data/.dart_tool/
+data/.github/

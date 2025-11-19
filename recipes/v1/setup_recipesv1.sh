@@ -1,4 +1,5 @@
 #!/bin/bash
+. "$(dirname "$0")/../../scripts/load_env.sh"
 
 # setup_recipesv1.sh - Build Firestore import bundle for recipesv1 and load via Firebase CLI
 # This script generates a Firestore import JSON file and imports it using firebase firestore:import
@@ -11,7 +12,7 @@ REPO_ROOT="$(dirname "$PROJECT_DIR")"
 
 FIREBASE_PROJECT="planmise"
 COLLECTION_NAME="recipesv1"
-RECIPES_FILE="${REPO_ROOT}/.tmp/recipe_dataset_titles.txt"
+RECIPES_FILE="${REPO_ROOT}/data/recipe_dataset_titles.txt"
 IMPORT_FILE="${REPO_ROOT}/.tmp/firestore_import.json"
 PYTHON_GENERATOR="${SCRIPT_DIR}/generate_firestore_import.py"
 
@@ -30,7 +31,7 @@ if [ ! -f "$RECIPES_FILE" ]; then
   exit 1
 fi
 
-for dependency in python3 firebase; do
+for dependency in python3; do
   if ! command -v "$dependency" >/dev/null 2>&1; then
     echo -e "${RED}Error: '$dependency' not found in PATH${NC}"
     exit 1
@@ -50,8 +51,8 @@ if [ ! -f "$IMPORT_FILE" ]; then
   exit 1
 fi
 
-echo -e "${YELLOW}Importing recipes via Firebase CLI...${NC}"
-firebase --project "$FIREBASE_PROJECT" firestore:import --collection-path "$COLLECTION_NAME" "$IMPORT_FILE"
+echo -e "${YELLOW}Importing recipes via Python script...${NC}"
+python3 "${SCRIPT_DIR}/import_to_firestore.py" --input "$IMPORT_FILE" --collection "$COLLECTION_NAME"
 
 echo -e "${GREEN}✓ Setup complete!${NC}"
 echo -e "${GREEN}Recipe collection '$COLLECTION_NAME' has been imported into Firestore.${NC}"

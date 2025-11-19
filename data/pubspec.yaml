@@ -1,0 +1,9 @@
+name: recipe_data_cli
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  dart_firebase_admin: ^0.1.0
