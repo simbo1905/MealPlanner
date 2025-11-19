@@ -7,8 +7,8 @@ This directory contains scripts and configuration for setting up versioned recip
 ```
 recipes/
 ├── v1/                          # Version 1 of recipes database
-│   ├── setup_recipesv1.sh      # Shell script to set up recipesv1
-│   ├── upload_recipes.dart     # Dart script to upload recipes to Firestore
+│   ├── setup_recipesv1.sh      # Shell script to build/import Firestore bundle
+│   ├── generate_firestore_import.py # Python helper that creates import JSON
 │   └── README.md               # This file
 ```
 
@@ -16,7 +16,7 @@ recipes/
 
 ### Prerequisites
 - Firebase CLI installed: `curl -sL https://firebase.tools | bash`
-- Flutter/Dart environment configured
+- Python 3 available in your PATH
 - Firebase project authenticated: `firebase login`
 - Recipe titles extracted to `.tmp/recipe_dataset_titles.txt`
 
@@ -30,9 +30,9 @@ chmod +x setup_recipesv1.sh
 ```
 
 This will:
-1. Verify Firebase project is set to `planmise`
-2. Read recipe titles from extracted dataset
-3. Upload recipes to Firestore collection `recipesv1/recipes`
+1. Generate `.tmp/firestore_import.json` using the Python helper
+2. Run `firebase firestore:import` against the `planmise` project
+3. Populate Firestore collection `recipesv1`
 
 ## Firestore Structure
 
@@ -54,7 +54,7 @@ projectId (planmise)
 To create additional versions (e.g., `v2`):
 
 1. Create new directory: `recipes/v2/`
-2. Copy `setup_recipesv1.sh` and `upload_recipes.dart`
+2. Copy `setup_recipesv1.sh` and `generate_firestore_import.py`
 3. Update collection name from `recipesv1` to `recipesv2`
 4. Update Dart class name and providers to use `V2` suffix
 5. Create corresponding Dart repository: `RecipesV2Repository`

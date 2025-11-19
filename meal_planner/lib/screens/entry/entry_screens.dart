@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 const _splashLogoAsset = 'assets/splash_logo.png';
 
@@ -15,6 +15,7 @@ class AppRoutes {
   static const home = '/home';
   static const developerLauncher = '/dev/launcher';
   static const splashPreview = '/dev/splash-preview';
+  static const splashDemoFinished = '/dev/splash-demo-finished';
   static const rotateHint = '/rotate-hint';
 }
 
@@ -22,7 +23,7 @@ class ProductionSplashScreen extends StatefulWidget {
   const ProductionSplashScreen({
     super.key,
     required this.nextRoute,
-    this.minimumDisplayDuration = const Duration(seconds: 4),
+    this.minimumDisplayDuration = const Duration(seconds: 2),
   });
 
   final String nextRoute;
@@ -32,20 +33,15 @@ class ProductionSplashScreen extends StatefulWidget {
   State<ProductionSplashScreen> createState() => _ProductionSplashScreenState();
 }
 
-class _ProductionSplashScreenState extends State<ProductionSplashScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+class _ProductionSplashScreenState extends State<ProductionSplashScreen> {
   late final Timer _timer;
   bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat();
     _timer = Timer(widget.minimumDisplayDuration, _navigateNext);
+    debugPrint('[Splash] Production splash started with duration ${widget.minimumDisplayDuration.inMilliseconds}ms');
   }
 
   void _navigateNext() {
@@ -53,23 +49,20 @@ class _ProductionSplashScreenState extends State<ProductionSplashScreen>
       return;
     }
     _navigated = true;
+    debugPrint('[Splash] Navigating to ${widget.nextRoute}');
     Navigator.of(context).pushReplacementNamed(widget.nextRoute);
   }
 
   @override
   void dispose() {
     _timer.cancel();
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _SplashContent(
-        controller: _controller,
-        allowDismiss: false,
-      ),
+    return const Scaffold(
+      body: _SplashContent(),
     );
   }
 }
@@ -81,25 +74,7 @@ class SplashPreviewScreen extends StatefulWidget {
   State<SplashPreviewScreen> createState() => _SplashPreviewScreenState();
 }
 
-class _SplashPreviewScreenState extends State<SplashPreviewScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _SplashPreviewScreenState extends State<SplashPreviewScreen> {
   void _dismiss() {
     Navigator.of(context).maybePop();
   }
@@ -107,10 +82,37 @@ class _SplashPreviewScreenState extends State<SplashPreviewScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _SplashContent(
-        controller: _controller,
-        allowDismiss: true,
-        onDismiss: _dismiss,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _dismiss,
+        child: Stack(
+          children: [
+            const _SplashContent(),
+            Positioned(
+              bottom: 48,
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.touch_app_outlined,
+                    color: Colors.grey.shade700,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Tap anywhere to dismiss',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -162,6 +164,19 @@ class DeveloperLauncherScreen extends StatelessWidget {
               label: 'Preview Splash Animation',
               description: 'Play the production splash animation in a loop.',
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.splashPreview),
+            ),
+            const SizedBox(height: 12),
+            _LauncherTile(
+              icon: Icons.play_circle_outline,
+              label: 'Test Splash Flow',
+              description: 'Run full 2-second splash flow ending at demo finished screen.',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ProductionSplashScreen(
+                    nextRoute: AppRoutes.splashDemoFinished,
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 32),
             Text(
@@ -272,133 +287,38 @@ class PlaceholderDestinationScreen extends StatelessWidget {
 }
 
 class _SplashContent extends StatelessWidget {
-  const _SplashContent({
-    required this.controller,
-    required this.allowDismiss,
-    this.onDismiss,
-  });
-
-  final AnimationController controller;
-  final bool allowDismiss;
-  final VoidCallback? onDismiss;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    Widget content = Stack(
-      children: [
-        const _SplashBackground(),
-        Center(
-          child: _RotatingEmblem(controller: controller),
-        ),
-        if (allowDismiss)
-          Positioned(
-            bottom: 48,
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.touch_app_outlined,
-                  color: Colors.white.withValues(alpha: 0.85),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Tap anywhere to dismiss',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.85),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-
-    if (allowDismiss) {
-      content = GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onDismiss,
-        child: content,
-      );
-    }
-
-    return SafeArea(child: content);
-  }
-}
-
-class _SplashBackground extends StatelessWidget {
-  const _SplashBackground();
+  const _SplashContent();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF0D47A1), Color(0xFF1976D2)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+      color: const Color(0xFF2F2F2F),
+      alignment: Alignment.center,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final size = constraints.biggest.shortestSide * 0.6;
+          final clampedSize = size.clamp(200.0, 360.0);
+          return SvgPicture.asset(
+            'assets/merged20.svg',
+            width: clampedSize,
+            height: clampedSize,
+          );
+        },
       ),
     );
   }
 }
 
-class _RotatingEmblem extends StatelessWidget {
-  const _RotatingEmblem({
-    required this.controller,
-    this.showRotation = true,
-  });
-
-  final AnimationController controller;
-  final bool showRotation;
+class SplashDemoFinishedScreen extends StatelessWidget {
+  const SplashDemoFinishedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget emblem = Container(
-      width: 220,
-      height: 220,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const RadialGradient(
-          colors: [Color(0xFF42A5F5), Color(0xFF1E88E5)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 24,
-            spreadRadius: 4,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(12),
-      child: ClipOval(
-        clipBehavior: Clip.antiAlias,
-        child: Image.asset(
-          _splashLogoAsset,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.high,
-        ),
+    return const Scaffold(
+      body: Center(
+        child: Text('splash demo finished'),
       ),
     );
-
-    if (showRotation) {
-      return AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) {
-          return Transform.rotate(
-            angle: controller.value * 2 * pi,
-            child: child,
-          );
-        },
-        child: emblem,
-      );
-    }
-
-    return emblem;
   }
 }
 
@@ -516,89 +436,98 @@ class _RotateHintScreenState extends State<RotateHintScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    // Check orientation on build (handles initial state and changes)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkOrientation();
     });
     
     return Scaffold(
-      body: Stack(
-        children: [
-          const _SplashBackground(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo/Brand graphic (reuse splash emblem style)
-                _RotatingEmblem(
-                  controller: _rotationController,
-                  showRotation: false,
-                ),
-                const SizedBox(height: 48),
-                // Animated rotating phone icon
-                RotationTransition(
-                  turns: _rotationController,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withValues(alpha: 0.2),
-                    ),
-                    child: const Icon(
-                      Icons.screen_rotation,
-                      size: 64,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                // Instruction text
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    'Rotate your phone to landscape to access week view.',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0D47A1), Color(0xFF1976D2)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          // Continue button (appears after timeout)
-          if (_showContinueButton)
-            Positioned(
-              bottom: 48,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: ElevatedButton(
-                  onPressed: _navigateToHome,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF0D47A1),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ClipOval(
+                      child: Image.asset(
+                        _splashLogoAsset,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  const SizedBox(height: 48),
+                  RotationTransition(
+                    turns: _rotationController,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.2),
+                      ),
+                      child: const Icon(
+                        Icons.screen_rotation,
+                        size: 64,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Text(
+                      'Rotate your phone to landscape to access week view.',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_showContinueButton)
+              Positioned(
+                bottom: 48,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: ElevatedButton(
+                    onPressed: _navigateToHome,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF0D47A1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

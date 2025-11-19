@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:meal_planner/screens/entry/entry_screens.dart';
 
@@ -20,12 +21,16 @@ void main() {
       );
 
       expect(find.byType(ProductionSplashScreen), findsOneWidget);
+      final svgFinder = find.byType(SvgPicture);
+      expect(svgFinder, findsOneWidget);
+      final svgWidget = tester.widget<SvgPicture>(svgFinder);
       expect(
-        find.byWidgetPredicate(
-          (widget) => widget is Image && widget.image is AssetImage &&
-              (widget.image as AssetImage).assetName == 'assets/splash_logo.png',
+        svgWidget.bytesLoader,
+        isA<SvgAssetLoader>().having(
+          (loader) => loader.assetName,
+          'assetName',
+          'assets/merged20.svg',
         ),
-        findsOneWidget,
       );
 
       await tester.pumpAndSettle();

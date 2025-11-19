@@ -354,7 +354,7 @@ test('Title search index supports low-latency queries', () async {
 
 **Required:**
 - Scripts in ./recipes/v1/ directory
-- Separate concerns: transform, upload, deploy
+- Separate concerns: transform, import, deploy (legacy batch scripts retained for archive)
 - Use Firebase CLI tools
 - Document process in memory/FIREBASE.md
 
@@ -363,13 +363,13 @@ test('Title search index supports low-latency queries', () async {
 **Evidence:**
 ```bash
 recipes/v1/
-├── setup_recipesv1.sh           ✅ Orchestration
-├── deploy_recipesv1.sh          ✅ Deployment
-├── transform_recipes_csv.dart   ✅ Data transformation
-└── upload_recipes.dart          ✅ Firestore upload
+├── setup_recipesv1.sh           ✅ Generates import + runs CLI
+├── generate_firestore_import.py ✅ Helper to build import JSON
+├── deploy_recipesv1.sh          ✅ Deployment (legacy batch pipeline)
+└── transform_recipes_csv.dart   ✅ Data transformation
 
 meal_planner/lib/scripts/
-└── load_recipes_v1.dart         ✅ Batch loading from .tmp/
+└── load_recipes_v1.dart         🚧 Legacy batch upload (retained for archive)
 ```
 
 **Documentation:**
@@ -537,7 +537,7 @@ This separation addresses a common Firestore anti-pattern where denormalized dat
    ↓
 2. transform_recipes_csv.dart   ✅ Normalize, tokenize, generate UUIDs
    ↓
-3. upload_recipes.dart          ✅ Batch upload to Firestore
+3. setup_recipesv1.sh          ✅ Imports Firestore bundle via CLI
    ↓
 4. Firestore indexes           ✅ Composite indexes for search
 ```

@@ -28,6 +28,7 @@ dependencies:
   permission_handler: ^12.0.1
   url_launcher: ^6.3.0
   flutter_native_splash: ^2.4.7
+  flutter_svg: ^2.0.10
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,7 @@ flutter:
   assets:
     - assets/lottie/
     - assets/splash_logo.png
+    - assets/merged20.svg
 
 flutter_native_splash:
   color: "#FFFFFF"

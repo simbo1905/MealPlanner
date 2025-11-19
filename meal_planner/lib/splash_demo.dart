@@ -3,8 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'screens/entry/entry_screens.dart';
 
-const _splashLogoAsset = 'assets/splash_logo.png';
-
 Future<void> main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
@@ -26,9 +24,9 @@ class SplashDemoApp extends StatelessWidget {
       theme: ThemeData(useMaterial3: true),
       routes: {
         '/': (_) => const ProductionSplashScreen(
-              nextRoute: _finishedRoute,
-              minimumDisplayDuration: Duration(seconds: 4),
-            ),
+          nextRoute: _finishedRoute,
+          minimumDisplayDuration: Duration(seconds: 5),
+        ),
         _finishedRoute: (_) => const _SplashDemoFinishedScreen(),
       },
       initialRoute: '/',
@@ -41,7 +39,6 @@ class _SplashDemoFinishedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0D47A1),
       body: Center(
@@ -58,7 +55,7 @@ class _SplashDemoFinishedScreen extends StatelessWidget {
               const SizedBox(height: 24),
               ClipOval(
                 child: Image.asset(
-                  _splashLogoAsset,
+                  'assets/splash_logo.png',
                   width: 160,
                   height: 160,
                   fit: BoxFit.cover,
@@ -67,20 +64,12 @@ class _SplashDemoFinishedScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'Splash Demo Finished',
-                style: theme.textTheme.headlineMedium?.copyWith(
+                'Splash Demo Finished!!!',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'This standalone build renders the production splash without loading the full MealPlanner app.',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.white70,
-                ),
               ),
             ],
           ),
@@ -89,4 +78,3 @@ class _SplashDemoFinishedScreen extends StatelessWidget {
     );
   }
 }
-

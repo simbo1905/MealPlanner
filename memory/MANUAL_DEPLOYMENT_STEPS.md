@@ -11,13 +11,12 @@ I successfully created the infrastructure and scripts needed to load recipe data
 ### What I Fixed:
 - **Fixed REPO_ROOT path calculation** in `recipes/v1/setup_recipesv1.sh` - changed from `$(dirname "$(dirname "$PROJECT_DIR")")` to `$(dirname "$PROJECT_DIR")`
 - **Recreated missing extraction script** - The `extract_recipe_titles.py` script was missing from the repository. I recreated it and generated the `recipe_dataset_titles.txt` file with 13,499 recipe titles.
-- **Created pure Dart upload script** - Replaced the Flutter-dependent version with a clean Dart script using Firestore REST API at `recipes/v1/upload_recipes.dart`
-- **Created Node.js fallback** - Added `upload.js` with Firebase Admin SDK as an alternative upload method
+- **Switched to Firebase CLI import** - Upload now runs through `recipes/v1/setup_recipesv1.sh`, which generates Firestore import JSON and calls `firebase firestore:import`
+- **Retired redundant upload scripts** - Dart/Node prototypes remain archived in `.tmp/` if needed for reference
 
 ### Scripts Created:
 - `.tmp/extract_recipe_titles.py` - Extracts recipe titles from the CSV dataset
-- `recipes/v1/upload_recipes.dart` - Pure Dart script using Firestore REST API
-- `.tmp/upload.js` - Node.js script with Firebase Admin SDK
+- `recipes/v1/setup_recipesv1.sh` - Generates the import bundle and performs a Firebase CLI import
 
 ### Data Ready:
 - ✅ Recipe dataset cloned from josephrmartinez/recipe-dataset

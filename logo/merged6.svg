@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="420" height="420" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rotate phone with list view fade effect (5 squares, 5 lines, centered)">
+  <defs>
+    <style>
+      .outline { fill:none; stroke:#000; stroke-width:4; }
+      .arrow   { fill:none; stroke:#000; stroke-width:4; stroke-linecap:round; }
+    </style>
+  </defs>
+
+  <g transform="translate(100,100)">
+    <!-- PHONE -->
+    <rect x="-30" y="-60" width="60" height="120" rx="10" ry="10" class="outline">
+      <animateTransform attributeName="transform" type="rotate"
+        dur="4s" repeatCount="indefinite"
+        keyTimes="0;0.25;0.5;0.75;1"
+        values="0;90;90;0;0"/>
+    </rect>
+
+    <!-- LIST VIEW CONTENT (5 squares, 5 lines, same center as merged2) -->
+    <g id="list-content" opacity="1">
+      <!-- Same scaling and translation as merged2.svg -->
+      <g transform="scale(0.2256) translate(-256, -256)">
+        <g transform="rotate(270 256 256)">
+          <!-- 5 squares centered at x=238 (same as 4-square center) -->
+          <rect fill="#000000" height="36" stroke="none" width="36" x="110" y="174" />
+          <rect fill="#000000" height="36" stroke="none" width="36" x="174" y="174" />
+          <rect fill="#000000" height="36" stroke="none" width="36" x="238" y="174" />
+          <rect fill="#000000" height="36" stroke="none" width="36" x="302" y="174" />
+          <rect fill="#000000" height="36" stroke="none" width="36" x="366" y="174" />
+          <!-- 5 vertical lines centered at x=256 (same as 4-line center) -->
+          <line stroke="#000000" stroke-linecap="round" stroke-width="16" x1="128.0" x2="128.0" y1="238" y2="338" />
+          <line stroke="#000000" stroke-linecap="round" stroke-width="16" x1="192.0" x2="192.0" y1="238" y2="338" />
+          <line stroke="#000000" stroke-linecap="round" stroke-width="16" x1="256.0" x2="256.0" y1="238" y2="338" />
+          <line stroke="#000000" stroke-linecap="round" stroke-width="16" x1="320.0" x2="320.0" y1="238" y2="338" />
+          <line stroke="#000000" stroke-linecap="round" stroke-width="16" x1="384.0" x2="384.0" y1="238" y2="338" />
+        </g>
+      </g>
+      
+      <!-- Fade out as phone rotates, fade in as it returns -->
+      <animate attributeName="opacity"
+        dur="4s" repeatCount="indefinite"
+        keyTimes="0;0.1;0.25;0.5;0.65;0.75;1"
+        values="1;0.2;0;0;0;0.2;1"/>
+    </g>
+
+    <!-- SIDE ARCS -->
+    <g id="side-arcs">
+      <!-- RIGHT SIDE -->
+      <path class="arrow" pathLength="100"
+            d="M 50,-35 C 68,-22 68,22 50,35">
+        <animate attributeName="stroke-dasharray"
+          dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.25;0.5;0.75;1"
+          values="0,100;100,0;100,0;0,100;0,100"/>
+      </path>
+
+      <!-- LEFT SIDE -->
+      <path class="arrow" pathLength="100"
+            d="M -50,35 C -68,22 -68,-22 -50,-35">
+        <animate attributeName="stroke-dasharray"
+          dur="4s" repeatCount="indefinite"
+          keyTimes="0;0.25;0.5;0.75;1"
+          values="0,100;100,0;100,0;0,100;0,100"/>
+      </path>
+
+      <!-- Rotate arcs with phone -->
+      <animateTransform attributeName="transform" type="rotate"
+        dur="4s" repeatCount="indefinite"
+        keyTimes="0;0.25;0.5;0.75;1"
+        values="0;90;90;0;0"/>
+    </g>
+  </g>
+</svg>

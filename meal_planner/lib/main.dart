@@ -80,6 +80,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.home: (_) => const InfiniteCalendarScreen(),
         AppRoutes.developerLauncher: (_) => const DeveloperLauncherScreen(),
         AppRoutes.splashPreview: (_) => const SplashPreviewScreen(),
+        AppRoutes.splashDemoFinished: (_) => const SplashDemoFinishedScreen(),
         AppRoutes.rotateHint: (_) => const RotateHintScreen(),
       },
     );

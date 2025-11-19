@@ -39,17 +39,16 @@ This setup enables a searchable, versioned recipe database in Firebase Firestore
    - Version management guidance
    - Firebase auth integration examples
 
-7. **recipes/v1/setup_recipesv1.sh** - Shell script to upload recipes to Firestore
-   - Verifies Firebase project (`planmise`)
+7. **recipes/v1/setup_recipesv1.sh** - Shell script to build Firestore import bundle and load it via Firebase CLI
    - Validates recipe file exists
-   - Calls Dart upload script
+   - Generates `.tmp/firestore_import.json`
+   - Runs `firebase firestore:import`
    - Progress reporting
 
-8. **recipes/v1/upload_recipes.dart** - Dart script to upload recipes to Firestore
+8. **recipes/v1/generate_firestore_import.py** - Python helper that builds Firestore import JSON
    - Reads recipe titles from `.tmp/recipe_dataset_titles.txt`
-   - Batches uploads (Firestore batch limit: 100)
-   - Creates `recipesv1/recipes` collection
-   - Adds server timestamps to each recipe
+   - Creates import structure for `recipesv1`
+   - Encodes lower-cased search helpers
 
 ## Data Source
 - **Source File**: `.tmp/recipe_dataset_titles.txt` (13,496 recipes)
